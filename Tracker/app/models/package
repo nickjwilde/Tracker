@@ -1,0 +1,27 @@
+require 'Photographer.rb'
+
+class Package
+  private
+    @package_id
+    # Add photographerid
+    @num_of_photos
+    @notes
+  public
+    def initialize(id = "-1",photo_num="0",notes="empty")
+      @package_id=id
+      @num_of_photos=photo_num
+      @notes=notes
+    end
+    def set_num_of_photos(num)
+      @num_of_photos=num
+    end
+    def get_num_of_photos
+      @num_of_photos
+    end
+    def set_notes(notes)
+      @notes = notes
+    end
+    def get_notes
+      @notes
+    end
+end
