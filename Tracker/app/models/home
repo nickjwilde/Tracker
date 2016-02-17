@@ -1,7 +1,7 @@
 require 'Parade.rb'
 require 'Photographer.rb'
 require 'Order.rb'
-class Home < Parade
+class Home
   private
     @home_id
     @home_name
@@ -9,51 +9,60 @@ class Home < Parade
     @city
     @state
     @notes
-    # Still need to add Parade ID
-    # Parade @parade
+    @parade
+    @order
+    @photographer
+    @builder
   public
-    def initialize(home = "-1",name="empty",address="empty",city="empty",state="empty",notes="empty")
+    def initialize(home = "-1",name="empty",address="empty",city="empty",state="empty",notes="empty",parade="empty",order="empty",photographer="empty",builder="empty")
       @home_id = home
       @home_name=name
       @address = address
       @city = city
       @state = state
       @notes = notes
+      @parade = parade
+      @order = order
+      @photographer = photographer
+      @builder = builder
     end
-    def set_home_id(id)
+    def self.set_home_id(id)
       @home_id=id
     end
-    def get_home_id
+    def self.get_home_id
       @home_id
     end
-    def set_home_name(name)
+    def self.set_home_name(name)
       @home_name = name
     end
-    def get_home_name
+    def self.get_home_name
       @home_name
     end
-    def set_home_address(address)
+    def self.set_home_address(address)
       @address=address
     end
-    def get_home_address
+    def self.get_home_address
       @address
     end
-    def set_city(city)
+    def self.set_city(city)
       @city=city
     end
-    def get_city
+    def self.get_city
       @city
     end
-    def set_state(state)
+    def self.set_state(state)
       @state=state
     end
-    def get_state
+    def self.get_state
       @state
     end
-    def set_home_notes(notes)
+    def self.set_home_notes(notes)
       @notes=notes
     end
-    def get_home_notes
+    def self.get_home_notes
       @notes
+    end
+    def self.get_parade
+      Parade
     end
 end
