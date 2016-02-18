@@ -1,8 +1,0 @@
-require 'Photographer.rb'
-require 'Package'
-
-photoPerson = Photographer.new
-
-photoPerson.set_name("Bob Nickels")
-
-print(photoPerson.get_name)
