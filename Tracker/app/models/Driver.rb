@@ -47,6 +47,11 @@ print (hippy.get_name())
 person.set_name_of_builder("Bob the Builder")
 person.set_phone_number("1-801-555-5555")
 
+person2 = Builder.new
+
+person2.set_name_of_builder("Beth")
+person2.set_phone_number("1-123-123-1234")
+
 stringArrayTest = Array.new(3)
 
 stringArrayTest[0] = person.get_builder_id
@@ -61,4 +66,24 @@ worker.connect_to_db(pw)
 
 worker.create_builder_table
 choice = 'C'
-worker.interact_with_builder(choice,stringArrayTest)
+person = worker.interact_with_builder(choice,person)
+
+person2 = worker.interact_with_builder(choice,person2)
+
+person3 = Builder.new
+person3.set_builder_id("1")
+
+temp = worker.interact_with_builder('r',person2)
+
+temp2 = worker.interact_with_builder('r',person3)
+
+person2.set_name_of_builder("Beth Woolston")
+
+worker.interact_with_builder('u',person2)
+
+temp = worker.interact_with_builder("L")
+
+print temp
+
+temp = worker.interact_with_builder("L")
+
