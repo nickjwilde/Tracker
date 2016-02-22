@@ -36,7 +36,4 @@ class Package
     def get_photographer
       @photographer
     end
-    def get_standard_photo_list()
-      @@array
-    end
 end

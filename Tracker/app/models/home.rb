@@ -11,7 +11,7 @@ class Home
     @photographer
     @builder
   public
-    def initialize(home = "-1",name="empty",address="empty",city="empty",state="empty",notes="empty",parade="empty",order="empty",photographer="empty",builder="empty")
+    def initialize(home = "-1",name="empty",address="empty",city="empty",state="empty",notes="empty",parade="empty",order="empty",photographer_notes="empty",photographer = "empty",builder="empty")
       @home_id = home
       @home_name=name
       @address = address
@@ -20,6 +20,7 @@ class Home
       @notes = notes
       @parade = parade
       @order = order
+      @photographer_notes = photographer_notes
       @photographer = photographer
       @builder = builder
     end

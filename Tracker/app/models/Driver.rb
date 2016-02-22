@@ -97,6 +97,46 @@ photo_person = worker.interact_with_photographer('C',photo_person)
 
 first_package = worker.interact_with_package('C',first_package)
 
+second_package = Package.new
+
+second_package.set_num_of_photos('15')
+
+second_package = worker.interact_with_package('C',second_package)
+
+temp = worker.interact_with_package('R',second_package)
+
+temp = worker.interact_with_package('L')
+
+first_package.set_notes("This is the test for the change")
+
+worker.interact_with_package('U',first_package)
+
+photo_person2 = Photographer.new
+photo_person2.set_name("Photy")
+photo_person2.set_notes("This person is a terrible photo person")
+
+second_package.set_photographer(photo_person2)
+
+worker.interact_with_package('U',second_package)
+
+photo_person3 = Photographer.new
+photo_person3.set_name("Rose")
+photo_person3.set_notes("This person is better then Photoy and has replaced him")
+
+
+second_package.set_photographer(photo_person3)
+
+worker.interact_with_package('U',second_package)
+
+second_package.set_photographer(photo_person)
+second_package.set_notes("3rd person")
+
+worker.interact_with_package('U',second_package)
+
+second_package.set_photographer("empty")
+
+worker.interact_with_package('U',second_package)
+
 print(first_package)
 
 print 'here'
