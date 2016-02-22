@@ -5,21 +5,10 @@ require 'pg'
 require'../models/factory.rb'
 
 
+
 person = Builder.new
 
-photoPerson = Photographer.new
 
-photoPerson.get_name
-
-print photoPerson.get_name
-
-photoPerson.set_name("Bob")
-
-first_package = Package.new("temp","10","none",photoPerson)
-
-hippy = first_package.get_photographer
-
-print (hippy.get_name())
 
 #begin
 
@@ -85,5 +74,29 @@ temp = worker.interact_with_builder("L")
 
 print temp
 
+worker.create_photographer_table
+
+worker.create_package_table
+photo_person = Photographer.new
+
+photo_person.set_name("Wild Bill")
+photo_person.set_email("12345$hotmail.com")
+
+first_package = Package.new("temp","10","none",photo_person)
+
+hippy = first_package.get_photographer
+
+print (hippy.get_name())
+
+
 temp = worker.interact_with_builder("L")
 
+
+
+photo_person = worker.interact_with_photographer('C',photo_person)
+
+first_package = worker.interact_with_package('C',first_package)
+
+print(first_package)
+
+print 'here'

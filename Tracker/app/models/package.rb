@@ -12,6 +12,12 @@ class Package
       @notes=notes
       @photographer=photographer
     end
+    def set_package_id(id)
+      @package_id = id
+    end
+    def get_package_id
+      @package_id
+    end
     def set_num_of_photos(num)
       @num_of_photos=num
     end
