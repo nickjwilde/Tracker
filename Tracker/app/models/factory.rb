@@ -14,6 +14,7 @@ class Factory
 
   # Builder Table information
   def create_builder_table
+    #@conn.exec("ALTER TABLE Package DROP CONSTRAINT home_builder_id_fkey")
     @conn.exec("DROP TABLE IF EXISTS Builder")
 
     @conn.exec ("CREATE TABLE Builder(
@@ -277,10 +278,79 @@ class Factory
 
 
   ## Home area
+  def create_home_table
+    @conn.exec("DROP TABLE IF EXISTS Home")
+
+    # Need to add order id/Photographer
+    @conn.exec ("CREATE TABLE Home(
+                    home_id		                        SERIAL 		        PRIMARY KEY
+                    , home_name     		              VARCHAR(100)
+                    , home_address                    VARCHAR(100)
+                    , city                            VARCHAR(100)
+                    , state                           VARCHAR(100)
+                    , notes                           VARCHAR(10000)
+                    , parade_id                       INTEGER           REFERENCES      Parade(parade_id)
+                    , builder_id                      INTEGER           REFERENCES      Builder(builder_id)
+                    , time_stamp                      TIMESTAMP         DEFAULT         current_timestamp     NOT NULL
+             );")
+  end
+
   def interact_with_home(choice,object="empty")
     choice = choice.upcase
     case choice
       when 'C'
+        results = Array.new
+        # Check to see if builder is assigned
+        if !object.get_builder.eql? "empty"
+          # A builder has been assigned
+          builder = Builder.new
+          builder = object.get_builder
+          buider_id = (builder.get_builder_id.to_i)
+
+          # Check to see if builder has been added to the database already
+          # The builder is in the system
+          if builder_id != -1
+            builder = interact_with_builder('U',builder)
+          elsif builder_id == -1
+            # The builder is not in the system
+            builder = interact_with_builder('C',builder)
+            buider_id = (builder.get_builder_id.to_i)
+          end
+        else
+          # A builder has not been assigned
+          builder_id = nil
+        end
+
+        # Check to see if parade has been assigned
+        if !object.get_parade.eql? "empty"
+          # A parade has been assigned
+          parade = Parade.new
+          parade = object.get_parade
+          parade_id = (parade.get_parade_id.to_i)
+
+          # Check to see if the parade has been added to the database
+          # The parade is in the system
+          if parade_id != -1
+              parade = interact_with_parade('U',parade)
+          else
+
+            # The parade is not in the system
+            parade = interact_with_parade('C',parade)
+            parade_id = (parade.get_parade_id.to_i)
+          end
+
+          # A parade has not been assigned
+        else
+          parade_id = nil
+        end
+
+        @conn.exec("INSERT INTO Home (home_name,home_address,city,state,notes,parade_id,builder_id) VALUES($1,$2,$3,$4,$5,$6,$7)",[object.get_home_name,object.get_home_address,object.get_city,object.get_state,object.get_home_notes,parade_id,builder_id])
+        results = @conn.exec("SELECT MAX(parade_id) FROM Parade")
+        object.set_parade_id(results.getvalue 0,0)
+        results = nil
+        return object
+      when 'D'
+        @conn.exec("DELETE FROM Home WHERE home_id = $1",[object.get_home_id])
       else
         return (@feedBack="Error")
     end
@@ -288,7 +358,7 @@ class Factory
 
   ## Parade area
   def create_parade_table
-      # @conn.exec("ALTER TABLE Parade DROP CONSTRAINT package_photographer_id_fkey")
+      #@conn.exec("ALTER TABLE Parade DROP CONSTRAINT home_parade_id_fkey")
       @conn.exec("DROP TABLE IF EXISTS Parade")
 
       @conn.exec ("CREATE TABLE Parade(
@@ -296,8 +366,8 @@ class Factory
                     , name_of_parade		          VARCHAR(1000)	                                      NOT NULL
                     , city_of_parade              VARCHAR(100)
                     , state_of_parade             VARCHAR(100)
-                    , start_date_of_parade		    DATETIME
-                    , end_date_of_parade          DATETIME
+                    , start_date_of_parade		    TIMESTAMP
+                    , end_date_of_parade          TIMESTAMP
                     , parade_notes                VARCHAR(10000)
                     , time_stamp                  TIMESTAMP        DEFAULT      current_timestamp     NOT NULL
              );")
@@ -314,10 +384,61 @@ class Factory
         object.set_parade_id(results.getvalue 0,0)
         results = nil
         return object
+      when 'D'
+        @conn.exec("DELETE FROM Parade WHERE parade_id = $1",[object.get_parade_id])
+      when 'R'
+        results = Array.new
+        results = @conn.exec("SELECT * FROM Parade WHERE parade_id=$1",[object.get_parade_id])
+        object.set_parade_name(results.getvalue 0,1)
+        object.set_city(results.getvalue 0,2)
+        object.set_state(results.getvalue 0,3)
+        object.set_start_date(results.getvalue 0,4)
+        object.set_end_date(results.getvalue 0,5)
+        object.set_notes(results.getvalue 0,6)
+        results = nil
+        return object
+      when 'L'
+        @feedBack = Array.new
+        @conn.exec "SELECT parade_id, name_of_parade FROM Parade" do |results|
+          results.each do |row|
+            object = Parade.new
+            object.set_parade_id(row['parade_id'])
+            object.set_parade_name(row['name_of_parade'])
+            @feedBack << object
+          end
+        end
+        results = nil
+        return @feedBack
+      when 'U'
+        results = Array.new
+        results = @conn.exec("SELECT * FROM Parade WHERE parade_id=$1",[object.get_parade_id])
+        compare_value = results.getvalue 0,1
+        if !compare_value.eql? object.get_name_of_parade
+          @conn.exec("UPDATE Parade SET name_of_parade=$2 WHERE parade_id=$1",[object.get_parade_id,object.get_parade_name])
+        end
+        compare_value = results.getvalue 0,2
+        if !compare_value.eql? object.get_city
+          @conn.exec("UPDATE Parade SET city_of_parade=$2 WHERE parade_id=$1",[object.get_parade_id,object.get_city])
+        end
+        compare_value = results.getvalue 0,3
+        if !compare_value.eql? object.get_city
+          @conn.exec("UPDATE Parade SET state_of_parade=$2 WHERE parade_id=$1",[object.get_parade_id,object.get_state])
+        end
+        compare_value = results.getvalue 0,4.to_d
+        if !compare_value.eql? (object.get_start_date.to_d)
+          @conn.exec("UPDATE Parade SET start_date_of_parade=$2 WHERE parade_id=$1",[object.get_parade_id,object.get_start_date])
+        end
+        compare_value = results.getvalue 0,5.to_d
+        if !compare_value.eql? (object.get_end_date.to_d)
+          @conn.exec("UPDATE Parade SET end_date_of_parade=$2 WHERE parade_id=$1",[object.get_parade_id,object.get_end_date])
+        end
+        compare_value = results.getvalue 0,6
+        if !compare_value.eql? object.get_notes
+          @conn.exec("UPDATE Parade SET parade_nodes=$2 WHERE parade_id=$1",[object.get_parade_id,object.get_notes])
+        end
       else
         return (@feedBack="Error")
     end
-
   end
 
 

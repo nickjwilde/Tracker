@@ -27,6 +27,12 @@ class Parade
     def set_parade_name(name)
       @parade_name=name
     end
+    def get_state
+      @state
+    end
+    def set_state(state)
+      @state = state
+    end
     def get_parade_name
       @parade_name
     end
