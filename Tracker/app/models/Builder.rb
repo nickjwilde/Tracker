@@ -10,7 +10,7 @@ class Builder
     @builder_id = id
   end
   #
-  def get_builder_id()
+  def get_builder_id
     @builder_id
   end
 
@@ -18,7 +18,7 @@ class Builder
     @name_of_builder = name
   end
 
-  def get_name_of_builder()
+  def get_name_of_builder
     @name_of_builder
   end
 

@@ -12,6 +12,7 @@ class Parade
     def initialize(id=-1,name="empty",city="empty",state="empty",start_date="empty",end_date="empty",notes="empty")
       @parade_id=id
       @parade_name=name
+      @city = city
       @state=state
       @start_date=start_date
       @end_date=end_date

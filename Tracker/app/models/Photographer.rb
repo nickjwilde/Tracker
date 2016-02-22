@@ -1,4 +1,3 @@
-
 class Photographer
   private
     @photographer_id

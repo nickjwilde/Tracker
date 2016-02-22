@@ -1,10 +1,8 @@
-require 'Photographer.rb'
-require 'Package.rb'
 class Order
   private
     @order_id
-    #Add photographer id
-    #Add package id
+    @photographer
+    @package
     @photos_received
     @photos_ordered
     @photos_usable
@@ -25,7 +23,7 @@ class Order
     @final_client_upload_date
     @verify_photoreplacement
 
-    def initialize(id = "-1",recieved="empty",ordered="empty",useable="empty",notes="empty",date_pictures_approved="empty",paid="empty",inital_client_upload="empty",inital_client_upload_date="empty",sent_to_philipines="empty",sent_to_philipines_date="empty",received_from_philipines="empty",received_from_philipines_date="empty",approve_philipines="empty",approve_philipines_date="empty",cropping="empty",cropping_date="empty",final_client_upload="empty",final_client_upload_date="empty",verify_photoreplacement="empty")
+    def initialize(id = "-1",recieved="empty",ordered="empty",useable="empty",notes="empty",date_pictures_approved="empty",paid="empty",inital_client_upload="empty",inital_client_upload_date="empty",sent_to_philipines="empty",sent_to_philipines_date="empty",received_from_philipines="empty",received_from_philipines_date="empty",approve_philipines="empty",approve_philipines_date="empty",cropping="empty",cropping_date="empty",final_client_upload="empty",final_client_upload_date="empty",verify_photoreplacement="empty",photographer="empty",package="empty")
       @order_id=id
       @photos_received=recieved
       @photos_ordered=ordered
@@ -46,6 +44,8 @@ class Order
       @final_client_upload= final_client_upload
       @final_client_upload_date=final_client_upload_date
       @verify_photoreplacement=verify_photoreplacement
+      @package=package
+      @photographer=photographer
     end
 
     def get_order_id
@@ -156,5 +156,16 @@ class Order
   def get_approve_philipines_date
     @approve_philipines_date
   end
-
+  def set_package(package)
+    @package= package
+  end
+  def get_package
+    @package
+  end
+  def set_photographer(photographer)
+    @photographer= photographer
+  end
+  def get_photographer
+    @photographer
+  end
 end
