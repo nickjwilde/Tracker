@@ -1,9 +1,10 @@
 class Builder
   
-  def initialize(id="-1",name="empty",phone="-1")
+  def initialize(id="-1",name="empty",phone="-1",email = "empty")
     @builder_id = id
     @name_of_builder= name
     @phone_number = phone
+    @email = email
   end
 
   def set_builder_id(id)
@@ -28,6 +29,14 @@ class Builder
 
   def get_phone_number()
     @phone_number
+  end
+
+  def set_email(email)
+    @email = email
+  end
+
+  def get_email
+    @email
   end
 
 end

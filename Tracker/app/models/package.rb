@@ -1,16 +1,16 @@
 class Package
   private
     @package_id
-    @photographer
+
     @num_of_photos
     @notes
     #@@array = Array.new('15','30','45')
   public
-    def initialize(id = "-1",photo_num="0",notes="empty",photographer="empty")
+    def initialize(id = "-1",photo_num="0",notes="empty")
       @package_id=id
       @num_of_photos=photo_num
       @notes=notes
-      @photographer=photographer
+
     end
     def set_package_id(id)
       @package_id = id
@@ -29,11 +29,5 @@ class Package
     end
     def get_notes
       @notes
-    end
-    def set_photographer(photographer)
-      @photographer=photographer
-    end
-    def get_photographer
-      @photographer
     end
 end

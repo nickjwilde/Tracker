@@ -11,7 +11,7 @@ class Home
     @photographer
     @builder
   public
-    def initialize(home = "-1",name="empty",address="empty",city="empty",state="empty",notes="empty",parade="empty",order="empty",builder="empty")
+    def initialize(home = "-1",name="empty",address="empty",city="empty",state="empty",notes="empty",parade="empty",builder="empty")
       @home_id = home
       @home_name=name
       @address = address
@@ -63,10 +63,16 @@ class Home
     def get_parade
       @parade
     end
-    def set_order_notes(order)
+    def set_notes(order)
     @order=order
-  end
-  def get_order_notes
-    @order
-  end
+    end
+    def get_notes
+      @order
+    end
+    def get_builder
+      @builder
+    end
+    def set_builder(builder)
+      @builder = builder
+    end
 end
