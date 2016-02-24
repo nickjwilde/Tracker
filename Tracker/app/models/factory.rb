@@ -135,7 +135,7 @@ class Factory
         end
         compare_value = results.getvalue 0,2
         if !compare_value.eql? object.get_email
-          @conn.exec("UPDATE Photographer SET email_of_photographer=$2 WHERE photographer_id=$1",[object.get_photographer_id_id,object.get_email])
+          @conn.exec("UPDATE Photographer SET email_of_photographer=$2 WHERE photographer_id=$1",[object.get_photographer_id,object.get_email])
         end
         compare_value = results.getvalue 0,3
         if !compare_value.eql? object.get_phone
@@ -168,7 +168,7 @@ class Factory
     case choice
       when 'C'
       results = Array.new
-      @conn.exec("INSERT INTO Package (number_of_photos,notes_of_package) VALUES($1,$2,$3)",[object.get_num_of_photos,object.get_notes])
+      @conn.exec("INSERT INTO Package (number_of_photos,notes_of_package) VALUES($1,$2)",[object.get_num_of_photos,object.get_notes])
       results = @conn.exec("SELECT MAX(package_id) FROM Package")
       object.set_package_id(results.getvalue 0,0)
       results = nil
@@ -177,13 +177,13 @@ class Factory
         @conn.exec("DELETE FROM Package WHERE package_id = $1",[object.get_package_id])
       when 'L'
         @feedBack = Array.new
-        @conn.exec("SELECT  package_id,
-                    FROM    Package b" )do |results|
+        @conn.exec("SELECT  package_id
+                    FROM    Package" )do |results|
           results.each do |row|
             object = Package.new
             object.set_package_id(row['package_id'])
-            object.set_package_notes(rows['notes_of_package'])
-            object.set_num_of_photos(rows['number_of_photos'])
+            object.set_notes(row['notes_of_package'])
+            object.set_num_of_photos(row['number_of_photos'])
             @feedBack << object
           end
         end
@@ -269,7 +269,7 @@ class Factory
         results = Array.new
         results = @conn.exec("SELECT * FROM Parade WHERE parade_id=$1",[object.get_parade_id])
         compare_value = results.getvalue 0,1
-        if !compare_value.eql? object.get_name_of_parade
+        if !compare_value.eql? object.get_parade_name
           @conn.exec("UPDATE Parade SET name_of_parade=$2 WHERE parade_id=$1",[object.get_parade_id,object.get_parade_name])
         end
         compare_value = results.getvalue 0,2
@@ -280,17 +280,17 @@ class Factory
         if !compare_value.eql? object.get_city
           @conn.exec("UPDATE Parade SET state_of_parade=$2 WHERE parade_id=$1",[object.get_parade_id,object.get_state])
         end
-        compare_value = results.getvalue 0,4.to_d
-        if !compare_value.eql? (object.get_start_date.to_d)
+        compare_value = results.getvalue 0,4
+        if !compare_value.eql? (object.get_start_date)
           @conn.exec("UPDATE Parade SET start_date_of_parade=$2 WHERE parade_id=$1",[object.get_parade_id,object.get_start_date])
         end
-        compare_value = results.getvalue 0,5.to_d
-        if !compare_value.eql? (object.get_end_date.to_d)
+        compare_value = results.getvalue 0,5
+        if !compare_value.eql? (object.get_end_date)
           @conn.exec("UPDATE Parade SET end_date_of_parade=$2 WHERE parade_id=$1",[object.get_parade_id,object.get_end_date])
         end
         compare_value = results.getvalue 0,6
         if !compare_value.eql? object.get_notes
-          @conn.exec("UPDATE Parade SET parade_nodes=$2 WHERE parade_id=$1",[object.get_parade_id,object.get_notes])
+          @conn.exec("UPDATE Parade SET parade_notes=$2 WHERE parade_id=$1",[object.get_parade_id,object.get_notes])
         end
       else
         return (@feedBack="Error")
@@ -451,10 +451,6 @@ class Factory
         return (@feedBack="Error")
     end
   end
-
-
-
-
 
   ## Order Area
 
