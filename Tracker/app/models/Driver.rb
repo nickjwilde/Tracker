@@ -8,6 +8,7 @@ require_relative '../models/package.rb'
 require '../models/factory.rb'
 require '../models/parade.rb'
 require '../models/order.rb'
+require '../models/home.rb'
 
 
 worker = Factory.new
@@ -130,7 +131,7 @@ temp = worker.interact_with_package('l')
 
 ### Recreate a Package
 package2.set_num_of_photos("5")
-package2.set_notes("THese are the notes for package two, that are reentered")
+package2.set_notes("These are the notes for package two, that are reentered")
 package2 = worker.interact_with_package('c',package2)
 
 ### Read a Package
@@ -186,42 +187,80 @@ temp = worker.interact_with_parade('R',parade1)
 ### List Parade
 temp = worker.interact_with_parade('l')
 
-## Here
 ## Home
-=begin
+
 home1 = Home.new
-home1.set
+home1.set_city("Salt Lake City")
+home1.set_state("UT")
+home1.set_builder(build_person1)
+home1.set_notes("THis is a home that has all the examples")
+home1.set_home_address("10256 n 489 e")
+home1.set_home_name("Candle Home 1")
+home1.set_parade(parade1)
+
+home2 = Home.new
+home2.set_city("Salt Lake City")
+home2.set_state("UT")
+home2.set_home_name("Candle Home 2")
+home2.set_notes("This is the second set of notes")
 
 ### Create Home
-parade1 = worker.interact_with_parade('c',parade1)
-parade2 = worker.interact_with_parade('c',parade2)
+home1 = worker.interact_with_home('c',home1)
+home2 = worker.interact_with_home('c',home2)
 
-### Update a Home
-parade2.set_notes("These are the updated notes for package 2")
-worker.interact_with_parade('u',parade2)
-
-### Delete a Home
-worker.interact_with_parade('D',parade2)
-
-### List Home
-temp = worker.interact_with_parade('l')
-
-### Recreate a Home
-parade2 = Parade.new
-parade2.set_parade_name("Salt Lake Parade")
-parade2.set_start_date("10/15/2015")
-parade2.set_end_date("11/24/2016")
-parade2.set_state("Utah")
-parade2.set_city("SLC")
-parade2.set_notes("Hello world, I am the second package")
-parade2 = worker.interact_with_parade('c',parade2)
+temp = worker.interact_with_home('l')
 
 ### Read a Home
-temp = worker.interact_with_parade('R',parade1)
+temp = worker.interact_with_home('R',home1)
+
+### Update a Home
+home2.set_builder(build_person1)
+worker.interact_with_home('u',home2)
+
+build_person1.set_email("1234123512341234")
+# home2.set_builder(build_person1)
+home2.set_notes("These are the test notes to see the two changes")
+worker.interact_with_home('U',home2)
+
+# Create a new parade and then assign it to home2
+parade3 = Parade.new
+parade3.set_parade_name("Kaysville")
+# parade3 = worker.interact_with_parade('C',parade3)
+home2.set_parade(parade3)
+worker.interact_with_home('U',home2)
+
+home1.set_builder("empty")
+worker.interact_with_home('u',home1)
+
 
 ### List Home
-temp = worker.interact_with_parade('l')
-=end
+temp = worker.interact_with_home('l')
 
+
+### Delete a Home
+worker.interact_with_home('D',home1)
+
+### List Home
+temp = worker.interact_with_home('l')
+
+### Recreate a Home
+home1 = Home.new
+home1.set_city("Salt Lake City")
+home1.set_state("UT")
+home1.set_builder(build_person1)
+home1.set_notes("THis is a home that has all the examples")
+home1.set_home_address("10256 n 489 e")
+home1.set_home_name("Candle Home 1")
+home1.set_parade(parade1)
+home1 = worker.interact_with_home('c',home1)
+
+### Read a Home
+temp = worker.interact_with_home('R',home1)
+
+### List Home
+temp = worker.interact_with_home('l')
+
+home2.set_parade("empty")
+worker.interact_with_home('U',home2)
 
 print 'here'
