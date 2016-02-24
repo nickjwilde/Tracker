@@ -1,142 +1,227 @@
+# External Files
+require 'pg'
+
+# Internal Files
 require_relative 'Builder.rb'
 require_relative 'Photographer.rb'
 require_relative '../models/package.rb'
-require 'pg'
-require'../models/factory.rb'
+require '../models/factory.rb'
+require '../models/parade.rb'
+require '../models/order.rb'
 
-
-
-person = Builder.new
-
-
-
-#begin
-
-# conn = PG::Connection.open(:dbname => 'postgres',:user =>'postgres', :password =>'B$t1m3RUN50uT')
-# temp = person.get_phone_number.to_s
-# conn.exec("INSERT INTO Builder (nameofbuilder,phoneNumber) VALUES($1,$2)",[person.get_name_of_builder,temp])
-#
-#   rs = conn.exec("SELECT * FROM Builder")
-#
-#   rs.each do |row|
-#     puts "%s %s %s" % [ row['id'], row['name'], row['phoneNumber'] ]
-#   end
-#
-# rescue PG::Error => e
-#
-# puts e.message
-#
-# ensure
-#
-#   conn.close if conn
-#
-# end
-
-
-person.set_name_of_builder("Bob the Builder")
-person.set_phone_number("1-801-555-5555")
-
-person2 = Builder.new
-
-person2.set_name_of_builder("Beth")
-person2.set_phone_number("1-123-123-1234")
-
-stringArrayTest = Array.new(3)
-
-stringArrayTest[0] = person.get_builder_id
-stringArrayTest[1] = person.get_name_of_builder
-stringArrayTest[2] = person.get_phone_number
 
 worker = Factory.new
-
+# This should be your password, utilize this
 pw = 'B$t1m3RUN50uT'
 
 worker.connect_to_db(pw)
 
+## Create Tables
 worker.create_builder_table
-choice = 'C'
-person = worker.interact_with_builder(choice,person)
-
-person2 = worker.interact_with_builder(choice,person2)
-
-person3 = Builder.new
-person3.set_builder_id("1")
-
-temp = worker.interact_with_builder('r',person2)
-
-temp2 = worker.interact_with_builder('r',person3)
-
-person2.set_name_of_builder("Beth Woolston")
-
-worker.interact_with_builder('u',person2)
-
-temp = worker.interact_with_builder("L")
-
-print temp
-
 worker.create_photographer_table
-
+worker.create_parade_table
 worker.create_package_table
-photo_person = Photographer.new
-
-photo_person.set_name("Wild Bill")
-photo_person.set_email("12345$hotmail.com")
-
-first_package = Package.new("temp","10","none",photo_person)
-
-hippy = first_package.get_photographer
-
-print (hippy.get_name())
 
 
-temp = worker.interact_with_builder("L")
+### dependency tables
+worker.create_home_table
+#worker.create_order_table
 
+# Creating testing people
+## Builder
+build_person1 = Builder.new
+build_person1.set_name_of_builder("Bob the builder")
+build_person1.set_phone_number("1-801-375-5555")
+build_person1.set_email("1234@asdf.com")
 
+build_person2 = Builder.new
+build_person2.set_name_of_builder("Dora wonder")
+build_person2.set_phone_number("1-597-589-5698")
+build_person2.set_email("asdfasd@234")
 
-photo_person = worker.interact_with_photographer('C',photo_person)
+### Create Builders
+build_person1 = worker.interact_with_builder('c',build_person1)
+build_person2 = worker.interact_with_builder('c',build_person2)
 
-first_package = worker.interact_with_package('C',first_package)
+### Update a Builder
+build_person2.set_email("aaaaaaaaaaaaaaaa")
+worker.interact_with_builder('u',build_person2)
 
-second_package = Package.new
+### Delete a Builder
+worker.interact_with_builder('D',build_person2)
 
-second_package.set_num_of_photos('15')
+### List Builders
+temp = worker.interact_with_builder('l')
 
-second_package = worker.interact_with_package('C',second_package)
+### Recreate a builder
+build_person2.set_name_of_builder("Dora wonder")
+build_person2.set_phone_number("1-597-589-5698")
+build_person2.set_email("aaaaaaaaaaaaaaaa")
+build_person2 = worker.interact_with_builder('c',build_person2)
 
-temp = worker.interact_with_package('R',second_package)
+### Read a Builder
+temp = worker.interact_with_builder('R',build_person1)
 
-temp = worker.interact_with_package('L')
+### List Builders
+temp = worker.interact_with_builder('l')
 
-first_package.set_notes("This is the test for the change")
-
-worker.interact_with_package('U',first_package)
+## Photographer
+photo_person1 = Photographer.new
+photo_person1.set_name("Beauty Beth")
+photo_person1.set_phone("1-234-567-8910")
+photo_person1.set_email("asdfasdfasdf")
 
 photo_person2 = Photographer.new
-photo_person2.set_name("Photy")
-photo_person2.set_notes("This person is a terrible photo person")
+photo_person2.set_name("wonder woman")
+photo_person2.set_phone("1-101-101-1010")
+photo_person2.set_email("a")
+photo_person2.set_notes("This person is not really wonder woman")
 
-second_package.set_photographer(photo_person2)
+### Create Photographer
+photo_person1 = worker.interact_with_photographer('c',photo_person1)
+photo_person2 = worker.interact_with_photographer('c',photo_person2)
 
-worker.interact_with_package('U',second_package)
+### Update a Photographer
+photo_person2.set_email("aaaaaaaaaaaaaaaa")
+worker.interact_with_photographer('u',photo_person2)
 
-photo_person3 = Photographer.new
-photo_person3.set_name("Rose")
-photo_person3.set_notes("This person is better then Photoy and has replaced him")
+### Delete a Photographer
+worker.interact_with_photographer('D',photo_person2)
+
+### List Photographer
+temp = worker.interact_with_photographer('l')
+
+### Recreate a Photographer
+photo_person2.set_name("wonder woman")
+photo_person2.set_phone("1-101-101-1010")
+photo_person2.set_email("a")
+photo_person2.set_notes("This person is not really wonder woman")
+photo_person2 = worker.interact_with_photographer('c',photo_person2)
+
+### Read a Photographer
+temp = worker.interact_with_photographer('R',photo_person1)
+
+### List Photographer
+temp = worker.interact_with_photographer('l')
 
 
-second_package.set_photographer(photo_person3)
+## Package
+package1 = Package.new
+package1.set_num_of_photos("10")
+package1.set_notes("This is the notes about package one")
 
-worker.interact_with_package('U',second_package)
+package2 = Package.new
+package2.set_num_of_photos("15")
+package2.set_notes("THese are the notes for package two")
 
-second_package.set_photographer(photo_person)
-second_package.set_notes("3rd person")
+### Create Package
+package1 = worker.interact_with_package('c',package1)
+package2 = worker.interact_with_package('c',package2)
 
-worker.interact_with_package('U',second_package)
+### Update a Package
+package2.set_notes("These are the new notes for package 2")
+worker.interact_with_package('u',package2)
 
-second_package.set_photographer("empty")
+### Delete a Package
+worker.interact_with_package('D',package2)
 
-worker.interact_with_package('U',second_package)
+### List Package
+temp = worker.interact_with_package('l')
 
-print(first_package)
+### Recreate a Package
+package2.set_num_of_photos("5")
+package2.set_notes("THese are the notes for package two, that are reentered")
+package2 = worker.interact_with_package('c',package2)
+
+### Read a Package
+temp = worker.interact_with_package('R',package1)
+
+### List Package
+temp = worker.interact_with_package('l')
+
+## Parade
+parade1 = Parade.new
+parade1.set_parade_name("Pleasant Grove Parade")
+parade1.set_start_date("10/01/2015")
+parade1.set_end_date("10/31/2016")
+parade1.set_state("Utah")
+parade1.set_city("PG")
+parade1.set_notes("Hello world")
+
+parade2 = Parade.new
+parade2.set_parade_name("Salt Lake Parade")
+parade2.set_start_date("10/15/2015")
+parade2.set_end_date("11/24/2016")
+parade2.set_state("Utah")
+parade2.set_city("SLC")
+parade2.set_notes("Hello world, I am the second package")
+
+### Create Parade
+parade1 = worker.interact_with_parade('c',parade1)
+parade2 = worker.interact_with_parade('c',parade2)
+
+### Update a Parade
+parade2.set_notes("These are the updated notes for package 2")
+worker.interact_with_parade('u',parade2)
+
+### Delete a Parade
+worker.interact_with_parade('D',parade2)
+
+### List Parade
+temp = worker.interact_with_parade('l')
+
+### Recreate a Parade
+parade2 = Parade.new
+parade2.set_parade_name("Salt Lake Parade")
+parade2.set_start_date("10/15/2015")
+parade2.set_end_date("11/24/2016")
+parade2.set_state("Utah")
+parade2.set_city("SLC")
+parade2.set_notes("Hello world, I am the second package")
+parade2 = worker.interact_with_parade('c',parade2)
+
+### Read a Parade
+temp = worker.interact_with_parade('R',parade1)
+
+### List Parade
+temp = worker.interact_with_parade('l')
+
+## Here
+## Home
+=begin
+home1 = Home.new
+home1.set
+
+### Create Home
+parade1 = worker.interact_with_parade('c',parade1)
+parade2 = worker.interact_with_parade('c',parade2)
+
+### Update a Home
+parade2.set_notes("These are the updated notes for package 2")
+worker.interact_with_parade('u',parade2)
+
+### Delete a Home
+worker.interact_with_parade('D',parade2)
+
+### List Home
+temp = worker.interact_with_parade('l')
+
+### Recreate a Home
+parade2 = Parade.new
+parade2.set_parade_name("Salt Lake Parade")
+parade2.set_start_date("10/15/2015")
+parade2.set_end_date("11/24/2016")
+parade2.set_state("Utah")
+parade2.set_city("SLC")
+parade2.set_notes("Hello world, I am the second package")
+parade2 = worker.interact_with_parade('c',parade2)
+
+### Read a Home
+temp = worker.interact_with_parade('R',parade1)
+
+### List Home
+temp = worker.interact_with_parade('l')
+=end
+
 
 print 'here'
