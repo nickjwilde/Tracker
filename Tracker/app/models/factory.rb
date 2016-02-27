@@ -14,7 +14,7 @@ class Factory
 
   # Builder Table information
   def create_builder_table
-    @conn.exec("ALTER TABLE Home DROP CONSTRAINT home_builder_id_fkey")
+    # @conn.exec("ALTER TABLE Home DROP CONSTRAINT home_builder_id_fkey")
     @conn.exec("DROP TABLE IF EXISTS Builder")
 
     @conn.exec ("CREATE TABLE Builder(
@@ -214,7 +214,7 @@ class Factory
 
   ## Parade area
   def create_parade_table
-    @conn.exec("ALTER TABLE Home DROP CONSTRAINT home_parade_id_fkey")
+    # @conn.exec("ALTER TABLE Home DROP CONSTRAINT home_parade_id_fkey")
     @conn.exec("DROP TABLE IF EXISTS Parade")
 
     @conn.exec ("CREATE TABLE Parade(
@@ -301,7 +301,7 @@ class Factory
   def create_home_table
     @conn.exec("DROP TABLE IF EXISTS Home")
 
-    # Need to add order id/Photographer
+
     @conn.exec ("CREATE TABLE Home(
                     home_id		                        SERIAL 		        PRIMARY KEY
                     , home_name     		              VARCHAR(100)
@@ -309,8 +309,8 @@ class Factory
                     , city                            VARCHAR(100)
                     , state                           VARCHAR(100)
                     , notes                           VARCHAR(10000)
-                    , parade_id                       INTEGER           REFERENCES      Parade(parade_id)
-                    , builder_id                      INTEGER           REFERENCES      Builder(builder_id)
+                    , parade_id                       INTEGER
+                    , builder_id                      INTEGER
                     , time_stamp                      TIMESTAMP         DEFAULT         current_timestamp     NOT NULL
              );")
   end
@@ -405,7 +405,6 @@ class Factory
         end
         results = nil
         return @feedBack
-      # Here
       when 'R'
         results = Array.new
         results = @conn.exec("SELECT  *
@@ -515,4 +514,373 @@ class Factory
   end
 
   ## Order Area
+  def create_order_table
+    @conn.exec("DROP TABLE IF EXISTS Order_table")
+
+    @conn.exec ("CREATE TABLE Order_table(
+                    order_id		                      SERIAL 		        PRIMARY KEY
+                    , photos_received	                VARCHAR(2)
+                    , photos_recieved_date            TIMESTAMP
+                    , photos_usable                   INTEGER
+                    , photo_notes                     VARCHAR(10000)
+                    , photos_approved_date            TIMESTAMP
+                    , photographer_paid               VARCHAR(2)
+                    , photographer_paid_date          TIMESTAMP
+                    , initial_client_upload           VARCHAR(2)
+                    , initial_client_upload_date      TIMESTAMP
+                    , sent_to_philippines            VARCHAR(2)
+                    , sent_to_philippines_date        TIMESTAMP
+                    , approve_philippines            VARCHAR(2)
+                    , approve_philippines_date        TIMESTAMP
+                    , cropping                        VARCHAR(2)
+                    , cropping_date                   TIMESTAMP
+                    , final_client_upload             VARCHAR(2)
+                    , final_client_upload_date        TIMESTAMP
+                    , verify_photo_replacement        VARCHAR(2)
+                    , verify_photo_replacement_date   TIMESTAMP
+                    , home_id                         INTEGER
+                    , photographer_id                 INTEGER
+                    , package_id                      INTEGER
+                    , time_stamp                      TIMESTAMP         DEFAULT         current_timestamp     NOT NULL
+             );")
+  end
+
+  def interact_with_order(choice,object="empty")
+    choice = choice.upcase
+    case choice
+      when 'C'
+        results = Array.new
+        # Check to see if Home is assigned
+        if !object.get_home.eql? "empty"
+          # A builder has been assigned
+          home = Home.new
+          home = object.get_home
+          home_id = (home.get_home_id.to_i)
+
+          # Check to see if Home has been added to the database already
+          # The Home is in the system
+          if home_id != -1
+            home = interact_with_home('U',home)
+          elsif home_id == -1
+            # The Home is not in the system
+            home = interact_with_home('C',home)
+            home_id = (home.get_home_id.to_i)
+          end
+        else
+          # A home has not been assigned
+          home_id = nil
+        end
+        # Check to see if Photographer has been assigned
+        if !object.get_photographer.eql? "empty"
+          # A Photographer has been assigned
+          photographer = Photographer.new
+          photographer = object.get_photographer
+          photographer_id = (photographer.get_photographer_id.to_i)
+
+          # Check to see if the Photographer has been added to the database
+          # The Photographer is in the system
+          if photographer_id != -1
+            photographer = interact_with_photographer('U',photographer)
+          else
+            # The photographer is not in the system
+            photographer = interact_with_photographer('C',photographer)
+            photographer_id = (photographer.get_photographer_id.to_i)
+          end
+          # A Photographer has not been assigned
+        else
+          photographer_id = nil
+        end
+        # Check to see if Package has been assigned
+        if !object.get_package.eql? "empty"
+          # A Package has been assigned
+          package = Package.new
+          package = object.get_package
+          package_id = (package.get_package_id.to_i)
+
+          # Check to see if the Package has been added to the database
+          # The Package is in the system
+          if package_id != -1
+            package = interact_with_package('U',package)
+          else
+            # The Package is not in the system
+            package = interact_with_package('C',package)
+            package_id = (package.get_package_id.to_i)
+          end
+          # A Package has not been assigned
+        else
+          package_id = nil
+        end
+
+        @conn.exec("INSERT INTO Order_table (photos_received,photos_recieved_date,photos_usable,photo_notes,photos_approved_date,photographer_paid,photographer_paid_date,initial_client_upload,initial_client_upload_date,sent_to_philippines,sent_to_philippines_date,approve_philippines,approve_philippines_date,cropping,cropping_date,final_client_upload,final_client_upload_date,verify_photo_replacement,verify_photo_replacement_date,home_id,photographer_id,package_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22)",[object.get_photos_received,object.get_received_date,object.get_photos_usable,object.get_notes,object.get_photos_approved_date,object.get_photographer_paid,object.get_photographer_paid_date,object.get_initial_client_upload,object.get_initial_client_upload_date,object.get_sent_to_philippines,object.get_sent_to_philippines_date,object.get_approve_philippines,object.get_approve_philippines_date,object.get_cropping,object.get_cropping_date,object.get_final_client_upload,object.get_final_client_upload_date,object.get_verify_photo_replacement,object.get_verify_photo_replacement_date,home_id,photographer_id,package_id])
+        results = @conn.exec("SELECT MAX(order_id) FROM Order_table")
+        object.set_order_id(results.getvalue 0,0)
+        results = nil
+        return object
+      # Delete a Order based off of the id
+      when 'D'
+        @conn.exec("DELETE FROM Order_table WHERE order_id = $1",[object.get_order_id])
+      when 'L'
+        @feedBack = Array.new
+        @conn.exec("SELECT  order_id, home_name, a.home_id, name_of_parade, b.parade_id, name_of_photographer, a.photographer_id, a.package_id
+                    FROM    Order_table a
+                                LEFT JOIN(SELECT *
+                                          FROM    Home
+                                        ) b
+                                        ON a.home_id = b.home_id
+                                LEFT JOIN(SELECT *
+                                          FROM    Parade
+                                        ) c
+                                        ON b.parade_id = c.parade_id
+                                LEFT JOIN(SELECT *
+                                          FROM    Package
+                                        ) d
+                                        ON a.package_id = d.package_id
+                                LEFT JOIN(
+                                    SELECT *
+                                    FROM    Photographer
+                                  ) e
+                                  ON a.photographer_id = e.photographer_id" )do |results|
+          results.each do |row|
+            object = Order.new
+            object.set_order_id(row['order_id'])
+
+            home = Home.new
+            home.set_home_id(row['home_id'])
+            home.set_home_name(row['home_name'])
+
+            photographer = Photographer.new
+            photographer.set_photographer_id(row['photographer_id'])
+            photographer.set_name(row['name_of_photographer'])
+
+            parade = Parade.new
+            parade.set_parade_id(row['parade_id'])
+            parade.set_parade_name(row['name_of_parade'])
+
+            package = Package.new
+            package.set_package_id(row['package_id'])
+
+            home.set_parade(parade)
+
+            object.set_home(home)
+            object.set_photographer(photographer)
+            object.set_package(package)
+            @feedBack << object
+          end
+        end
+        results = nil
+        return @feedBack
+      when 'R'
+        results = Array.new
+        results = @conn.exec("SELECT  *
+                              FROM    Order_table
+                              WHERE   order_id=$1",[object.get_order_id])
+        object.set_order_id(results.getvalue 0,0)
+        object.set_photo_received(results.getvalue 0,1)
+        object.set_received_date(results.getvalue 0,2)
+        object.set_photos_usable(results.getvalue 0,3)
+        object.set_notes(results.getvalue 0,4)
+        object.set_photos_approved_date(results.getvalue 0,5)
+        object.set_photographer_paid(results.getvalue 0,6)
+        object.set_photographer_paid_date(results.getvalue 0,7)
+        object.set_initial_client_upload(results.getvalue 0,8)
+        object.set_initial_client_upload_date(results.getvalue 0,9)
+        object.set_sent_to_philippines(results.getvalue 0,10)
+        object.set_sent_to_philippines_date(results.getvalue 0,11)
+        object.set_approve_philippines(results.getvalue 0,12)
+        object.set_approve_philippines_date(results.getvalue 0,13)
+        object.set_cropping(results.getvalue 0,14)
+        object.set_cropping_date(results.getvalue 0,15)
+        object.set_final_client_upload(results.getvalue 0,16)
+        object.set_final_client_upload_date(results.getvalue 0,17)
+        object.set_verify_photo_replacement(results.getvalue 0,18)
+        object.set_verify_photo_replacement_date(results.getvalue 0,19)
+
+        # Get home associated with order
+        compare_value = results.getvalue 0,20
+        # If no home has been assigned yet
+        if compare_value.nil? | (compare_value.eql? "empty")
+          object.set_home("empty")
+          # value has been assigned
+        else
+          home_id = compare_value
+          home = Home.new
+          home.set_home_id(home_id)
+          home = interact_with_home('R',home)
+          object.set_home(home)
+        end
+
+        # Get Photographer associated with order
+        compare_value = results.getvalue 0,21
+        # if no order has been assigned yet
+        if compare_value.nil? |(compare_value.eql? "empty")
+          object.set_photographer("empty")
+        else
+          photographer_id = compare_value
+          photographer = Photographer.new
+          photographer.set_photographer_id(photographer_id)
+          photographer = interact_with_photographer('R',photographer)
+          object.set_photographer(photographer)
+        end
+
+        # Get Package associated with order
+        compare_value = results.getvalue 0,22
+        # if no order has been assigned yet
+        if compare_value.nil? |(compare_value.eql? "empty")
+          object.set_package("empty")
+        else
+          package_id = compare_value
+          package = Package.new
+          package.set_package_id(package_id)
+          package = interact_with_package('R',package)
+          object.set_package(package)
+        end
+        results = nil
+        return object
+      when 'U'
+        results = Array.new
+        results = @conn.exec("SELECT * FROM Order_table WHERE order_id=$1",[object.get_order_id])
+        compare_value = results.getvalue 0,1
+        if !compare_value.eql? object.get_photos_received
+          @conn.exec("UPDATE Order_table SET photos_received=$2 WHERE order_id=$1",[object.get_order_id,object.get_photos_received])
+        end
+        compare_value = results.getvalue 0,2
+        if !compare_value.eql? object.get_received_date
+          @conn.exec("UPDATE Order_table SET photos_recieved_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_received_date])
+        end
+        compare_value = results.getvalue 0,3
+        if !compare_value.eql? object.get_photos_usable
+          @conn.exec("UPDATE Order_table SET photos_usable=$2 WHERE order_id=$1",[object.get_order_id,object.get_photos_usable])
+        end
+        compare_value = results.getvalue 0,4
+        if !compare_value.eql? object.get_notes
+          @conn.exec("UPDATE Order_table SET photo_notes=$2 WHERE order_id=$1",[object.get_order_id,object.get_notes])
+        end
+        compare_value = results.getvalue 0,5
+        if !compare_value.eql? object.get_photos_approved_date
+          @conn.exec("UPDATE Order_table SET photos_approved_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_photos_approved_date])
+        end
+        compare_value = results.getvalue 0,6
+        if !compare_value.eql? object.get_photographer_paid
+          @conn.exec("UPDATE Order_table SET photographer_paid=$2 WHERE order_id=$1",[object.get_order_id,object.get_photographer_paid])
+        end
+        compare_value = results.getvalue 0,7
+        if !compare_value.eql? object.get_photographer_paid_date
+          @conn.exec("UPDATE Order_table SET photographer_paid_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_photographer_paid_date])
+        end
+        compare_value = results.getvalue 0,8
+        if !compare_value.eql? object.get_initial_client_upload
+          @conn.exec("UPDATE Order_table SET initial_client_upload=$2 WHERE order_id=$1",[object.get_order_id,object.get_initial_client_upload])
+        end
+        compare_value = results.getvalue 0,9
+        if !compare_value.eql? object.get_initial_client_upload_date
+          @conn.exec("UPDATE Order_table SET initial_client_upload_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_initial_client_upload_date])
+        end
+        compare_value = results.getvalue 0,10
+        if !compare_value.eql? object.get_sent_to_philippines
+          @conn.exec("UPDATE Order_table SET sent_to_philippines=$2 WHERE order_id=$1",[object.get_order_id,object.get_sent_to_philippines])
+        end
+        compare_value = results.getvalue 0,11
+        if !compare_value.eql? object.get_sent_to_philippines_date
+          @conn.exec("UPDATE Order_table SET sent_to_philippines_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_sent_to_philippines_date])
+        end
+        compare_value = results.getvalue 0,12
+        if !compare_value.eql? object.get_approve_philippines
+          @conn.exec("UPDATE Order_table SET approve_philippines=$2 WHERE order_id=$1",[object.get_order_id,object.get_approve_philippines])
+        end
+        compare_value = results.getvalue 0,13
+        if !compare_value.eql? object.get_approve_philippines_date
+          @conn.exec("UPDATE Order_table SET approve_philippines_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_approve_philippines_date])
+        end
+        compare_value = results.getvalue 0,14
+        if !compare_value.eql? object.get_cropping
+          @conn.exec("UPDATE Order_table SET cropping=$2 WHERE order_id=$1",[object.get_order_id,object.get_cropping])
+        end
+        compare_value = results.getvalue 0,15
+        if !compare_value.eql? object.get_cropping_date
+          @conn.exec("UPDATE Order_table SET cropping_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_cropping_date])
+        end
+        compare_value = results.getvalue 0,16
+        if !compare_value.eql? object.get_final_client_upload
+          @conn.exec("UPDATE Order_table SET final_client_upload=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_client_upload])
+        end
+        compare_value = results.getvalue 0,17
+        if !compare_value.eql? object.get_final_client_upload_date
+          @conn.exec("UPDATE Order_table SET final_client_upload_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_client_upload_date])
+        end
+        compare_value = results.getvalue 0,18
+        if !compare_value.eql? object.get_verify_photo_replacement
+          @conn.exec("UPDATE Order_table SET verify_photo_replacement=$2 WHERE order_id=$1",[object.get_order_id,object.get_verify_photo_replacement])
+        end
+        compare_value = results.getvalue 0,19
+        if !compare_value.eql? object.get_verify_photo_replacement_date
+          @conn.exec("UPDATE Order_table SET verify_photo_replacement_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_verify_photo_replacement_date])
+        end
+
+
+        compare_value = results.getvalue 0,20
+        if object.get_home.eql? "empty"
+          if !compare_value.nil?
+            parade_id = nil
+          end
+        elsif !object.get_home.eql? "empty"
+          home = Home.new
+          home = object.get_home
+          home_id = home.get_home_id.to_i
+
+          if home_id != -1
+            home = interact_with_home('u',home)
+          elsif home_id == -1
+            home = interact_with_home('c',home)
+            home_id = home.get_home_id.to_i
+          end
+        end
+        if compare_value.to_i != home_id
+          @conn.exec("UPDATE Order_table SET home_id=$2 WHERE order_id=$1",[object.get_order_id,home_id])
+        end
+
+        compare_value = results.getvalue 0,21
+        if object.get_photographer.eql? "empty"
+          if !compare_value.nil?
+            photographer_id = nil
+          end
+        elsif !object.get_photographer.eql? "empty"
+          photographer = Photographer.new
+          photographer = object.get_photographer
+          photographer_id = photographer.get_photographer_id.to_i
+
+          if photographer_id != -1
+            photographer = interact_with_photographer('u',photographer)
+          elsif photographer_id == -1
+            photographer = interact_with_photographer('c',photographer)
+            photographer_id = photographer.get_photographer_id.to_i
+          end
+        end
+        if compare_value.to_i != photographer_id
+          @conn.exec("UPDATE Order_table SET photographer_id=$2 WHERE order_id=$1",[object.get_order_id,photographer_id])
+        end
+
+        compare_value = results.getvalue 0,22
+        if object.get_package.eql? "empty"
+          if !compare_value.nil?
+            package_id = nil
+          end
+        elsif !object.get_package.eql? "empty"
+          package = Package.new
+          package = object.get_package
+          package_id = package.get_package_id.to_i
+
+          if package_id != -1
+            package = interact_with_package('u',package)
+          elsif package_id == -1
+            package = interact_with_package('c',package)
+            package_id = package.get_package_id.to_i
+          end
+        end
+        if compare_value.to_i != package_id
+          @conn.exec("UPDATE Order_table SET package_id=$2 WHERE order_id=$1",[object.get_order_id,package_id])
+        end
+      else
+        return (@feedBack="Error")
+    end
+  end
 end
