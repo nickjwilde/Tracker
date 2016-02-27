@@ -61,16 +61,16 @@ class Factory
         end
         results = nil
       when 'D'
-          @conn.exec("DELETE FROM Builder WHERE builder_id = $1",[object.get_builder_id])
+        @conn.exec("DELETE FROM Builder WHERE builder_id = $1",[object.get_builder_id])
       when 'L'
         @feedBack = Array.new
         @conn.exec "SELECT builder_id, name_of_builder FROM Builder" do |results|
           results.each do |row|
-              object = Builder.new
-              object.set_builder_id(row['builder_id'])
-              object.set_name_of_builder(row['name_of_builder'])
-              @feedBack << object
-            end
+            object = Builder.new
+            object.set_builder_id(row['builder_id'])
+            object.set_name_of_builder(row['name_of_builder'])
+            @feedBack << object
+          end
         end
         results = nil
         return @feedBack
@@ -167,12 +167,12 @@ class Factory
     choice = choice.upcase
     case choice
       when 'C'
-      results = Array.new
-      @conn.exec("INSERT INTO Package (number_of_photos,notes_of_package) VALUES($1,$2)",[object.get_num_of_photos,object.get_notes])
-      results = @conn.exec("SELECT MAX(package_id) FROM Package")
-      object.set_package_id(results.getvalue 0,0)
-      results = nil
-      return object
+        results = Array.new
+        @conn.exec("INSERT INTO Package (number_of_photos,notes_of_package) VALUES($1,$2)",[object.get_num_of_photos,object.get_notes])
+        results = @conn.exec("SELECT MAX(package_id) FROM Package")
+        object.set_package_id(results.getvalue 0,0)
+        results = nil
+        return object
       when 'D'
         @conn.exec("DELETE FROM Package WHERE package_id = $1",[object.get_package_id])
       when 'L'
@@ -207,8 +207,8 @@ class Factory
           @conn.exec("UPDATE Package SET notes_of_package=$2 WHERE package_id=$1",[object.get_package_id,object.get_notes])
         end
         results = nil
-    else
-      return (@feedBack="Error")
+      else
+        return (@feedBack="Error")
     end
   end
 
@@ -325,7 +325,7 @@ class Factory
           # A builder has been assigned
           builder = Builder.new
           builder = object.get_builder
-          buider_id = (builder.get_builder_id.to_i)
+          builder_id = (builder.get_builder_id.to_i)
 
           # Check to see if builder has been added to the database already
           # The builder is in the system
@@ -334,7 +334,7 @@ class Factory
           elsif builder_id == -1
             # The builder is not in the system
             builder = interact_with_builder('C',builder)
-            buider_id = (builder.get_builder_id.to_i)
+            builder_id = (builder.get_builder_id.to_i)
           end
         else
           # A builder has not been assigned
@@ -351,7 +351,7 @@ class Factory
           # Check to see if the parade has been added to the database
           # The parade is in the system
           if parade_id != -1
-              parade = interact_with_parade('U',parade)
+            parade = interact_with_parade('U',parade)
           else
 
             # The parade is not in the system
@@ -365,22 +365,21 @@ class Factory
         end
 
         @conn.exec("INSERT INTO Home (home_name,home_address,city,state,notes,parade_id,builder_id) VALUES($1,$2,$3,$4,$5,$6,$7)",[object.get_home_name,object.get_home_address,object.get_city,object.get_state,object.get_home_notes,parade_id,builder_id])
-        results = @conn.exec("SELECT MAX(parade_id) FROM Parade")
-        object.set_parade_id(results.getvalue 0,0)
+        results = @conn.exec("SELECT MAX(home_id) FROM Home")
+        object.set_home_id(results.getvalue 0,0)
         results = nil
         return object
-        # Delete a home based off of the id
+      # Delete a home based off of the id
       when 'D'
         @conn.exec("DELETE FROM Home WHERE home_id = $1",[object.get_home_id])
       when 'L'
         @feedBack = Array.new
-        @conn.exec("SELECT  home_id, home_name, b.builder_id, builder_name, b.parade_id, parade_name
+        @conn.exec("SELECT  home_id, home_name, b.builder_id, name_of_builder, b.parade_id, name_of_parade
                     FROM    Home b
                                 LEFT JOIN(SELECT *
                                           FROM    Builder
                                         ) a
                                         ON b.builder_id = a.builder_id
-
                                 LEFT JOIN(
                                     SELECT *
                                     FROM    Parade
@@ -393,11 +392,11 @@ class Factory
 
             builder = Builder.new
             builder.set_builder_id(row['builder_id'])
-            builder.set_builder_name(row['builder_name'])
+            builder.set_name_of_builder(row['name_of_builder'])
 
             parade = Parade.new
             parade.set_parade_id(row['parade_id'])
-            parade.set_parade_name(row['parade_name'])
+            parade.set_parade_name(row['name_of_parade'])
 
             object.set_parade(parade)
             object.set_builder(builder)
@@ -406,12 +405,12 @@ class Factory
         end
         results = nil
         return @feedBack
-        # Here
+      # Here
       when 'R'
         results = Array.new
         results = @conn.exec("SELECT  *
                               FROM    Home
-                              WHERE   package_id=$1",[object.home_id])
+                              WHERE   home_id=$1",[object.get_home_id])
         object.set_home_id(results.getvalue 0,0)
         object.set_home_name(results.getvalue 0,1)
         object.set_home_address(results.getvalue 0,2)
@@ -424,12 +423,12 @@ class Factory
         # If no parade has been assigned yet
         if compare_value.nil? | (compare_value.eql? "empty")
           object.set_parade("empty")
-        # value has been assigned
+          # value has been assigned
         else
           parade_id = compare_value
           parade = Parade.new
           parade.set_parade_id(parade_id)
-          parade = interact_with_parade('R',photographer)
+          parade = interact_with_parade('R',parade)
           object.set_parade(parade)
         end
 
@@ -447,11 +446,73 @@ class Factory
         end
         results = nil
         return object
+      when 'U'
+        results = Array.new
+        results = @conn.exec("SELECT * FROM Home WHERE home_id=$1",[object.get_home_id])
+        compare_value = results.getvalue 0,1
+        if !compare_value.eql? object.get_home_name
+          @conn.exec("UPDATE Home SET home_name=$2 WHERE home_id=$1",[object.get_home_id,object.get_home_name])
+        end
+        compare_value = results.getvalue 0,2
+        if !compare_value.eql? object.get_home_address
+          @conn.exec("UPDATE Home SET home_address=$2 WHERE home_id=$1",[object.get_home_id,object.get_home_address])
+        end
+        compare_value = results.getvalue 0,3
+        if !compare_value.eql? object.get_city
+          @conn.exec("UPDATE Home SET city=$2 WHERE home_id=$1",[object.get_home_id,object.get_city])
+        end
+        compare_value = results.getvalue 0,4
+        if !compare_value.eql? object.get_state
+          @conn.exec("UPDATE Home SET state=$2 WHERE home_id=$1",[object.get_home_id,object.get_state])
+        end
+        compare_value = results.getvalue 0,5
+        if !compare_value.eql? object.get_notes
+          @conn.exec("UPDATE Home SET notes=$2 WHERE home_id=$1",[object.get_home_id,object.get_notes])
+        end
+        compare_value = results.getvalue 0,6
+        if object.get_parade.eql? "empty"
+          if !compare_value.nil?
+            parade_id = nil
+          end
+        elsif !object.get_parade.eql? "empty"
+          parade = Parade.new
+          parade = object.get_parade
+          parade_id = parade.get_parade_id.to_i
+
+          if parade_id != -1
+            parade = interact_with_parade('u',parade)
+          elsif parade_id == -1
+            parade = interact_with_parade('c',parade)
+            parade_id = parade.get_parade_id.to_i
+          end
+        end
+        if compare_value.to_i != parade_id
+          @conn.exec("UPDATE Home SET parade_id=$2 WHERE home_id=$1",[object.get_home_id,parade_id])
+        end
+        compare_value = results.getvalue 0,7
+        if object.get_builder.eql? "empty"
+          if !compare_value.nil?
+            builder_id = nil
+          end
+        elsif !object.get_builder.eql? "empty"
+          builder = Builder.new
+          builder = object.get_builder
+          builder_id = builder.get_builder_id.to_i
+
+          if builder_id != -1
+            builder = interact_with_builder('u',builder)
+          elsif builder_id == -1
+            builder = interact_with_builder('c',builder)
+            builder_id = parade.get_builder_id.to_i
+          end
+        end
+        if compare_value.to_i != builder_id
+          @conn.exec("UPDATE Home SET builder_id=$2 WHERE home_id=$1",[object.get_home_id,builder_id])
+        end
       else
         return (@feedBack="Error")
     end
   end
 
   ## Order Area
-
 end
