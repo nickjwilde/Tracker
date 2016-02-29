@@ -883,4 +883,45 @@ class Factory
         return (@feedBack="Error")
     end
   end
+
+  def list_all_orders_for_parade(object)
+    # Get the ID for the parade
+    results = Array.new
+    returnResults = Array.new
+    results = @conn.exec("SELECT	a.*
+
+                          FROM	Order_table AS a INNER JOIN Home AS b
+                                    ON a.home_id = b.home_id
+
+                                    INNER JOIN Parade c
+                                    ON b.parade_id = c.parade_id
+
+                          WHERE c.parade_id = $1",[object.get_parade_id])
+
+    results.each do |value|
+      orderTemp = Order.new
+      orderTemp.set_order_id(value['order_id'])
+      returnResults << interact_with_order('r',orderTemp)
+    end
+
+    return returnResults
+  end
+  #
+  # SELECT	O
+  # FROM	Parade p INNER JOIN Home h
+  # ON p.parade_id = h.parade_id
+  #
+  # INNER JOIN Order_table o
+  # ON o.home_id = h.home_id
+  #
+  # WHERE	p.parade_id = 1
+  #
+  #
+  # SELECT	*
+  #     FROM	Order_table
+  #
+  #
+  # SELECT	*
+  #     FROM	Home
+
 end

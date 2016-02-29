@@ -475,4 +475,19 @@ order2.set_package(package4)
 
 worker.interact_with_order('U',order2)
 
+
+
+# Getting all orders from a single parade, Parade_id =1 is out example as it has two orders associated with it
+results = Array.new
+paradeTemp = Parade.new
+paradeTemp.set_parade_id(1)
+
+results = worker.list_all_orders_for_parade(paradeTemp)
+
+# Access the results
+results.each do |value|
+  orderTemp = Order.new
+  orderTemp = value
+end
+
 print 'here'
