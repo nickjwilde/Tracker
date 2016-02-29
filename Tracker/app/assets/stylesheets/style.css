@@ -1,0 +1,112 @@
+body{
+	margin: 20px 0 0 20px;
+}
+
+.alert-danger {
+	background-color: #F09999;
+}
+
+.alert-success {
+	background-color: #BEFAA6;
+}
+
+.alert-warning {
+	background-color: #F7F565;
+}
+
+.column-header {
+	width:100%;
+	height:50px;
+	white-space: nowrap;
+}
+
+.email {
+	float: left;
+	padding-left: 5px;
+}
+
+.entry {
+	height:75px;
+	width:100%;
+	border: solid 0 transparent;
+    border-radius: 10px;
+    margin-top: 5px;
+    min-width: 220px;
+    text-align: center;
+    color: #292929;
+    cursor: pointer;
+}
+
+.entry:hover {
+	background-color: #9994FF;
+}
+
+.fa-envelope {
+	font-size: 20px;
+    color: #337AB7;
+    padding-left: 5px;
+    float: right;
+}
+
+.fa-phone {
+    font-size: 20px;
+    color: #337AB7;
+    padding-left: 5px;
+    float: right;
+}
+
+.fa-plus-circle {
+	padding-left:5px;
+	color:green;
+	font-size:25px;
+}
+
+.hidden {
+	display: none;
+}
+
+.nav-pills {
+	float:right;
+}
+
+.phone {
+	float: right;
+}
+
+.photo-name {
+    border-bottom: solid 2px;
+    margin-bottom: 0;
+}
+
+.progress{
+	margin: auto;
+	width:75%;
+}
+
+@media (min-width: 768px){
+	.entry{
+		
+	}
+}
+
+@media (max-width: 400px){
+	.phone {
+		float: none;
+	}
+
+	.email {
+		float: none;
+	}
+
+	.entry {
+		height: 85px;
+	}
+
+	.fa-phone {
+		float: none;
+	}
+
+	.fa-envelope {
+		float: none;
+	}
+}

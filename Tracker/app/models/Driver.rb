@@ -12,7 +12,7 @@ require '../models/order.rb'
 
 worker = Factory.new
 # This should be your password, utilize this
-pw = 'B$t1m3RUN50uT'
+pw = ""
 
 worker.connect_to_db(pw)
 
