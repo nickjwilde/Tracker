@@ -19,11 +19,10 @@
         <div class="entry alert-danger">
 					<h4 class="photo-name"><%= event.get_parade_name %><br/></h4>
 						<div class="email">
-							john.doe@paradecraze.com<i class="fa fa-envelope"></i>
-						</div>
+							<%= event.get_city + ", " + event.get_state %>
+            </div>
 						<div class="phone">
-							801-555-5555
-								<i class="fa fa-phone"></i>
+							<%= "Event Start Date: " + event.get_start_date.to_time.strftime("%m/%d/%Y")%>
 						</div>
 				</div>
         <% end %>

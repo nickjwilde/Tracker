@@ -14,11 +14,11 @@ class Factory
 
   # Builder Table information
   def create_builder_table
-<<<<<<< HEAD
+
     #@conn.exec("ALTER TABLE Home DROP CONSTRAINT home_builder_id_fkey")
-=======
+
     # @conn.exec("ALTER TABLE Home DROP CONSTRAINT home_builder_id_fkey")
->>>>>>> b8e73c66c9ecae47d13894f73cf7f141414e1cce
+
     @conn.exec("DROP TABLE IF EXISTS Builder")
 
     @conn.exec ("CREATE TABLE Builder(
@@ -218,11 +218,11 @@ class Factory
 
   ## Parade area
   def create_parade_table
-<<<<<<< HEAD
+
    #@conn.exec("ALTER TABLE Home DROP CONSTRAINT home_parade_id_fkey")
-=======
+
     # @conn.exec("ALTER TABLE Home DROP CONSTRAINT home_parade_id_fkey")
->>>>>>> b8e73c66c9ecae47d13894f73cf7f141414e1cce
+
     @conn.exec("DROP TABLE IF EXISTS Parade")
 
     @conn.exec ("CREATE TABLE Parade(
@@ -264,11 +264,9 @@ class Factory
       when 'L'
         @feedBack = Array.new
 
-        @conn.exec "SELECT parade_id, name_of_parade FROM Parade" do |results|
+        @conn.exec "SELECT * FROM Parade" do |results|
         results.each do |row|
-            object = Parade.new
-            object.set_parade_id(row['parade_id'])
-            object.set_parade_name(row['name_of_parade'])
+            object = Parade.new(row['parade_id'],row['name_of_parade'],row['city_of_parade'],row['state_of_parade'],row['start_date_of_parade'],row['end_date_of_parade'])
             @feedBack << object
           end
         end
