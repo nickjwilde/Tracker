@@ -9,7 +9,7 @@ class Parade
     @end_date
     @notes
   public
-    def initialize(id=-1,name="empty",city="empty",state="empty",start_date="empty",end_date="empty",notes="empty")
+    def initialize(id=-1,name="empty",city="empty",state="empty",start_date=nil,end_date=nil,notes="empty")
       @parade_id=id
       @parade_name=name
       @city = city
