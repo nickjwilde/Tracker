@@ -1,10 +1,14 @@
-class Builder
+require '../models/Notes.rb'
+
+class Builder < Notes
   
-  def initialize(id="-1",name="empty",phone="-1",email = "empty")
+  def initialize(id="-1",name="empty",phone="-1",email = "empty",note_key_id = "-1",contact = "empty")
     @builder_id = id
     @name_of_builder= name
     @phone_number = phone
     @email = email
+    @note_key_id= note_key_id
+
   end
 
   def set_builder_id(id)
@@ -13,6 +17,14 @@ class Builder
   #
   def get_builder_id
     @builder_id
+  end
+
+  def set_note_key_id(id)
+    @note_key_id= id
+  end
+
+  def get_note_key_id
+    @note_key_id
   end
 
   def set_name_of_builder(name)
@@ -38,5 +50,14 @@ class Builder
   def get_email
     @email
   end
+
+  def get_contact
+    @contact
+  end
+
+  def set_contact(contact)
+    @contact = contact
+  end
+
 
 end
