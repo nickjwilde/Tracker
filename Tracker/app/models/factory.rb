@@ -9,12 +9,16 @@ class Factory
   end
 
   def connect_to_db(pw)
-    @conn = PG::Connection.open(:dbname => 'postgres',:user =>'postgres', :password =>pw)
+    @conn = PG::Connection.open(:dbname => 'postgres',:user =>'nitrous', :password =>"")
   end
 
   # Builder Table information
   def create_builder_table
+
+    #@conn.exec("ALTER TABLE Home DROP CONSTRAINT home_builder_id_fkey")
+
     # @conn.exec("ALTER TABLE Home DROP CONSTRAINT home_builder_id_fkey")
+
     @conn.exec("DROP TABLE IF EXISTS Builder")
 
     @conn.exec ("CREATE TABLE Builder(
@@ -214,7 +218,11 @@ class Factory
 
   ## Parade area
   def create_parade_table
+
+   #@conn.exec("ALTER TABLE Home DROP CONSTRAINT home_parade_id_fkey")
+
     # @conn.exec("ALTER TABLE Home DROP CONSTRAINT home_parade_id_fkey")
+
     @conn.exec("DROP TABLE IF EXISTS Parade")
 
     @conn.exec ("CREATE TABLE Parade(
@@ -255,11 +263,10 @@ class Factory
         return object
       when 'L'
         @feedBack = Array.new
-        @conn.exec "SELECT parade_id, name_of_parade FROM Parade" do |results|
-          results.each do |row|
-            object = Parade.new
-            object.set_parade_id(row['parade_id'])
-            object.set_parade_name(row['name_of_parade'])
+
+        @conn.exec "SELECT * FROM Parade" do |results|
+        results.each do |row|
+            object = Parade.new(row['parade_id'],row['name_of_parade'],row['city_of_parade'],row['state_of_parade'],row['start_date_of_parade'],row['end_date_of_parade'])
             @feedBack << object
           end
         end
