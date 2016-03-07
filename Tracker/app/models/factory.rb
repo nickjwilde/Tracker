@@ -8,8 +8,8 @@ class Factory
     @feedBack =""
   end
 
-  def connect_to_db(pw)
-    @conn = PG::Connection.open(:dbname => 'postgres',:user =>'nitrous', :password =>"")
+  def connect_to_db(user_name,pw)
+    @conn = PG::Connection.open(:dbname => 'postgres',:user =>user_name, :password =>pw)
   end
 
   # Builder Table information
@@ -27,6 +27,7 @@ class Factory
                     , phone_number		    VARCHAR(14)
                     , email_address       VARCHAR(100)
                     , time_stamp          TIMESTAMP        DEFAULT      current_timestamp     NOT NULL
+                    , contact             VARCHAR(100)
              );")
   end
 
@@ -35,22 +36,23 @@ class Factory
     case choice
       when 'C'
         results = Array.new
-        @conn.exec("INSERT INTO Builder (name_of_builder,phone_number,email_address) VALUES($1,$2,$3)",[object.get_name_of_builder,object.get_phone_number,object.get_email])
+        @conn.exec("INSERT INTO Builder (name_of_builder,phone_number,email_address, contact) VALUES($1,$2,$3,$4)",[object.get_name_of_builder,object.get_phone_number,object.get_email,object.get_contact])
         results = @conn.exec("SELECT MAX(builder_id) FROM Builder")
         object.set_builder_id(results.getvalue 0,0)
         results = nil
         return object
       when 'R'
         results = Array.new
-        results = @conn.exec("SELECT * FROM Builder WHERE builder_id=$1",[object.get_builder_id])
+        results = @conn.exec("SELECT builder_id, name_of_builder, phone_number, email_address, contact FROM Builder WHERE builder_id=$1",[object.get_builder_id])
         object.set_name_of_builder(results.getvalue 0,1)
         object.set_phone_number(results.getvalue 0,2)
         object.set_email(results.getvalue 0,3)
+        object.set_contact(results.getvalue 0,4)
         results = nil
         return object
       when 'U'
         results = Array.new
-        results = @conn.exec("SELECT * FROM Builder WHERE builder_id=$1",[object.get_builder_id])
+        results = @conn.exec("SELECT builder_id, name_of_builder, phone_number, email_address, contact FROM Builder WHERE builder_id=$1",[object.get_builder_id])
         compare_value = results.getvalue 0,1
         if !compare_value.eql? object.get_name_of_builder
           @conn.exec("UPDATE Builder SET name_of_builder=$2 WHERE builder_id=$1",[object.get_builder_id,object.get_name_of_builder])
@@ -63,16 +65,21 @@ class Factory
         if !compare_value.eql? object.get_email
           @conn.exec("UPDATE Builder SET email_address=$2 WHERE builder_id=$1",[object.get_builder_id,object.get_email])
         end
+        compare_value = results.getvalue 0,4
+        if !compare_value.eql? object.get_contact
+          @conn.exec("UPDATE Builder SET email_address=$2 WHERE builder_id=$1",[object.get_builder_id,object.get_contact])
+        end
         results = nil
       when 'D'
         @conn.exec("DELETE FROM Builder WHERE builder_id = $1",[object.get_builder_id])
       when 'L'
         @feedBack = Array.new
-        @conn.exec "SELECT builder_id, name_of_builder FROM Builder" do |results|
+        @conn.exec "SELECT builder_id, name_of_builder, contact FROM Builder" do |results|
           results.each do |row|
             object = Builder.new
             object.set_builder_id(row['builder_id'])
             object.set_name_of_builder(row['name_of_builder'])
+            object.set_contact(row['contact'])
             @feedBack << object
           end
         end
@@ -94,6 +101,7 @@ class Factory
                     , phone_number_of_photographer		VARCHAR(14)
                     , notes_of_photographer           VARCHAR(1000)
                     , time_stamp                      TIMESTAMP        DEFAULT      current_timestamp     NOT NULL
+                    , swag                            VARCHAR(2)
              );")
   end
 
@@ -102,7 +110,7 @@ class Factory
     case choice
       when 'C'
         results = Array.new
-        @conn.exec("INSERT INTO Photographer (name_of_photographer,email_of_photographer,phone_number_of_photographer,notes_of_photographer) VALUES($1,$2,$3,$4)",[object.get_name,object.get_email,object.get_phone,object.get_notes])
+        @conn.exec("INSERT INTO Photographer (name_of_photographer,email_of_photographer,phone_number_of_photographer,notes_of_photographer,swag) VALUES($1,$2,$3,$4,$5)",[object.get_name,object.get_email,object.get_phone,object.get_notes,object.get_swag])
         results = @conn.exec("SELECT MAX(photographer_id) FROM Photographer")
         object.set_photographer_id(results.getvalue 0,0)
         results = nil
@@ -123,16 +131,17 @@ class Factory
         return @feedBack
       when 'R'
         results = Array.new
-        results = @conn.exec("SELECT * FROM Photographer WHERE photographer_id=$1",[object.get_photographer_id])
+        results = @conn.exec("SELECT photographer_id, name_of_photographer, email_of_photographer, phone_number_of_photographer, notes_of_photographer, swag FROM Photographer WHERE photographer_id=$1",[object.get_photographer_id])
         object.set_name(results.getvalue 0,1)
         object.set_email(results.getvalue 0,2)
         object.set_phone(results.getvalue 0,3)
         object.set_notes(results.getvalue 0,4)
+        object.set_swag(results.getvalue 0,5)
         results = nil
         return object
       when 'U'
         results = Array.new
-        results = @conn.exec("SELECT * FROM Photographer WHERE photographer_id=$1",[object.get_photographer_id])
+        results = @conn.exec("SELECT photographer_id, name_of_photographer, email_of_photographer, phone_number_of_photographer,notes_of_photographer, swag FROM Photographer WHERE photographer_id=$1",[object.get_photographer_id])
         compare_value = results.getvalue 0,1
         if !compare_value.eql? object.get_name
           @conn.exec("UPDATE Photographer SET name_of_photographer=$2 WHERE photographer_id=$1",[object.get_photographer_id,object.get_name])
@@ -143,11 +152,15 @@ class Factory
         end
         compare_value = results.getvalue 0,3
         if !compare_value.eql? object.get_phone
-          @conn.exec("UPDATE Photographer SET phone_number_of_photographer=$2 WHERE photographer_id=$1",[object.get_photographer_id_id,object.get_phone])
+          @conn.exec("UPDATE Photographer SET phone_number_of_photographer=$2 WHERE photographer_id=$1",[object.get_photographer_id,object.get_phone])
         end
         compare_value = results.getvalue 0,4
         if !compare_value.eql? object.get_notes
-          @conn.exec("UPDATE Photographer SET notes_of_photographer=$2 WHERE photographer_id=$1",[object.get_photographer_id_id,object.get_notes])
+          @conn.exec("UPDATE Photographer SET notes_of_photographer=$2 WHERE photographer_id=$1",[object.get_photographer_id,object.get_notes])
+        end
+        compare_value = results.getvalue 0,5
+        if !compare_value.eql? object.get_swag
+          @conn.exec("UPDATE Photographer SET swag=$2 WHERE photographer_id=$1",[object.get_photographer_id,object.get_swag])
         end
         results = nil
       else
@@ -164,6 +177,7 @@ class Factory
                     , number_of_photos                INTEGER
                     , notes_of_package                VARCHAR(10000)
                     , time_stamp                      TIMESTAMP        DEFAULT      current_timestamp     NOT NULL
+                    , name                            VARCHAR(1000)
              );")
   end
 
@@ -172,7 +186,7 @@ class Factory
     case choice
       when 'C'
         results = Array.new
-        @conn.exec("INSERT INTO Package (number_of_photos,notes_of_package) VALUES($1,$2)",[object.get_num_of_photos,object.get_notes])
+        @conn.exec("INSERT INTO Package (number_of_photos,notes_of_package,name) VALUES($1,$2,$3)",[object.get_num_of_photos,object.get_notes,object.get_name])
         results = @conn.exec("SELECT MAX(package_id) FROM Package")
         object.set_package_id(results.getvalue 0,0)
         results = nil
@@ -181,13 +195,14 @@ class Factory
         @conn.exec("DELETE FROM Package WHERE package_id = $1",[object.get_package_id])
       when 'L'
         @feedBack = Array.new
-        @conn.exec("SELECT  package_id
+        @conn.exec("SELECT  package_id, name, notes_of_package, number_of_photos
                     FROM    Package" )do |results|
           results.each do |row|
             object = Package.new
             object.set_package_id(row['package_id'])
             object.set_notes(row['notes_of_package'])
             object.set_num_of_photos(row['number_of_photos'])
+            object.set_name(row['name'])
             @feedBack << object
           end
         end
@@ -195,13 +210,14 @@ class Factory
         return @feedBack
       when 'R'
         results = Array.new
-        results = @conn.exec("SELECT * FROM Package WHERE package_id=$1",[object.get_package_id])
+        results = @conn.exec("SELECT package_id, number_of_photos, notes_of_package, name FROM Package WHERE package_id=$1",[object.get_package_id])
         object.set_num_of_photos(results.getvalue 0,1)
         object.set_notes(results.getvalue 0,2)
+        object.set_name(results.getvalue 0,3)
         return object
       when 'U'
         results = Array.new
-        results = @conn.exec("SELECT * FROM Package WHERE package_id=$1",[object.get_package_id])
+        results = @conn.exec("SELECT  package_id, number_of_photos, notes_of_package, name FROM Package WHERE package_id=$1",[object.get_package_id])
         compare_value = results.getvalue 0,1
         if !compare_value.eql? object.get_num_of_photos
           @conn.exec("UPDATE Package SET number_of_photos=$2 WHERE package=$1",[object.get_package_id,object.get_num_of_photos])
@@ -209,6 +225,10 @@ class Factory
         compare_value = results.getvalue 0,2
         if !compare_value.eql? object.get_notes
           @conn.exec("UPDATE Package SET notes_of_package=$2 WHERE package_id=$1",[object.get_package_id,object.get_notes])
+        end
+        compare_value = results.getvalue 0,3
+        if !compare_value.eql? object.get_name
+          @conn.exec("UPDATE Package SET name=$2 WHERE package_id=$1",[object.get_package_id,object.get_name])
         end
         results = nil
       else
