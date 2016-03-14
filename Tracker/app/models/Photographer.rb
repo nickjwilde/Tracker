@@ -7,12 +7,21 @@ class Photographer
     @notes
 
   public
-    def initialize(id = "-1",name="empty",email="empty",phone="empty",notes="empty")
+    def initialize(id = "-1",name="empty",email="empty",phone="empty",notes="empty",swag = "N")
       @photographer_id = id
       @name = name
       @email = email
       @phone = phone
       @notes = notes
+      @swag = swag
+    end
+
+    def get_swag
+      @swag
+    end
+
+    def set_swag(swag)
+      @swag = swag
     end
 
     def set_photographer_id(id)

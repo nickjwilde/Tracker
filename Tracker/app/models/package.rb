@@ -6,11 +6,18 @@ class Package
     @notes
     #@@array = Array.new('15','30','45')
   public
-    def initialize(id = "-1",photo_num="0",notes="empty")
+    def initialize(id = "-1",photo_num="0",notes="empty",name="empty")
       @package_id=id
       @num_of_photos=photo_num
       @notes=notes
+      @name = name
 
+    end
+    def get_name
+      @name
+    end
+    def set_name(name)
+      @name = name
     end
     def set_package_id(id)
       @package_id = id
