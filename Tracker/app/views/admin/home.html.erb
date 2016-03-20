@@ -1,64 +1,40 @@
-<html>
-  <body>
-    	<div class="row">
+
+	<div class="row">
 	<div class="col-md-12">
-	<ul class="nav nav-pills">
-		<li class="active logout"><a href="#">Logout</a></li>
-	</ul>
+	  <ul class="nav nav-pills">
+	  	<li><a class="btn btn-default" href="#">Add</a></li>
+	  	<li><a class="btn btn-default" href="#">Admin</a></li>
+	  	<li class="active logout"><a href="#">Logout</a></li>
+	  </ul>
 	</div>
-</div>
+  </div>
 
 	<div class="container">
 		<div class="row">
-			<div id="photo-column" class="col-sm-6">
+			<div id="event-column" class="col-sm-6">
 				<div class="column-header">
-          <h1>Events<i class="fa fa-plus-circle"> Add New</i></h1>
-        </div>
-				<% @results.each do |event| %>
-
-        <div class="entry alert-danger">
-					<h4 class="photo-name"><%= event.get_parade_name %><br/></h4>
-						<div class="email">
-							<%= event.get_city + ", " + event.get_state %>
-            </div>
-						<div class="phone">
-							<%= "Event Start Date: " + event.get_start_date.to_time.strftime("%m/%d/%Y")%>
-						</div>
+					<h2 class="">Upcoming Events</h2>
 				</div>
-        <% end %>
-			</div>
-			<div id="editor-column" class="col-sm-6">
-				<div class="column-header"><h1>Photos to Edit</h1></div>
-				<div class="entry alert-danger" role="alert"><p>Text here</p></div>
-				<div class="entry alert-danger"></div>
-				<div class="entry alert-warning"></div>
-				<div class="entry alert-warning"></div>
-				<div class="entry alert-success"></div>
-				<div class="entry alert-success"></div>
-				<div class="entry alert-success"></div>
-			</div>
-			<div id="home-column" class="col-sm-6 hidden">
-				<div><h1>Homes</h1></div>
-				<div class="entry alert-danger" role="alert"></div>
-				<div class="entry alert-danger">
-					<h4 class="photo-name">Home 1<br/>
+        <%= @results.each do |event| %>
+				<div class="entry">
+					<h4>
+						<span class="entry-header">
+							<%= event.get_city + ", " +  event.get_state %>
+						</span><br/>
+						<div class="date">
+							<div class="day">
+								<%= event.get_start_date.to_time.strftime("%d") %>
+							</div>
+							<div class="month">
+								<%= event.get_start_date.to_time.strftime("%b") %>
+							</div>
+							<div class="year">
+								<%= event.get_start_date.to_time.strftime("%Y") %>
+							</div>
+						</div>
 					</h4>
-						<div class="email">
-							1234 Cherry Lane
-						</div>
-						<div class="phone">
-						</div>
-
-
 				</div>
-				<div class="entry alert-warning"></div>
-				<div class="entry alert-warning"></div>
-				<div class="entry alert-success"></div>
-				<div class="entry alert-success"></div>
-				<div class="entry alert-success"></div>
+			<% end %>
 			</div>
 		</div>
 	</div>
-</body>
-</html>
-
