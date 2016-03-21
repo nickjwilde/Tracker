@@ -11,6 +11,10 @@
 <body>
  <% if current_user %>
         Signed in as <strong><%= current_user.name %></strong>!
+        <%= current_user.provider %>
+  <%= current_user.uid %><br/>
+  <%= current_user.oauth_token %><br/>
+  <%= current_user.oauth_expires_at %><br/>
         <%= link_to "Sign out", signout_path, id: "sign_out" %>
       <%= yield %>
       <% else %>
