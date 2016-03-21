@@ -10,15 +10,24 @@
 </head>
 <body>
  <% if current_user %>
-        Signed in as <strong><%= current_user.name %></strong>!
-        <%= current_user.provider %>
-  <%= current_user.uid %><br/>
-  <%= current_user.oauth_token %><br/>
-  <%= current_user.oauth_expires_at %><br/>
-        <%= link_to "Sign out", signout_path, id: "sign_out" %>
+
+  <div class="row">
+	<div class="col-md-12">
+	  <ul class="nav nav-pills">
+      <li class="navbar-text">Welcome, <%= current_user.name %>!</li>
+	  	<li><a class="btn btn-default" href="#">Add</a></li>
+	  	<li><a class="btn btn-default" href="#">Admin</a></li>
+	  	<li class="active logout"><a href="signout/">Logout</a></li>
+	  </ul>
+	</div>
+  </div>
       <%= yield %>
       <% else %>
-        <%= link_to "Sign in with Google", "/auth/google_oauth2", id: "sign_in", class: "btn btn-primary" %>
+    <div class="container">
+      <div class="row">
+        <%= link_to "Sign in with Google", "/auth/google_oauth2", id: "sign_in", class: "btn btn-primary", style: "position:absolute;top:50%;left:50%"%>
+      </div>
+  </div>
       <% end %>
 
 

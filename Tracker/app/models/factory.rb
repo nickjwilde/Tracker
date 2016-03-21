@@ -933,22 +933,65 @@ class Factory
 
     return returnResults
   end
-  #
-  # SELECT	O
-  # FROM	Parade p INNER JOIN Home h
-  # ON p.parade_id = h.parade_id
-  #
-  # INNER JOIN Order_table o
-  # ON o.home_id = h.home_id
-  #
-  # WHERE	p.parade_id = 1
-  #
-  #
-  # SELECT	*
-  #     FROM	Order_table
-  #
-  #
-  # SELECT	*
-  #     FROM	Home
 
+  def create_user_table
+    @conn.exec("DROP TABLE IF EXISTS user_table")
+
+    @conn.exec ("CREATE TABLE user_table(
+                first_name      VARCHAR(100),
+                last_name       VARHCAR(100),
+                email           VARCHAR(1000),
+                user_id         INTEGER,
+                time_stamp      TIMESTAMP         DEFAULT         current_timestamp     NOT NULL
+              );")
+  end
+
+  def interact_with_user(choice,object="empty")
+    choice = choice.upcase
+    case choice
+      when 'C'
+        results = Array.new
+        @conn.exec("INSERT INTO user_table (first_name,last_name,email,user_id) VALUES($1,$2,$3,$4)",[object.get_first_name,object.get_last_name,object.get_email,object.get_user_id])
+      when 'V'
+        results = Array.new
+        results = @conn.exec("SELECT user_id FROM user_table WHERE user_id=$1",[object.get_user_id])
+        if results.blank?
+          return False
+        else
+          return True
+        end
+      when 'U'
+        results = Array.new
+        results = @conn.exec("SELECT first_name,last_name,user_id FROM user_table WHERE user_id=$1",[object.get_user_id])
+        compare_value = results.getvalue 0,0
+        if !compare_value.eql? object.get_first_name
+          @conn.exec("UPDATE user_table SET first_name=$2 WHERE user_id=$1",[object.get_user_id,object.get_first_name])
+        end
+        compare_value = results.getvalue 0,1
+        if !compare_value.eql? object.get_last_name
+          @conn.exec("UPDATE user_table SET last_name=$2 WHERE user_id=$1",[object.get_user_id,object.get_last_name])
+        end
+        compare_value = results.getvalue 0,2
+        if !compare_value.eql? object.get_last_name
+          @conn.exec("UPDATE user_table SET email=$2 WHERE user_id=$1",[object.get_user_id,object.get_email])
+        end
+      when 'D'
+        @conn.exec("DELETE FROM user_table WHERE user_id = $1",[object.get_user_id])
+      when 'L'
+        @feedBack = Array.new
+        @conn.exec "SELECT first_name, last_name, email FROM user_table" do |results|
+          results.each do |row|
+            object = User.new
+            object.set_first_name(row['first_name'])
+            object.set_last_name(row['last_name'])
+            object.set_email(row['email'])
+            @feedBack << object
+          end
+        end
+        results = nil
+        return @feedBack
+      else
+        return (@feedBack="Error")
+    end
+  end
 end

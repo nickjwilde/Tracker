@@ -58,11 +58,6 @@ ActiveRecord::Schema.define(version: 20160321012430) do
     t.datetime "time_stamp",                                default: "now()", null: false
   end
 
-  create_table "test", id: false, force: true do |t|
-    t.integer "id",                null: false
-    t.string  "name", limit: 1000
-  end
-
   create_table "users", force: true do |t|
     t.string   "provider"
     t.string   "uid"
