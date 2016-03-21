@@ -13,9 +13,11 @@ require '../models/home.rb'
 
 worker = Factory.new
 # This should be your password, utilize this
-pw = ""
+pw =
+user_name =
+database = "photo_tracking"
 
-worker.connect_to_db(pw)
+worker.connect_to_db(user_name, pw, database)
 
 ## Create Tables
 worker.create_builder_table
@@ -35,6 +37,7 @@ build_person1 = Builder.new
 build_person1.set_name_of_builder("Bob the builder")
 build_person1.set_phone_number("1-801-375-5555")
 build_person1.set_email("1234@asdf.com")
+build_person1.set_contact("Tommy Thorn")
 
 build_person2 = Builder.new
 build_person2.set_name_of_builder("Dora wonder")
@@ -47,6 +50,7 @@ build_person2 = worker.interact_with_builder('c',build_person2)
 
 ### Update a Builder
 build_person2.set_email("aaaaaaaaaaaaaaaa")
+build_person2.set_contact("Crowy conner")
 worker.interact_with_builder('u',build_person2)
 
 ### Delete a Builder
@@ -56,9 +60,11 @@ worker.interact_with_builder('D',build_person2)
 temp = worker.interact_with_builder('l')
 
 ### Recreate a builder
+build_person2 = Builder.new
 build_person2.set_name_of_builder("Dora wonder")
 build_person2.set_phone_number("1-597-589-5698")
 build_person2.set_email("aaaaaaaaaaaaaaaa")
+build_person2.set_contact("Crowy conner Two")
 build_person2 = worker.interact_with_builder('c',build_person2)
 
 ### Read a Builder
@@ -72,6 +78,7 @@ photo_person1 = Photographer.new
 photo_person1.set_name("Beauty Beth")
 photo_person1.set_phone("1-234-567-8910")
 photo_person1.set_email("asdfasdfasdf")
+photo_person1.set_swag("Y")
 
 photo_person2 = Photographer.new
 photo_person2.set_name("wonder woman")
@@ -85,6 +92,7 @@ photo_person2 = worker.interact_with_photographer('c',photo_person2)
 
 ### Update a Photographer
 photo_person2.set_email("aaaaaaaaaaaaaaaa")
+photo_person2.set_swag("Y")
 worker.interact_with_photographer('u',photo_person2)
 
 ### Delete a Photographer
@@ -94,6 +102,7 @@ worker.interact_with_photographer('D',photo_person2)
 temp = worker.interact_with_photographer('l')
 
 ### Recreate a Photographer
+photo_person2 = Photographer.new
 photo_person2.set_name("wonder woman")
 photo_person2.set_phone("1-101-101-1010")
 photo_person2.set_email("a")
@@ -489,5 +498,22 @@ results.each do |value|
   orderTemp = Order.new
   orderTemp = value
 end
+
+user = 'test_person'
+pw = '1234AbCd'
+
+worker.create_new_user(user,pw)
+
+worker1 = connect_to_db(user,pw)
+
+build_person5 = Builder.new
+build_person5.set_name_of_builder('Billy Tommy Will')
+
+worker1.interact_with_builder('C',build_person5)
+
+
+
+
+
 
 print 'here'

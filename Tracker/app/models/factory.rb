@@ -8,17 +8,12 @@ class Factory
     @feedBack =""
   end
 
-  def connect_to_db(user_name,pw)
-    @conn = PG::Connection.open(:dbname => 'postgres',:user =>user_name, :password =>pw)
+  def connect_to_db(user_name,pw,database)
+    @conn = PG::Connection.open(:dbname => database,:user =>user_name, :password =>pw)
   end
 
   # Builder Table information
   def create_builder_table
-
-    #@conn.exec("ALTER TABLE Home DROP CONSTRAINT home_builder_id_fkey")
-
-    # @conn.exec("ALTER TABLE Home DROP CONSTRAINT home_builder_id_fkey")
-
     @conn.exec("DROP TABLE IF EXISTS Builder")
 
     @conn.exec ("CREATE TABLE Builder(
