@@ -1,6 +1,6 @@
-require '../models/Notes.rb'
 
-class Builder < Notes
+
+class Builder
   
   def initialize(id="-1",name="empty",phone="-1",email = "empty",note_key_id = "-1",contact = "empty")
     @builder_id = id

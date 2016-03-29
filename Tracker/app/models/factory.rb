@@ -396,21 +396,14 @@ class Factory
         @conn.exec("DELETE FROM Home WHERE home_id = $1",[object.get_home_id])
       when 'L'
         @feedBack = Array.new
-        @conn.exec("SELECT  home_id, home_name, b.builder_id, name_of_builder, b.parade_id, name_of_parade
-                    FROM    Home b
-                                LEFT JOIN(SELECT *
-                                          FROM    Builder
-                                        ) a
-                                        ON b.builder_id = a.builder_id
-                                LEFT JOIN(
-                                    SELECT *
-                                    FROM    Parade
-                                  ) c
-                                  ON b.parade_id = c.parade_id" )do |results|
+        @conn.exec("SELECT  h.*, b.name_of_builder, p.name_of_parade
+                    FROM Home h
+                        LEFT JOIN builder b
+                        ON h.builder_id = b.builder_id
+                        LEFT JOIN Parade p
+                        ON h.parade_id = p.parade_id" )do |results|
           results.each do |row|
-            object = Home.new
-            object.set_home_id(row['home_id'])
-            object.set_home_name(row['home_name'])
+            object = Home.new(row['home_id'],row['home_name'],row['home_address'],row['city'],row['state'],row['notes'])
 
             builder = Builder.new
             builder.set_builder_id(row['builder_id'])
@@ -950,10 +943,10 @@ class Factory
       when 'V'
         results = Array.new
         results = @conn.exec("SELECT user_id FROM user_table WHERE user_id=$1",[object.get_user_id])
-        if results.blank?
-          return False
+        if (results.num_tuples.zero?)
+          return FALSE
         else
-          return True
+          return TRUE
         end
       when 'U'
         results = Array.new

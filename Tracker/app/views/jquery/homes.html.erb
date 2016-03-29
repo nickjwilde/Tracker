@@ -1,0 +1,21 @@
+<div class="column-header">
+	<h2>
+		Projects
+  </h2>
+</div>
+<% @home_results.each do | home | %>
+  <% if home.get_parade.get_parade_id == @parade_id %>
+    <div class="entry">
+	    <h4>
+		    <div class="home-header">
+			  	<span class="address">
+            <%= home.get_builder.get_name_of_builder %><br/>
+				  	<%= home.get_home_name %>
+				  </span><br/>
+            <%= home.get_home_address %><br/>
+			      <%= home.get_city + ', ' + home.get_state + ' ' + '84321' %>
+	    	</div>
+    	</h4>
+    </div>
+  <% end %>
+<% end %>

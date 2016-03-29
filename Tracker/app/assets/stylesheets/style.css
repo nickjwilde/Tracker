@@ -16,15 +16,15 @@ body{
 	white-space: nowrap;
 }
 
+.day {
+    font-size: 30px;
+    float: left;
+}
+
 .date {
 	margin: auto;
 	width: 80px;
 	font-weight: 300;
-}
-
-.day {
-    font-size: 30px;
-    float: left;
 }
 
 .details-box {
@@ -89,6 +89,10 @@ body{
 
 .hidden {
 	display: none;
+}
+
+.home-column .entry {
+  height: 80px;
 }
 
 .modal-header {

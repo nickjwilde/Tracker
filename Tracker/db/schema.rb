@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20160321012430) do
     t.string   "phone_number",    limit: 14
     t.string   "email_address",   limit: 100
     t.datetime "time_stamp",                  default: "now()", null: false
+    t.string   "contact",         limit: 100
   end
 
   create_table "home", primary_key: "home_id", force: true do |t|
@@ -34,10 +35,37 @@ ActiveRecord::Schema.define(version: 20160321012430) do
     t.datetime "time_stamp",                 default: "now()", null: false
   end
 
+  create_table "order_table", primary_key: "order_id", force: true do |t|
+    t.string   "photos_received",               limit: 2
+    t.datetime "photos_recieved_date"
+    t.integer  "photos_usable"
+    t.string   "photo_notes",                   limit: 10000
+    t.datetime "photos_approved_date"
+    t.string   "photographer_paid",             limit: 2
+    t.datetime "photographer_paid_date"
+    t.string   "initial_client_upload",         limit: 2
+    t.datetime "initial_client_upload_date"
+    t.string   "sent_to_philippines",           limit: 2
+    t.datetime "sent_to_philippines_date"
+    t.string   "approve_philippines",           limit: 2
+    t.datetime "approve_philippines_date"
+    t.string   "cropping",                      limit: 2
+    t.datetime "cropping_date"
+    t.string   "final_client_upload",           limit: 2
+    t.datetime "final_client_upload_date"
+    t.string   "verify_photo_replacement",      limit: 2
+    t.datetime "verify_photo_replacement_date"
+    t.integer  "home_id"
+    t.integer  "photographer_id"
+    t.integer  "package_id"
+    t.datetime "time_stamp",                                  default: "now()", null: false
+  end
+
   create_table "package", primary_key: "package_id", force: true do |t|
     t.integer  "number_of_photos"
     t.string   "notes_of_package", limit: 10000
     t.datetime "time_stamp",                     default: "now()", null: false
+    t.string   "name",             limit: 1000
   end
 
   create_table "parade", primary_key: "parade_id", force: true do |t|
@@ -56,6 +84,15 @@ ActiveRecord::Schema.define(version: 20160321012430) do
     t.string   "phone_number_of_photographer", limit: 14
     t.string   "notes_of_photographer",        limit: 1000
     t.datetime "time_stamp",                                default: "now()", null: false
+    t.string   "swag",                         limit: 2
+  end
+
+  create_table "user_table", id: false, force: true do |t|
+    t.string   "first_name", limit: 100
+    t.string   "last_name",  limit: 100
+    t.string   "email",      limit: 1000
+    t.string   "user_id",    limit: 1000
+    t.datetime "time_stamp",              default: "now()", null: false
   end
 
   create_table "users", force: true do |t|

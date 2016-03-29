@@ -13,9 +13,9 @@ require '../models/home.rb'
 
 worker = Factory.new
 # This should be your password, utilize this
-pw =
-user_name =
-database = "photo_tracking"
+pw = ""
+user_name = "nitrous"
+database = "postgres"
 
 worker.connect_to_db(user_name, pw, database)
 
@@ -498,22 +498,3 @@ results.each do |value|
   orderTemp = Order.new
   orderTemp = value
 end
-
-user = 'test_person'
-pw = '1234AbCd'
-
-worker.create_new_user(user,pw)
-
-worker1 = connect_to_db(user,pw)
-
-build_person5 = Builder.new
-build_person5.set_name_of_builder('Billy Tommy Will')
-
-worker1.interact_with_builder('C',build_person5)
-
-
-
-
-
-
-print 'here'

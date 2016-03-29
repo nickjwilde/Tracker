@@ -10,7 +10,9 @@ Rails.application.routes.draw do
   resources :sessions, only: [:create, :destroy]
   resource :home, only: [:show]
 
-  root 'admin#home'
+  match 'homes/', :to => 'jquery#homes', via: 'post'
+
+  root 'admin#events'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

@@ -1,0 +1,48 @@
+	<div class="container">
+		<div class="row">
+			<div id="event-column" class="col-sm-6">
+				<div class="column-header">
+					<h2 class="">Upcoming Events</h2>
+				</div>
+        <% @results.each do |event| %>
+				<div class="entry" data-parade-id="<%= event.get_parade_id %>">
+					<h4>
+						<span class="entry-header">
+              <%= event.get_parade_name %>
+						</span><br/>
+            <%= event.get_city + ", " +  event.get_state %><br/>
+						<div class="date">
+            <div class="start-date">
+							<div class="day">
+								<%= event.get_start_date.to_time.strftime("%d") %>
+							</div>
+							<div class="month">
+								<%= event.get_start_date.to_time.strftime("%b") %>
+							</div>
+							<div class="year">
+								<%= event.get_start_date.to_time.strftime("%Y") %>
+							</div>
+						</div>
+            <div class="end-date">
+							<div class="day">
+								<%= event.get_end_date.to_time.strftime("%d") %>
+							</div>
+							<div class="month">
+								<%= event.get_end_date.to_time.strftime("%b") %>
+							</div>
+							<div class="year">
+								<%= event.get_start_date.to_time.strftime("%Y") %>
+							</div>
+						</div>
+            </div>
+					</h4>
+				</div>
+			<% end %>
+			</div>
+    </div>
+    <div class="row">
+      <div id="home-results" class="home-column" class="col-sm-6">
+      </div>
+
+		</div>
+	</div>

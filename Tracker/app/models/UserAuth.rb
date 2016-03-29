@@ -1,6 +1,5 @@
-
 class UserAuth
-  def initialize(first_name, last_name, email, user_id)
+  def initialize(first_name="empty", last_name="empty", email="emtpy", user_id="empty")
     @first_name = first_name
     @last_name = last_name
     @email = email
@@ -30,8 +29,10 @@ class UserAuth
   def set_email(email)
     @email = email
   end
-
   def get_user_id
     @user_id
+  end
+  def set_user_id(user_id)
+    @user_id = user_id
   end
 end
