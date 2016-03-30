@@ -14,8 +14,8 @@ require '../models/home.rb'
 worker = Factory.new
 # This should be your password, utilize this
 pw = ""
-user_name = "nitrous"
-database = "postgres"
+user_name = "postgres"
+database = "photo_tracking"
 
 worker.connect_to_db(user_name, pw, database)
 
@@ -26,31 +26,22 @@ worker.create_parade_table
 worker.create_package_table
 worker.create_order_table
 
-
 ### dependency tables
 worker.create_home_table
-#worker.create_order_table
 
 # Creating testing people
 ## Builder
 build_person1 = Builder.new
 build_person1.set_name_of_builder("Bob the builder")
-build_person1.set_phone_number("1-801-375-5555")
-build_person1.set_email("1234@asdf.com")
-build_person1.set_contact("Tommy Thorn")
 
 build_person2 = Builder.new
 build_person2.set_name_of_builder("Dora wonder")
-build_person2.set_phone_number("1-597-589-5698")
-build_person2.set_email("asdfasd@234")
-
 ### Create Builders
 build_person1 = worker.interact_with_builder('c',build_person1)
 build_person2 = worker.interact_with_builder('c',build_person2)
 
 ### Update a Builder
-build_person2.set_email("aaaaaaaaaaaaaaaa")
-build_person2.set_contact("Crowy conner")
+build_person2.set_name_of_builder("aaaaaaaaaaaaaaaa")
 worker.interact_with_builder('u',build_person2)
 
 ### Delete a Builder
@@ -62,9 +53,6 @@ temp = worker.interact_with_builder('l')
 ### Recreate a builder
 build_person2 = Builder.new
 build_person2.set_name_of_builder("Dora wonder")
-build_person2.set_phone_number("1-597-589-5698")
-build_person2.set_email("aaaaaaaaaaaaaaaa")
-build_person2.set_contact("Crowy conner Two")
 build_person2 = worker.interact_with_builder('c',build_person2)
 
 ### Read a Builder
@@ -214,6 +202,8 @@ home1.set_builder(build_person1)
 home1.set_notes("THis is a home that has all the examples")
 home1.set_home_address("10256 n 489 e")
 home1.set_home_name("Candle Home 1")
+home1.set_home_number(11)
+home1.set_home_zipcode(84341)
 home1.set_parade(parade1)
 
 home2 = Home.new
@@ -233,9 +223,11 @@ temp = worker.interact_with_home('R',home1)
 
 ### Update a Home
 home2.set_builder(build_person1)
+home2.set_zipcode(84112)
+home2.set_home_number(10)
 worker.interact_with_home('u',home2)
 
-build_person1.set_email("1234123512341234")
+build_person1.set_name_of_builder("1234123512341234")
 # home2.set_builder(build_person1)
 home2.set_notes("These are the test notes to see the two changes")
 worker.interact_with_home('U',home2)
@@ -282,28 +274,29 @@ home2.set_parade("empty")
 worker.interact_with_home('U',home2)
 
 
+
+
 ## Create Order
 ### Create order with all fields filled
 order1 = Order.new
-order1.set_photo_received("Y")
-order1.set_received_date("12/14/1988")
-order1.set_photos_usable(30)
-order1.set_notes("These are the notes for order 1")
+order1.set_raw_photos(100)
+order1.set_raw_photos_date("12/14/1988")
+order1.set_estimated_photos(30)
+order1.set_photos_approved("Y")
 order1.set_photos_approved_date("01/01/2016")
 order1.set_photographer_paid("Y")
 order1.set_photographer_paid_date("01/05/2106")
-order1.set_initial_client_upload("Y")
-order1.set_initial_client_upload_date("01/06/2016")
-order1.set_sent_to_philippines("Y")
-order1.set_sent_to_philippines_date("01/10/2016")
-order1.set_approve_philippines("Y")
-order1.set_approve_philippines_date("01/11/2016")
+order1.set_quick_edit_upload("Y")
+order1.set_quick_edit_upload_date("01/06/2016")
+order1.set_assigned_to_editor("Y")
+order1.set_assigned_to_editor_date("01/10/2016")
+order1.set_final_edits_approve("Y")
+order1.set_final_edits_approve_date("01/11/2016")
+order1.set_final_photos_number(1000)
 order1.set_cropping("Y")
 order1.set_cropping_date("01/12/2016")
-order1.set_final_client_upload("Y")
-order1.set_final_client_upload_date("01/16/2016")
-order1.set_verify_photo_replacement("Y")
-order1.set_verify_photo_replacement_date("01/17/2016")
+order1.set_final_edit_upload("Y")
+order1.set_final_edit_upload_date("01/16/2016")
 order1.set_home(home1)
 order1.set_photographer(photo_person1)
 order1.set_package(package1)
@@ -314,8 +307,7 @@ order1 = worker.interact_with_order('C',order1)
 ### Build Person
 build_person3 = Builder.new
 build_person3.set_name_of_builder("Zooey buildings")
-build_person3.set_phone_number("1-597-589-1111")
-build_person3.set_email("asdf97868765764@234")
+
 
 ### New parade that needs to be created
 parade3 = Parade.new
@@ -350,59 +342,30 @@ photo_person3.set_notes("This person is really odd")
 
 
 order2 = Order.new
-order2.set_photo_received("N")
-order2.set_received_date(nil)
-order2.set_photos_usable(30)
-order2.set_notes("These are the notes for order 2")
+order2.set_raw_photos(5)
+order2.set_raw_photos_date(nil)
+order2.set_estimated_photos(2)
+order2.set_photos_approved("N")
 order2.set_photos_approved_date(nil)
 order2.set_photographer_paid("N")
 order2.set_photographer_paid_date(nil)
-order2.set_initial_client_upload("N")
-order2.set_initial_client_upload_date(nil)
-order2.set_sent_to_philippines("N")
-order2.set_sent_to_philippines_date(nil)
-order2.set_approve_philippines("N")
-order2.set_approve_philippines_date(nil)
+order2.set_quick_edit_upload("N")
+order2.set_quick_edit_upload_date(nil)
+order2.set_assigned_to_editor("N")
+order2.set_assigned_to_editor_date(nil)
+order2.set_final_edits_approve("N")
+order2.set_final_edits_approve_date(nil)
+order2.set_final_photos_number(1000)
 order2.set_cropping("N")
 order2.set_cropping_date(nil)
-order2.set_final_client_upload("N")
-order2.set_final_client_upload_date(nil)
-order2.set_verify_photo_replacement("N")
-order2.set_verify_photo_replacement_date(nil)
+order2.set_final_edit_upload("N")
+order2.set_final_edit_upload_date(nil)
 order2.set_home(home3)
-order2.set_photographer(photo_person3)
+order2.set_photographer(photo_person2)
 order2.set_package(package3)
 
+
 order2 = worker.interact_with_order('C',order2)
-
-## Order 3 has empty everything and will be updated later
-order3 = Order.new
-order3.set_photo_received("N")
-order3.set_received_date(nil)
-order3.set_photos_usable(30)
-order3.set_notes("These are the notes for order 3")
-order3.set_photos_approved_date(nil)
-order3.set_photographer_paid("N")
-order3.set_photographer_paid_date(nil)
-order3.set_initial_client_upload("N")
-order3.set_initial_client_upload_date(nil)
-order3.set_sent_to_philippines("N")
-order3.set_sent_to_philippines_date(nil)
-order3.set_approve_philippines("N")
-order3.set_approve_philippines_date(nil)
-order3.set_cropping("N")
-order3.set_cropping_date(nil)
-order3.set_final_client_upload("N")
-order3.set_final_client_upload_date(nil)
-order3.set_verify_photo_replacement("N")
-order3.set_verify_photo_replacement_date(nil)
-# Did not set home/Photographer/package on purpose
-
-order3 = worker.interact_with_order('C',order3)
-
-
-## List all orders in the database and return basic attributes
-temp = worker.interact_with_order('L')
 
 ## Read a specific Order
 orderTemp = Order.new
@@ -410,41 +373,40 @@ orderTemp.set_order_id(1)
 
 orderTemp = worker.interact_with_order('R',orderTemp)
 
-order3.set_photo_received("Y")
-order3.set_received_date("01/21/2015")
-order3.set_photos_usable(15)
-order3.set_notes("These are the notes for order 3, UPDATED")
-order3.set_photos_approved_date("12/15/2015")
-order3.set_photographer_paid("Y")
-order3.set_photographer_paid_date("07/28/2015")
-order3.set_initial_client_upload("Y")
-order3.set_initial_client_upload_date("09/08/2017")
-order3.set_sent_to_philippines("Y")
-order3.set_sent_to_philippines_date("08/07/1956")
-order3.set_approve_philippines("Y")
-order3.set_approve_philippines_date("06/02/1987")
-order3.set_cropping("Y")
-order3.set_cropping_date("12/12/2016")
-order3.set_final_client_upload("Y")
-order3.set_final_client_upload_date("08/08/1598")
-order3.set_verify_photo_replacement("Y")
-order3.set_verify_photo_replacement_date("07/07/2016")
+## List all orders in the database and return basic attributes
+temp = worker.interact_with_order('L')
 
-worker.interact_with_order('U',order3)
+## Order 3 has empty everything and will be updated later
+order2.set_raw_photos(-1)
+order2.set_raw_photos_date(nil)
+order2.set_estimated_photos(-100)
+order2.set_photos_approved("Y")
+order2.set_photos_approved_date(nil)
+order2.set_photographer_paid("Y")
+order2.set_photographer_paid_date(nil)
+order2.set_quick_edit_upload("Y")
+order2.set_quick_edit_upload_date(nil)
+order2.set_assigned_to_editor("Y")
+order2.set_assigned_to_editor_date(nil)
+order2.set_final_edits_approve("Y")
+order2.set_final_edits_approve_date(nil)
+order2.set_final_photos_number(-2)
+order2.set_cropping("Y")
+order2.set_cropping_date(nil)
+order2.set_final_edit_upload("Y")
+order2.set_final_edit_upload_date(nil)
+order2.set_home(home2)
+order2.set_photographer(photo_person3)
+order2.set_package(package2)
+# Did not set home/Photographer/package on purpose
 
-order3.set_home(home1)
-order3.set_photographer(photo_person2)
-order3.set_package(package2)
+order3 = worker.interact_with_order('U',order2)
 
-
-worker.interact_with_order('U',order3)
 
 
 ### Build Person
 build_person4 = Builder.new
 build_person4.set_name_of_builder("Build Person 4")
-build_person4.set_phone_number("1-597-666-1111")
-build_person4.set_email("66666@234")
 
 ### New parade that needs to be created
 parade4 = Parade.new
@@ -463,11 +425,12 @@ home4.set_builder(build_person4)
 home4.set_notes("THis is a home that has all the examples, this is home 4")
 home4.set_home_address("10256 n 14587562 E")
 home4.set_home_name("Candle Home 72")
+home4.set_home_number(15)
 home4.set_parade(parade4)
 
 ### New package that needs to be created
 package4 = Package.new
-package4.set_num_of_photos("0")
+package4.set_num_of_photos("100000")
 package4.set_notes("This is the notes about package four")
 
 ### New photographer that needs to be created

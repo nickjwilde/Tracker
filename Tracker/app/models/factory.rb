@@ -19,10 +19,6 @@ class Factory
     @conn.exec ("CREATE TABLE Builder(
                     builder_id		        SERIAL 		      PRIMARY KEY
                     , name_of_builder		  VARCHAR(100)	                                      NOT NULL
-                    , phone_number		    VARCHAR(14)
-                    , email_address       VARCHAR(100)
-                    , time_stamp          TIMESTAMP        DEFAULT      current_timestamp     NOT NULL
-                    , contact             VARCHAR(100)
              );")
   end
 
@@ -31,50 +27,33 @@ class Factory
     case choice
       when 'C'
         results = Array.new
-        @conn.exec("INSERT INTO Builder (name_of_builder,phone_number,email_address, contact) VALUES($1,$2,$3,$4)",[object.get_name_of_builder,object.get_phone_number,object.get_email,object.get_contact])
+        @conn.exec("INSERT INTO Builder (name_of_builder) VALUES($1)",[object.get_name_of_builder])
         results = @conn.exec("SELECT MAX(builder_id) FROM Builder")
         object.set_builder_id(results.getvalue 0,0)
         results = nil
         return object
       when 'R'
         results = Array.new
-        results = @conn.exec("SELECT builder_id, name_of_builder, phone_number, email_address, contact FROM Builder WHERE builder_id=$1",[object.get_builder_id])
+        results = @conn.exec("SELECT builder_id, name_of_builder FROM Builder WHERE builder_id=$1",[object.get_builder_id])
         object.set_name_of_builder(results.getvalue 0,1)
-        object.set_phone_number(results.getvalue 0,2)
-        object.set_email(results.getvalue 0,3)
-        object.set_contact(results.getvalue 0,4)
         results = nil
         return object
       when 'U'
         results = Array.new
-        results = @conn.exec("SELECT builder_id, name_of_builder, phone_number, email_address, contact FROM Builder WHERE builder_id=$1",[object.get_builder_id])
+        results = @conn.exec("SELECT builder_id, name_of_builder FROM Builder WHERE builder_id=$1",[object.get_builder_id])
         compare_value = results.getvalue 0,1
         if !compare_value.eql? object.get_name_of_builder
           @conn.exec("UPDATE Builder SET name_of_builder=$2 WHERE builder_id=$1",[object.get_builder_id,object.get_name_of_builder])
         end
-        compare_value = results.getvalue 0,2
-        if !compare_value.eql? object.get_phone_number
-          @conn.exec("UPDATE Builder SET phone_number=$2 WHERE builder_id=$1",[object.get_builder_id,object.get_phone_number])
-        end
-        compare_value = results.getvalue 0,3
-        if !compare_value.eql? object.get_email
-          @conn.exec("UPDATE Builder SET email_address=$2 WHERE builder_id=$1",[object.get_builder_id,object.get_email])
-        end
-        compare_value = results.getvalue 0,4
-        if !compare_value.eql? object.get_contact
-          @conn.exec("UPDATE Builder SET email_address=$2 WHERE builder_id=$1",[object.get_builder_id,object.get_contact])
-        end
-        results = nil
       when 'D'
         @conn.exec("DELETE FROM Builder WHERE builder_id = $1",[object.get_builder_id])
       when 'L'
         @feedBack = Array.new
-        @conn.exec "SELECT builder_id, name_of_builder, contact FROM Builder" do |results|
+        @conn.exec "SELECT builder_id, name_of_builder FROM Builder" do |results|
           results.each do |row|
             object = Builder.new
             object.set_builder_id(row['builder_id'])
             object.set_name_of_builder(row['name_of_builder'])
-            object.set_contact(row['contact'])
             @feedBack << object
           end
         end
@@ -327,9 +306,11 @@ class Factory
     @conn.exec ("CREATE TABLE Home(
                     home_id		                        SERIAL 		        PRIMARY KEY
                     , home_name     		              VARCHAR(100)
+                    , home_number                     INTEGER
                     , home_address                    VARCHAR(100)
                     , city                            VARCHAR(100)
                     , state                           VARCHAR(100)
+                    , zip                             INTEGER
                     , notes                           VARCHAR(10000)
                     , parade_id                       INTEGER
                     , builder_id                      INTEGER
@@ -386,7 +367,7 @@ class Factory
           parade_id = nil
         end
 
-        @conn.exec("INSERT INTO Home (home_name,home_address,city,state,notes,parade_id,builder_id) VALUES($1,$2,$3,$4,$5,$6,$7)",[object.get_home_name,object.get_home_address,object.get_city,object.get_state,object.get_home_notes,parade_id,builder_id])
+        @conn.exec("INSERT INTO Home (home_name,home_address,home_number,city,state,zip,notes,parade_id,builder_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)",[object.get_home_name,object.get_home_address,object.get_home_number,object.get_city,object.get_state,object.get_zipcode,object.get_home_notes,parade_id,builder_id])
         results = @conn.exec("SELECT MAX(home_id) FROM Home")
         object.set_home_id(results.getvalue 0,0)
         results = nil
@@ -403,7 +384,7 @@ class Factory
                         LEFT JOIN Parade p
                         ON h.parade_id = p.parade_id" )do |results|
           results.each do |row|
-            object = Home.new(row['home_id'],row['home_name'],row['home_address'],row['city'],row['state'],row['notes'])
+            object = Home.new(row['home_id'],row['home_name'],row['home_number'],row['home_address'],row['city'],row['state'],row['zipcode'],row['notes'])
 
             builder = Builder.new
             builder.set_builder_id(row['builder_id'])
@@ -427,13 +408,15 @@ class Factory
                               WHERE   home_id=$1",[object.get_home_id])
         object.set_home_id(results.getvalue 0,0)
         object.set_home_name(results.getvalue 0,1)
-        object.set_home_address(results.getvalue 0,2)
-        object.set_city(results.getvalue 0,3)
-        object.set_state(results.getvalue 0,4)
-        object.set_notes(results.getvalue 0,5)
+        object.set_home_number(results.getvalue 0,2)
+        object.set_home_address(results.getvalue 0,3)
+        object.set_city(results.getvalue 0,4)
+        object.set_state(results.getvalue 0,5)
+        object.set_zipcode(results.getvalue 0,6)
+        object.set_notes(results.getvalue 0,7)
 
         # Get parade associated with home
-        compare_value = results.getvalue 0,6
+        compare_value = results.getvalue 0,8
         # If no parade has been assigned yet
         if compare_value.nil? | (compare_value.eql? "empty")
           object.set_parade("empty")
@@ -447,7 +430,7 @@ class Factory
         end
 
         # Get builder associated with home
-        compare_value = results.getvalue 0,7
+        compare_value = results.getvalue 0,9
         # if no builder has been assigned yet
         if compare_value.nil? |(compare_value.eql? "empty")
           object.set_builder("empty")
@@ -460,6 +443,14 @@ class Factory
         end
         results = nil
         return object
+      when 'O'
+        id = object.get_home_id
+        results = Array.new
+        results = @conn.exec("SELECT order_id FROM Order WHERE home_id=$1",[object.get_home_id])
+        order = Order.new
+        order.set_order_id(results)
+        order = interact_with_order('R',order)
+        return order
       when 'U'
         results = Array.new
         results = @conn.exec("SELECT * FROM Home WHERE home_id=$1",[object.get_home_id])
@@ -472,18 +463,26 @@ class Factory
           @conn.exec("UPDATE Home SET home_address=$2 WHERE home_id=$1",[object.get_home_id,object.get_home_address])
         end
         compare_value = results.getvalue 0,3
+        if !compare_value.eql? object.get_home_number
+          @conn.exec("UPDATE Home SET home_number=$2 WHERE home_id=$1",[object.get_home_id,object.get_home_number])
+        end
+        compare_value = results.getvalue 0,4
         if !compare_value.eql? object.get_city
           @conn.exec("UPDATE Home SET city=$2 WHERE home_id=$1",[object.get_home_id,object.get_city])
         end
-        compare_value = results.getvalue 0,4
+        compare_value = results.getvalue 0,5
         if !compare_value.eql? object.get_state
           @conn.exec("UPDATE Home SET state=$2 WHERE home_id=$1",[object.get_home_id,object.get_state])
         end
-        compare_value = results.getvalue 0,5
+        compare_value = results.getvalue 0,6
+        if !compare_value.eql? object.get_zipcode
+          @conn.exec("UPDATE Home SET zip=$2 WHERE home_id=$1",[object.get_home_id,object.get_zipcode])
+        end
+        compare_value = results.getvalue 0,7
         if !compare_value.eql? object.get_notes
           @conn.exec("UPDATE Home SET notes=$2 WHERE home_id=$1",[object.get_home_id,object.get_notes])
         end
-        compare_value = results.getvalue 0,6
+        compare_value = results.getvalue 0,8
         if object.get_parade.eql? "empty"
           if !compare_value.nil?
             parade_id = nil
@@ -503,7 +502,7 @@ class Factory
         if compare_value.to_i != parade_id
           @conn.exec("UPDATE Home SET parade_id=$2 WHERE home_id=$1",[object.get_home_id,parade_id])
         end
-        compare_value = results.getvalue 0,7
+        compare_value = results.getvalue 0,9
         if object.get_builder.eql? "empty"
           if !compare_value.nil?
             builder_id = nil
@@ -534,25 +533,24 @@ class Factory
 
     @conn.exec ("CREATE TABLE Order_table(
                     order_id		                      SERIAL 		        PRIMARY KEY
-                    , photos_received	                VARCHAR(2)
-                    , photos_recieved_date            TIMESTAMP
-                    , photos_usable                   INTEGER
-                    , photo_notes                     VARCHAR(10000)
+                    , raw_photos	                    INTEGER
+                    , raw_photos_date                 TIMESTAMP
+                    , estimated_photos                INTEGER
+                    , photos_approved                  VARCHAR(2)
                     , photos_approved_date            TIMESTAMP
                     , photographer_paid               VARCHAR(2)
                     , photographer_paid_date          TIMESTAMP
-                    , initial_client_upload           VARCHAR(2)
-                    , initial_client_upload_date      TIMESTAMP
-                    , sent_to_philippines            VARCHAR(2)
-                    , sent_to_philippines_date        TIMESTAMP
-                    , approve_philippines            VARCHAR(2)
-                    , approve_philippines_date        TIMESTAMP
-                    , cropping                        VARCHAR(2)
-                    , cropping_date                   TIMESTAMP
-                    , final_client_upload             VARCHAR(2)
-                    , final_client_upload_date        TIMESTAMP
-                    , verify_photo_replacement        VARCHAR(2)
-                    , verify_photo_replacement_date   TIMESTAMP
+                    , quick_edit_upload               VARCHAR(2)
+                    , quick_edit_upload_date          TIMESTAMP
+                    , assigned_to_editor              VARCHAR(2)
+                    , assigned_to_editor_date         TIMESTAMP
+                    , final_edits_approve             VARCHAR(2)
+                    , final_edits_approve_date        TIMESTAMP
+                    , final_photos_num                INTEGER
+                    , final_cropping                  VARCHAR(2)
+                    , final_cropping_date             TIMESTAMP
+                    , final_edit_upload               VARCHAR(2)
+                    , final_edit_upload_date          TIMESTAMP
                     , home_id                         INTEGER
                     , photographer_id                 INTEGER
                     , package_id                      INTEGER
@@ -626,7 +624,7 @@ class Factory
           package_id = nil
         end
 
-        @conn.exec("INSERT INTO Order_table (photos_received,photos_recieved_date,photos_usable,photo_notes,photos_approved_date,photographer_paid,photographer_paid_date,initial_client_upload,initial_client_upload_date,sent_to_philippines,sent_to_philippines_date,approve_philippines,approve_philippines_date,cropping,cropping_date,final_client_upload,final_client_upload_date,verify_photo_replacement,verify_photo_replacement_date,home_id,photographer_id,package_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22)",[object.get_photos_received,object.get_received_date,object.get_photos_usable,object.get_notes,object.get_photos_approved_date,object.get_photographer_paid,object.get_photographer_paid_date,object.get_initial_client_upload,object.get_initial_client_upload_date,object.get_sent_to_philippines,object.get_sent_to_philippines_date,object.get_approve_philippines,object.get_approve_philippines_date,object.get_cropping,object.get_cropping_date,object.get_final_client_upload,object.get_final_client_upload_date,object.get_verify_photo_replacement,object.get_verify_photo_replacement_date,home_id,photographer_id,package_id])
+        @conn.exec("INSERT INTO Order_table (raw_photos,raw_photos_date,estimated_photos,photos_approved,photos_approved_date,photographer_paid,photographer_paid_date,quick_edit_upload,quick_edit_upload_date,assigned_to_editor,assigned_to_editor_date,final_edits_approve,final_edits_approve_date,final_photos_num,final_cropping,final_cropping_date,final_edit_upload,final_edit_upload_date,home_id,photographer_id,package_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21)",[object.get_raw_photos, object.get_raw_photos_date, object.get_estimated_photos, object.get_photos_approved, object.get_photos_approved_date, object.get_photographer_paid, object.get_photographer_paid_date, object.get_quick_edit_upload, object.get_quick_edit_upload_date, object.get_assigned_to_editor, object.get_assigned_to_editor_date, object.get_final_edits_approve, object.get_final_edits_approve_date,object.get_final_photos_number, object.get_cropping, object.get_cropping_date, object.get_final_edit_upload, object.get_final_edit_upload_date, home_id, photographer_id, package_id])
         results = @conn.exec("SELECT MAX(order_id) FROM Order_table")
         object.set_order_id(results.getvalue 0,0)
         results = nil
@@ -689,29 +687,27 @@ class Factory
         results = @conn.exec("SELECT  *
                               FROM    Order_table
                               WHERE   order_id=$1",[object.get_order_id])
-        object.set_order_id(results.getvalue 0,0)
-        object.set_photo_received(results.getvalue 0,1)
-        object.set_received_date(results.getvalue 0,2)
-        object.set_photos_usable(results.getvalue 0,3)
-        object.set_notes(results.getvalue 0,4)
+        object.set_raw_photos(results.getvalue 0,1)
+        object.set_raw_photos_date(results.getvalue 0,2)
+        object.set_estimated_photos(results.getvalue 0,3)
+        object.set_photos_approved(results.getvalue 0,4)
         object.set_photos_approved_date(results.getvalue 0,5)
         object.set_photographer_paid(results.getvalue 0,6)
         object.set_photographer_paid_date(results.getvalue 0,7)
-        object.set_initial_client_upload(results.getvalue 0,8)
-        object.set_initial_client_upload_date(results.getvalue 0,9)
-        object.set_sent_to_philippines(results.getvalue 0,10)
-        object.set_sent_to_philippines_date(results.getvalue 0,11)
-        object.set_approve_philippines(results.getvalue 0,12)
-        object.set_approve_philippines_date(results.getvalue 0,13)
-        object.set_cropping(results.getvalue 0,14)
-        object.set_cropping_date(results.getvalue 0,15)
-        object.set_final_client_upload(results.getvalue 0,16)
-        object.set_final_client_upload_date(results.getvalue 0,17)
-        object.set_verify_photo_replacement(results.getvalue 0,18)
-        object.set_verify_photo_replacement_date(results.getvalue 0,19)
+        object.set_quick_edit_upload(results.getvalue 0,8)
+        object.set_quick_edit_upload_date(results.getvalue 0,9)
+        object.set_assigned_to_editor(results.getvalue 0,10)
+        object.set_assigned_to_editor_date(results.getvalue 0,11)
+        object.set_final_edits_approve(results.getvalue 0,12)
+        object.set_final_edits_approve_date(results.getvalue 0,13)
+        object.set_final_photos_number(results.getvalue 0,14)
+        object.set_cropping(results.getvalue 0,15)
+        object.set_cropping_date(results.getvalue 0,16)
+        object.set_final_edit_upload(results.getvalue 0,17)
+        object.set_final_edit_upload_date(results.getvalue 0,18)
 
         # Get home associated with order
-        compare_value = results.getvalue 0,20
+        compare_value = results.getvalue 0,19
         # If no home has been assigned yet
         if compare_value.nil? | (compare_value.eql? "empty")
           object.set_home("empty")
@@ -725,7 +721,7 @@ class Factory
         end
 
         # Get Photographer associated with order
-        compare_value = results.getvalue 0,21
+        compare_value = results.getvalue 0,20
         # if no order has been assigned yet
         if compare_value.nil? |(compare_value.eql? "empty")
           object.set_photographer("empty")
@@ -738,7 +734,7 @@ class Factory
         end
 
         # Get Package associated with order
-        compare_value = results.getvalue 0,22
+        compare_value = results.getvalue 0,21
         # if no order has been assigned yet
         if compare_value.nil? |(compare_value.eql? "empty")
           object.set_package("empty")
@@ -755,20 +751,20 @@ class Factory
         results = Array.new
         results = @conn.exec("SELECT * FROM Order_table WHERE order_id=$1",[object.get_order_id])
         compare_value = results.getvalue 0,1
-        if !compare_value.eql? object.get_photos_received
-          @conn.exec("UPDATE Order_table SET photos_received=$2 WHERE order_id=$1",[object.get_order_id,object.get_photos_received])
+        if !compare_value.eql? object.get_raw_photos
+          @conn.exec("UPDATE Order_table SET raw_photos=$2 WHERE order_id=$1",[object.get_order_id,object.get_raw_photos])
         end
         compare_value = results.getvalue 0,2
-        if !compare_value.eql? object.get_received_date
-          @conn.exec("UPDATE Order_table SET photos_recieved_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_received_date])
+        if !compare_value.eql? object.get_raw_photos_date
+          @conn.exec("UPDATE Order_table SET raw_photos_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_raw_photos_date])
         end
         compare_value = results.getvalue 0,3
-        if !compare_value.eql? object.get_photos_usable
-          @conn.exec("UPDATE Order_table SET photos_usable=$2 WHERE order_id=$1",[object.get_order_id,object.get_photos_usable])
+        if !compare_value.eql? object.get_estimated_photos
+          @conn.exec("UPDATE Order_table SET estimated_photos=$2 WHERE order_id=$1",[object.get_order_id,object.get_estimated_photos])
         end
         compare_value = results.getvalue 0,4
-        if !compare_value.eql? object.get_notes
-          @conn.exec("UPDATE Order_table SET photo_notes=$2 WHERE order_id=$1",[object.get_order_id,object.get_notes])
+        if !compare_value.eql? object.get_photos_approved
+          @conn.exec("UPDATE Order_table SET photos_approved=$2 WHERE order_id=$1",[object.get_order_id,object.get_photos_approved])
         end
         compare_value = results.getvalue 0,5
         if !compare_value.eql? object.get_photos_approved_date
@@ -783,56 +779,50 @@ class Factory
           @conn.exec("UPDATE Order_table SET photographer_paid_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_photographer_paid_date])
         end
         compare_value = results.getvalue 0,8
-        if !compare_value.eql? object.get_initial_client_upload
-          @conn.exec("UPDATE Order_table SET initial_client_upload=$2 WHERE order_id=$1",[object.get_order_id,object.get_initial_client_upload])
+        if !compare_value.eql? object.get_quick_edit_upload
+          @conn.exec("UPDATE Order_table SET quick_edit_upload=$2 WHERE order_id=$1",[object.get_order_id,object.get_quick_edit_upload])
         end
         compare_value = results.getvalue 0,9
-        if !compare_value.eql? object.get_initial_client_upload_date
-          @conn.exec("UPDATE Order_table SET initial_client_upload_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_initial_client_upload_date])
+        if !compare_value.eql? object.get_quick_edit_upload_date
+          @conn.exec("UPDATE Order_table SET quick_edit_upload_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_quick_edit_upload_date])
         end
         compare_value = results.getvalue 0,10
-        if !compare_value.eql? object.get_sent_to_philippines
-          @conn.exec("UPDATE Order_table SET sent_to_philippines=$2 WHERE order_id=$1",[object.get_order_id,object.get_sent_to_philippines])
+        if !compare_value.eql? object.get_assigned_to_editor
+          @conn.exec("UPDATE Order_table SET assigned_to_editor=$2 WHERE order_id=$1",[object.get_order_id,object.get_assigned_to_editor])
         end
         compare_value = results.getvalue 0,11
-        if !compare_value.eql? object.get_sent_to_philippines_date
-          @conn.exec("UPDATE Order_table SET sent_to_philippines_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_sent_to_philippines_date])
+        if !compare_value.eql? object.get_assigned_to_editor_date
+          @conn.exec("UPDATE Order_table SET assigned_to_editor_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_assigned_to_editor_date])
         end
         compare_value = results.getvalue 0,12
-        if !compare_value.eql? object.get_approve_philippines
-          @conn.exec("UPDATE Order_table SET approve_philippines=$2 WHERE order_id=$1",[object.get_order_id,object.get_approve_philippines])
+        if !compare_value.eql? object.get_final_edits_approve
+          @conn.exec("UPDATE Order_table SET final_edits_approve=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_edits_approve])
         end
         compare_value = results.getvalue 0,13
-        if !compare_value.eql? object.get_approve_philippines_date
-          @conn.exec("UPDATE Order_table SET approve_philippines_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_approve_philippines_date])
+        if !compare_value.eql? object.get_final_edits_approve_date
+          @conn.exec("UPDATE Order_table SET final_edits_approve_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_edits_approve_date])
         end
         compare_value = results.getvalue 0,14
-        if !compare_value.eql? object.get_cropping
-          @conn.exec("UPDATE Order_table SET cropping=$2 WHERE order_id=$1",[object.get_order_id,object.get_cropping])
+        if !compare_value.eql? object.get_final_photos_number
+          @conn.exec("UPDATE Order_table SET final_photos_num=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_photos_number])
         end
         compare_value = results.getvalue 0,15
-        if !compare_value.eql? object.get_cropping_date
-          @conn.exec("UPDATE Order_table SET cropping_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_cropping_date])
+        if !compare_value.eql? object.get_cropping
+          @conn.exec("UPDATE Order_table SET final_cropping=$2 WHERE order_id=$1",[object.get_order_id,object.get_cropping])
         end
         compare_value = results.getvalue 0,16
-        if !compare_value.eql? object.get_final_client_upload
-          @conn.exec("UPDATE Order_table SET final_client_upload=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_client_upload])
+        if !compare_value.eql? object.get_cropping_date
+          @conn.exec("UPDATE Order_table SET final_cropping_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_cropping_date])
         end
         compare_value = results.getvalue 0,17
-        if !compare_value.eql? object.get_final_client_upload_date
-          @conn.exec("UPDATE Order_table SET final_client_upload_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_client_upload_date])
+        if !compare_value.eql? object.get_final_edit_upload
+          @conn.exec("UPDATE Order_table SET final_edit_upload=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_edit_upload])
         end
         compare_value = results.getvalue 0,18
-        if !compare_value.eql? object.get_verify_photo_replacement
-          @conn.exec("UPDATE Order_table SET verify_photo_replacement=$2 WHERE order_id=$1",[object.get_order_id,object.get_verify_photo_replacement])
+        if !compare_value.eql? object.get_final_edit_upload_date
+          @conn.exec("UPDATE Order_table SET final_edit_upload_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_edit_upload_date])
         end
         compare_value = results.getvalue 0,19
-        if !compare_value.eql? object.get_verify_photo_replacement_date
-          @conn.exec("UPDATE Order_table SET verify_photo_replacement_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_verify_photo_replacement_date])
-        end
-
-
-        compare_value = results.getvalue 0,20
         if object.get_home.eql? "empty"
           if !compare_value.nil?
             parade_id = nil
@@ -853,7 +843,7 @@ class Factory
           @conn.exec("UPDATE Order_table SET home_id=$2 WHERE order_id=$1",[object.get_order_id,home_id])
         end
 
-        compare_value = results.getvalue 0,21
+        compare_value = results.getvalue 0,20
         if object.get_photographer.eql? "empty"
           if !compare_value.nil?
             photographer_id = nil
@@ -874,7 +864,7 @@ class Factory
           @conn.exec("UPDATE Order_table SET photographer_id=$2 WHERE order_id=$1",[object.get_order_id,photographer_id])
         end
 
-        compare_value = results.getvalue 0,22
+        compare_value = results.getvalue 0,21
         if object.get_package.eql? "empty"
           if !compare_value.nil?
             package_id = nil
