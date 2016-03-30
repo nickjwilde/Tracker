@@ -448,6 +448,13 @@ order2.set_package(package4)
 worker.interact_with_order('U',order2)
 
 
+tempOrder = Order.new
+exampleHome = Home.new
+exampleHome.set_home_id(3)
+
+tempOrder = worker.interact_with_home('O',exampleHome)
+
+
 
 # Getting all orders from a single parade, Parade_id =1 is out example as it has two orders associated with it
 results = Array.new

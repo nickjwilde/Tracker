@@ -446,9 +446,9 @@ class Factory
       when 'O'
         id = object.get_home_id
         results = Array.new
-        results = @conn.exec("SELECT order_id FROM Order WHERE home_id=$1",[object.get_home_id])
+        results = @conn.exec("SELECT order_id FROM Order_table WHERE home_id=$1",[object.get_home_id])
         order = Order.new
-        order.set_order_id(results)
+        order.set_order_id(results.getvalue 0,0)
         order = interact_with_order('R',order)
         return order
       when 'U'
