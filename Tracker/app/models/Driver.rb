@@ -2,7 +2,7 @@
 require 'pg'
 
 # Internal Files
-require '../models/Builder.rb'
+require '../models/builder.rb'
 require '../models/Photographer.rb'
 require '../models/package.rb'
 require '../models/factory.rb'
@@ -13,8 +13,8 @@ require '../models/home.rb'
 
 worker = Factory.new
 # This should be your password, utilize this
-pw = ""
-user_name = "nitrous"
+pw = "Ln53gi8N"
+user_name = "nick"
 database = "postgres"
 
 worker.connect_to_db(user_name, pw, database)

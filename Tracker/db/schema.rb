@@ -87,14 +87,6 @@ ActiveRecord::Schema.define(version: 20160321012430) do
     t.string   "swag",                         limit: 2
   end
 
-  create_table "user_table", id: false, force: true do |t|
-    t.string   "first_name", limit: 100
-    t.string   "last_name",  limit: 100
-    t.string   "email",      limit: 1000
-    t.string   "user_id",    limit: 1000
-    t.datetime "time_stamp",              default: "now()", null: false
-  end
-
   create_table "users", force: true do |t|
     t.string   "provider"
     t.string   "uid"

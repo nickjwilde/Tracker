@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resource :home, only: [:show]
 
   match 'homes/', :to => 'jquery#homes', via: 'post'
+  match 'order_details/', :to => 'jquery#order', via: 'post'
 
   root 'admin#events'
 
