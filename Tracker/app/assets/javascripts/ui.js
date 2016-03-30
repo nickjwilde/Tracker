@@ -41,7 +41,8 @@ $(document).ready(function(){
 			$(this).addClass("selected");
 			$('#event-column .column-header').fadeTo(1000,0);
 			$('#event-column .entry').not(this).slideUp(1000);
-      homes_ajax(parade_id);
+      			homes_ajax(parade_id);
+      		}
 });
 	$(document).on('click','.home-column .entry',function(){
 		var home_id = $(this).data("home-id");

@@ -5,7 +5,7 @@
 </div>
 <% @home_results.each do | home | %>
   <% if home.get_parade.get_parade_id == @parade_id %>
-    <div class="entry">
+    <div data-home-id="<%= home.get_home_id %>" class="entry">
 	    <h4>
 		    <div class="home-header">
 			  	<span class="address">
