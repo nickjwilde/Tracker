@@ -1,68 +1,57 @@
 class Order
-    def initialize(id = "-1",received="empty",received_date=nil,ordered="empty",usable="empty",notes="empty",date_pictures_approved=nil,paid="empty",paid_date=nil,initial_client_upload="empty",initial_client_upload_date=nil,sent_to_philippines="empty",sent_to_philippines_date=nil,received_from_philippines="empty",received_from_philippines_date=nil,approve_philippines="empty",approve_philippines_date=nil,cropping="empty",cropping_date="empty",final_client_upload="empty",final_client_upload_date=nil,verify_photo_replacement="empty",verify_photo_replacement_date=nil,home = "empty",photographer="empty",package="empty")
+    def initialize(id = "-1", raw="empty", raw_date=nil,estimated="empty", approved = "N", date_pictures_approved=nil, paid="empty", paid_date=nil, quick_edit="empty", quick_edit_date=nil, assigned_editor="empty", assigned_editor_date=nil, final_edits="empty", final_edits_date=nil,final_num=0, cropping="empty", cropping_date="empty", final_edit_upload="empty", final_edit_upload_date=nil, home = "empty", photographer="empty", package="empty")
       @order_id=id
-      @photos_received=received
-      @photos_received_date = received_date
-      @photos_ordered=ordered
-      @photos_usable=usable
-      @picture_notes=notes
-      @photos_approved_date=date_pictures_approved
-      @photographer_paid=paid
-      @photographer_paid_date=paid_date
-      @initial_client_upload=initial_client_upload
-      @initial_client_upload_date = initial_client_upload_date
-      @sent_to_philippines = sent_to_philippines
-      @sent_to_philippines_date = sent_to_philippines_date
-      @received_from_philippines=received_from_philippines
-      @received_from_philippines_date=received_from_philippines_date
-      @approve_philippines = approve_philippines
-      @approve_philippines_date = approve_philippines_date
-      @cropping=cropping
-      @cropping_date=cropping_date
-      @final_client_upload= final_client_upload
-      @final_client_upload_date=final_client_upload_date
-      @verify_photo_replacement=verify_photo_replacement
-      @verify_photo_replacement_date = verify_photo_replacement_date
       @home = home
       @package=package
       @photographer=photographer
-    end
-
-    def get_order_id
-      @order_id
-    end
-    def set_order_id(id)
-      @order_id=id
-    end
-    def get_photos_received
-      @photos_received
-    end
-    def set_photo_received(receive)
-      @photos_received = receive
-    end
-  def get_received_date
-    @received_date
+      @raw_photos=raw
+      @raw_photos_date = raw_date
+      @estimated_photos=estimated
+      @photos_approved = approved
+      @photos_approved_date=date_pictures_approved
+      @photographer_paid=paid
+      @photographer_paid_date=paid_date
+      @quick_edit_upload=quick_edit
+      @quick_edit_upload_date = quick_edit_date
+      @assigned_to_editor = assigned_editor
+      @assigned_to_editor_date = assigned_editor_date
+      @final_edits_approve=final_edits
+      @final_edits_approve_date=final_edits_date
+      @final_photos_num = final_num
+      @final_cropping=cropping
+      @final_cropping_date=cropping_date
+      @final_edit_upload= final_edit_upload
+      @final_edit_upload_date=final_edit_upload_date
   end
-  def set_received_date(date)
-    @received_date = date
+  def get_order_id
+    @order_id
   end
-  def get_photos_ordered
-    @photos_ordered
+  def set_order_id(id)
+    @order_id=id
   end
-  def set_photos_ordered(ordered)
-    @photos_ordered = ordered
+  def get_raw_photos
+    @raw_photos
   end
-  def get_photos_usable
-    @photos_usable
+  def set_raw_photos(raw)
+    @raw_photos = raw
   end
-  def set_photos_usable(usable)
-    @photos_usable=usable
+  def get_raw_photos_date
+    @raw_photos_date
   end
-  def get_notes
-    @picture_notes
+  def set_raw_photos_date(date)
+    @raw_photos_date = date
   end
-  def set_notes(notes)
-    @picture_notes = notes
+  def get_estimated_photos
+    @estimated_photos
+  end
+  def set_estimated_photos(estimated)
+    @estimated_photos=estimated
+  end
+  def set_photos_approved(photos)
+    @photos_approved = photos
+  end
+  def get_photos_approved
+    @photos_approved
   end
   def set_photos_approved_date(approved)
     @photos_approved_date = approved
@@ -76,90 +65,84 @@ class Order
   def get_photographer_paid
     @photographer_paid
   end
-    def set_photographer_paid_date(paid_date)
-      @photographer_paid_date=paid_date
-    end
-    def get_photographer_paid_date
-      @photographer_paid_date
-    end
-  def set_initial_client_upload(upload)
-    @initial_client_upload=upload
+  def set_photographer_paid_date(paid_date)
+    @photographer_paid_date=paid_date
   end
-  def get_initial_client_upload
-    @initial_client_upload
+  def get_photographer_paid_date
+    @photographer_paid_date
   end
-  def set_initial_client_upload_date(upload_date)
-    @initial_client_upload_date=upload_date
+  def set_quick_edit_upload(upload)
+    @quick_edit_upload=upload
   end
-  def get_initial_client_upload_date
-    @initial_client_upload_date
+  def get_quick_edit_upload
+    @quick_edit_upload
   end
-  def set_sent_to_philippines(sent_to)
-    @sent_to_philippines =sent_to
+  def set_quick_edit_upload_date(upload_date)
+    @quick_edit_upload_date=upload_date
   end
-  def get_sent_to_philippines
-    @sent_to_philippines
+  def get_quick_edit_upload_date
+    @quick_edit_upload_date
   end
-  def set_sent_to_philippines_date(sent_to_date)
-    @sent_to_philippines_date =sent_to_date
+  def set_assigned_to_editor(sent_to)
+    @assigned_to_editor =sent_to
   end
-  def get_sent_to_philippines_date
-    @sent_tophilippines_date
+  def get_assigned_to_editor
+    @assigned_to_editor
+  end
+  def set_assigned_to_editor_date(assigned_to_date)
+    @assigned_to_editor_date =assigned_to_date
+  end
+  def get_assigned_to_editor_date
+    @assigned_to_editor_date
+  end
+  def set_final_edits_approve(final_edits)
+    @final_edits_approve =final_edits
+  end
+  def get_final_edits_approve
+    @final_edits_approve
+  end
+  def set_final_edits_approve_date(final_edits_date)
+    @final_edits_approve_date =final_edits_date
+  end
+  def get_final_edits_approve_date
+    @final_edits_approve_date
+  end
+  def set_final_photos_number(num)
+    @final_photos_num = num
+  end
+  def get_final_photos_number
+    @final_photos_num
   end
   def set_cropping(cropping)
-    @cropping = cropping
+    @final_cropping = cropping
   end
   def get_cropping
-    @cropping
+    @final_cropping
   end
   def set_cropping_date(cropping_date)
-    @cropping_date = cropping_date
+    @final_cropping_date = cropping_date
   end
   def get_cropping_date
-    @cropping_date
+    @final_cropping_date
   end
-  def set_final_client_upload(upload)
-    @final_client_upload = upload
+  def set_final_edit_upload(upload)
+    @final_edit_upload = upload
   end
-  def get_final_client_upload
-    @final_client_upload
+  def get_final_edit_upload
+    @final_edit_upload
   end
-  def set_final_client_upload_date(upload_date)
-    @final_client_upload_date = upload_date
+  def set_final_edit_upload_date(upload_date)
+    @final_edit_upload_date = upload_date
   end
-  def get_final_client_upload_date
-    @final_client_upload_date
+  def get_final_edit_upload_date
+    @final_edit_upload_date
   end
-  def set_verify_photo_replacement(photo_replacement)
-    @verify_photo_replacement = photo_replacement
+  def get_home
+    @home
   end
-  def get_verify_photo_replacement
-    @verify_photo_replacement
+  def set_home(home)
+    @home = home
   end
-    def get_verify_photo_replacement_date
-      @verify_photo_replacement_date
-    end
-    def set_verify_photo_replacement_date(date)
-      @verify_photo_replacement_date = date
-    end
-  def set_approve_philippines(approve_philippines)
-    @approve_philippines = approve_philippines
-  end
-  def get_approve_philippines
-    @approve_philippines
-  end
-  def set_approve_philippines_date(approve_philippines_date)
-    @approve_philippines_date = approve_philippines_date
-  end
-  def get_approve_philippines_date
-    @approve_philippines_date
-  end
-    def get_home
-      @home
-    end
-    def set_home(home)
-      @home = home
-    end
   def set_package(package)
     @package= package
   end
