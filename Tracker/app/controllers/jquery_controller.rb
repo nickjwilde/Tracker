@@ -11,7 +11,7 @@ class JqueryController < ActionController::Base
     worker.connect_to_db("nitrous","","postgres")
     home = Home.new
     home.set_home_id(params[:home_id]);
-    @order_object = worker.interact_with_home('O',home)
+    @order_object = worker.interact_with_home('O', home)
   end
 	
 end
