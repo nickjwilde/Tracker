@@ -1,38 +1,193 @@
 				<div class="details-box">
-					<a class="update-project btn btn-primary" data-toggle="modal" data-target="#update-modal">Update Details</a>
-					<div id="order-details">
-						<h4>Project: </h4>
-						<input id="photos-received" class="num-input" type="text" value="8"></input> photos received of 15
-						<div class="photos-usable">
-							Usable Photos: <input id="usable-photos" class="num-input" value="8"></input>
-						</div>
-						<div class="sent-to-editor" data-sent-to-editor="False">
-							Sent to Editor: <i class="fa fa-times"></i>
-						</div>
+					<div class="row row-one">
+						
+							<div class="sm-input">
+								<label for="pkg">Pkg </label>
+								<input type="text" class="sm-txt-box" value="<%= @orderdetails.get_package.get_num_of_photos %>" data-pkg-photos="<%= @orderdetails.get_package.get_num_of_photos %>" id="pkg"/>
+							</div>
+							<div class="sm-input">
+								<label for="raw">RAW </label>
+								<input type="text" class="sm-txt-box" value="<%= @orderdetails.get_raw_photos %>" data-raw-photos="<%= @orderdetails.get_raw_photos %>" id="raw"/>
+							</div>
+							<div class="sm-input">
+								<label for="est">Est </label>
+								<input type="text" class="sm-txt-box" value="<%= @orderdetails.get_estimated_photos %>" data-est-photos="<%= @orderdetails.get_estimated_photos %> id="est">
+							</div>
+							<div class="sm-input-final">
+								<label for="final">Final </label>
+								<input type="text" class="sm-txt-box" value="<%= @orderdetails.get_final_photos_number %>" data-final-photos="<%= @orderdetails.get_final_photos_number %> id="final">
+							</div>
 					</div>
+					
+
 					<div id="photographer-details">
-						<h4>Photographer: </h4>
-						<div id="photographer-paid" data-photographer-paid="False">
-							Photographer Paid: <i class="fa fa-times"></i>
-						</div>
-						<div class="name">
-							John Doe
-						</div>
+						
+								<h4>Photographer: </h4>
+							<div class="photographer">
+								<select>
+									<option>John Doe</option>
+								</select>
+							</div>
+							<div class="swag">
+							<% if @orderdetails.get_photographer.get_swag %>
+								Swag Pkg  <i class="fa fa-check"></i>
+							<% else %>
+								Swag Pkg <i class="fa fa-times"></i>
+							<% end %>
+							</div>
+					</div>
+					<div id="photographer-info">
 						<div class="email">
-							jdoe@fakemail.com
+							<a href="mailto:jdoe@fakemail.com">jdoe@fakemail.com</a>
 						</div>
 						<div class="phone">
-							801-555-5555
+							<a href="tel:801-555-5555">801-555-5555</a>
 						</div>
 					</div>
-					<div id="builder-details">
-						<h4>Builder: </h4>
-						FX General Contractors
-						<div class="phone">
-							855-594-5115
+					<div id="order-bools">
+						<div class="row status-row">
+							<div class="status-header">
+								Photos Approved:  
+							</div>
+							<% if @orderdetails.get_photos_approved %>
+							<div class="status-icon">
+								<i class="fa fa-check"></i>
+							</div>
+							<div class="status-date">
+								Date: <%= @orderdetails.get_photos_approved_date.try(:to_time).try(:strftime, '%-m/%-d/%y') %> 
+							</div>
+							<% else %>
+							<div class="status-icon">
+								<i class="fa fa-times"></i>
+							</div>
+							<div class="status-date">
+								Date:  
+							</div>
+							<% end %>
 						</div>
+						<div class="row status-row">
+							<div class="status-header">
+								Photographer Paid:	
+							</div>
+							<% if @orderdetails.get_photographer_paid %>
+							<div class="status-icon">
+								<i class="fa fa-check"></i>
+							</div>
+							<div class="status-date">
+								Date: <%= @orderdetails.get_photographer_paid_date.try(:to_time).try(:strftime, '%-m/%-d/%y') %> 
+							</div>
+							<% else %>
+							<div class="status-icon">
+								<i class="fa fa-times"></i>
+							</div>
+							<div class="status-date">
+								Date:  
+							</div>
+							<% end %>
+						</div>
+						<div class="row status-row">
+							<div class="status-header">
+								 Quick Edit Upload: 
+							</div>
+							<% if @orderdetails.get_quick_edit_upload%>
+							<div class="status-icon">
+								<i class="fa fa-check"></i>
+							</div>
+							<div class="status-date">
+								Date: <%= @orderdetails.get_quick_edit_upload_date.try(:to_time).try(:strftime, '%-m/%-d/%y') %> 
+							</div>
+							<% else %>
+							<div class="status-icon">
+								<i class="fa fa-times"></i>
+							</div>
+							<div class="status-date">
+								Date:  
+							</div>
+							<% end %>	
+						</div>
+						<div class="row status-row">
+							<div class="status-header">
+								Assigned to Editor:  
+							</div>
+							<% if @orderdetails.get_assigned_to_editor%>
+							<div class="status-icon">
+								<i class="fa fa-check"></i>
+							</div>
+							<div class="status-date">
+								Date: <%= @orderdetails.get_assigned_to_editor_date.try(:to_time).try(:strftime, '%-m/%-d/%y') %> 
+							</div>
+							<% else %>
+							<div class="status-icon">
+								<i class="fa fa-times"></i>
+							</div>
+							<div class="status-date">
+								Date:  
+							</div>
+							<% end %>
+						</div>
+						<div class="row status-row">
+							<div class="status-header">
+								Final Edits Approved:  
+							</div>
+							<% if @orderdetails.get_final_edits_approve%>
+							<div class="status-icon">
+								<i class="fa fa-check"></i>
+							</div>
+							<div class="status-date">
+								Date: <%= @orderdetails.get_final_edits_approve_date.try(:to_time).try(:strftime, '%-m/%-d/%y') %> 
+							</div>
+							<% else %>
+							<div class="status-icon">
+								<i class="fa fa-times"></i>
+							</div>
+							<div class="status-date">
+								Date:  
+							</div>
+							<% end %>
+						</div>
+						<div class="row status-row">
+							<div class="status-header">
+								Final Crops:  
+							</div>
+							<% if @orderdetails.get_cropping %>
+							<div class="status-icon">
+								<i class="fa fa-check"></i>
+							</div>
+							<div class="status-date">
+								Date: <%= @orderdetails.get_cropping_date.try(:to_time).try(:strftime, '%-m/%-d/%y')%> 
+							</div>
+							<% else %>
+							<div class="status-icon">
+								<i class="fa fa-times"></i>
+							</div>
+							<div class="status-date">
+								Date:  
+							</div>
+							<% end %>
+						</div>
+						<div class="row status-row">
+							<div class="status-header">
+								Final Edit Upload:  
+							</div>
+							<% if @orderdetails.get_final_edit_upload %>
+							<div class="status-icon">
+								<i class="fa fa-check"></i>
+							</div>
+							<div class="status-date">
+								Date: <%= @orderdetails.get_final_edit_upload_date.try(:to_time).try(:strftime, '%-m/%-d/%y') %> 
+							</div>
+							<% else %>
+							<div class="status-icon">
+								<i class="fa fa-times"></i>
+							</div>
+							<div class="status-date">
+								Date:  
+							</div>
+							<% end %>
+						</div>
+						</div><br/>
+						<a class ="update-project btn btn-primary" data-toggle="modal" data-target="#update-modal">Update Details</a>
 					</div>
+
 				</div>
-			</div>
-		</div>
-	</div>
+				</div>
