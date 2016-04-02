@@ -2,9 +2,15 @@
 @import "bootstrap-sprockets";
 
 body{
-	margin: 20px 0 0 20px;
+	margin: 20px 0 20px 20px;
 	font-family: 'Open Sans', sans-serif;
+	padding-bottom: 20px;
 }
+
+a {
+	text-decoration: none;
+}
+
 .address {
 	color: #DA8E21;
 	font-weight: 600;
@@ -16,16 +22,16 @@ body{
 	white-space: nowrap;
 }
 
-.day {
-    font-size: 30px;
-    float: left;
-}
-
 .date {
 	margin: auto;
 	width: 100%;
 	font-weight: 300;
 	font-size: 16px;
+}
+
+.day {
+    font-size: 30px;
+    float: left;
 }
 
 .details-box {
@@ -85,7 +91,7 @@ body{
 .fa-times {
 	color: red;
 	border: solid 2px;
-	padding: 2px;
+	padding: 3px;
 }
 
 .hidden {
@@ -115,8 +121,6 @@ body{
 	text-align: center;
 }
 
-
-
 .package {
 	height: 300px;
     width: 100%;
@@ -126,9 +130,12 @@ body{
     text-align: center;
 }
 
-#photographer-paid {
-	float: right;
-	margin-right: 1em;
+.photographer {
+	float: left;
+}
+
+#photographer-info {
+	clear: both;
 }
 
 .photos-usable {
@@ -136,17 +143,70 @@ body{
 	margin-right: 1em;
 }
 
+.row-one {
+	margin-top: 1em;
+}
+
 .selected h4 {
 	border-left: solid 4px #ED9C28;
 	box-shadow: 2px 2px 1px #909090;
 }
 
+.sm-input {
+	float: left;
+	margin-left: 1em;
+}
+
+.sm-input-final {
+	float: right;
+	margin-right: 2em;
+}
+
+.sm-txt-box {
+	width: 30px;
+	text-align: center;
+}
+
+.status-date {
+	float: left;
+	width: 25%;
+	margin: auto;
+	margin-left: 5em;
+}
+
+.status-header {
+	margin: auto;
+	width: 25%;
+	margin-left: 1em;
+	float: left;
+}
+
+.status-icon {
+	float: left;
+	margin: auto;
+	width: 25%;
+}
+
+.status-icon i {
+	cursor: pointer;
+}
+
+.status-row {
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+
+.swag {
+	float: right;
+	margin-right: 1em;
+}
+
+.swag i {
+	cursor: pointer;
+}
+
 .update-project {
-    float: right;
-    margin-right: 1em;
-    position: absolute;
-    bottom: 0;
-    right: 0;
+	margin-bottom: 1em;
 }
 
 .year {
@@ -154,9 +214,8 @@ body{
 	clear: right;
 }
 
-@media (min-width: 768px){
-	.entry{
+@media (min-width: 768px) {
+	.entry {
 
 	}
 }
-

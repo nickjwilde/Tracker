@@ -7,14 +7,6 @@ function homes_ajax(id){
             $("#home-results").html(data);
           }
   );
-  /*$.post('notes',
-  	{
-	   id: id
-	},
-	function(data){
-	   //update notes div here. 
-	}
-  );*/
 }
 
 function order_ajax(id){
@@ -36,7 +28,8 @@ $(document).ready(function(){
 			$(this).removeClass("selected");
 			$('#event-column .column-header').fadeTo(1000,1);
 			$('#event-column .entry').not(this).slideDown(1000);
-      $('#home-results').html(' ');
+      $('#home-results').html('');
+      $('#order-results').html('');
 		}else{
 			$(this).addClass("selected");
 			$('#event-column .column-header').fadeTo(1000,0);
@@ -50,11 +43,36 @@ $(document).ready(function(){
 			$(this).removeClass("selected");
 			$('#home-results .column-header').slideDown(1000);
 			$('#home-results .entry').not(this).slideDown(1000);
+			$('#order-results').html('');
 		}else{
 			$(this).addClass("selected");
 			$('#home-results .column-header').slideUp(1000);
 			$('#home-results .entry').not(this).slideUp(1000);
 			order_ajax(home_id)
+		}
+	});
+	//handle checks and x's on status elements
+	$(document).on('click','.status-icon i',function(){
+		if($(this).hasClass('fa-check')){
+			$(this).removeClass('fa-check');
+			$(this).addClass('fa-times');
+			//code here to change data attribute false
+		}else{
+			$(this).removeClass('fa-times');
+			$(this).addClass('fa-check');
+			//code here to change data attribute to true
+		}
+	});
+	//handle swag package
+	$(document).on('click','.swag i',function(){
+		if($(this).hasClass('fa-check')){
+			$(this).removeClass('fa-check');
+			$(this).addClass('fa-times');
+			//code here to change swag data attribute false
+		}else{
+			$(this).removeClass('fa-times');
+			$(this).addClass('fa-check');
+			//code here to change data attribute to true
 		}
 	});
 });
