@@ -664,6 +664,7 @@ class Factory
             photographer = Photographer.new
             photographer.set_photographer_id(row['photographer_id'])
             photographer.set_name(row['name_of_photographer'])
+	    photographer = interact_with_photographer('R', photographer)
 
             parade = Parade.new
             parade.set_parade_id(row['parade_id'])
@@ -671,6 +672,7 @@ class Factory
 
             package = Package.new
             package.set_package_id(row['package_id'])
+	    package = interact_with_package('R', package)
 
             home.set_parade(parade)
 
