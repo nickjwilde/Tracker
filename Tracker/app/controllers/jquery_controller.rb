@@ -65,7 +65,24 @@ class JqueryController < ActionController::Base
   end
 
   def updateorder
-
+	#worker = Factory.new
+	#order = Order.new
+	#order params[:num_photos]
+	#order params[:raw_photos]
+	#order  params[:est_photos]
+	#order params[:final_photos]
+	#photographer = Photographer.new
+	#photographer params[:photographer_id]
+	#get photographer id and check it against
+	#new one.
+	#order params[:photos_approved]
+	#order params[:photographer_paid]
+	#order params[:quick_edit_upload]
+	#order params[:assigned_to_editor]
+	#order params[:final_edits_approve]
+	#order params[:final_crops]
+	#order params[:final_edit_upload]
+	#worker.interact_with_order('U',order)
   end
 	
 end
