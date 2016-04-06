@@ -7,6 +7,7 @@
   <% if home.get_parade.get_parade_id == @parade_id %>
     <div data-home-id="<%= home.get_home_id %>" class="entry">
 	    <h4>
+	    <div id="home-number"><%= home.get_home_number %></div>
 		    <div class="home-header">
 			  	<span class="address">
             <%= home.get_builder.get_name_of_builder %><br/>

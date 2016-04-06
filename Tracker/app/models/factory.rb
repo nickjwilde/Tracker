@@ -93,7 +93,7 @@ class Factory
         @conn.exec("DELETE FROM Photographer WHERE photographer_id = $1",[object.get_photographer_id])
       when 'L'
         @feedBack = Array.new
-        @conn.exec "SELECT photographer_id, name_of_photographer FROM Photographer" do |results|
+        @conn.exec "SELECT photographer_id, name_of_photographer FROM Photographer order by name_of_photographer" do |results|
           results.each do |row|
             object = Photographer.new
             object.set_photographer_id(row['photographer_id'])
@@ -448,7 +448,11 @@ class Factory
         results = Array.new
         results = @conn.exec("SELECT order_id FROM Order_table WHERE home_id=$1",[object.get_home_id])
         order = Order.new
-        order.set_order_id(results.getvalue 0,0)
+	if results.num_tuples.zero?
+       		order.set_order_id(-1)
+	else
+       		order.set_order_id(results.getvalue(0,0))
+	end
         order = interact_with_order('R',order)
         return order
       when 'U'
@@ -689,6 +693,7 @@ class Factory
         results = @conn.exec("SELECT  *
                               FROM    Order_table
                               WHERE   order_id=$1",[object.get_order_id])
+	if !results.num_tuples.zero?
         object.set_raw_photos(results.getvalue 0,1)
         object.set_raw_photos_date(results.getvalue 0,2)
         object.set_estimated_photos(results.getvalue 0,3)
@@ -747,6 +752,7 @@ class Factory
           package = interact_with_package('R',package)
           object.set_package(package)
         end
+	end
         results = nil
         return object
       when 'U'

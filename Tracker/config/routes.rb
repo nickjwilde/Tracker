@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 
   match 'homes/', :to => 'jquery#homes', via: 'post'
   match 'order_details/', :to => 'jquery#order', via: 'post'
+  match 'update_order/', :to => 'jquery#updateorder', via: 'post'
 
   root 'admin#events'
 

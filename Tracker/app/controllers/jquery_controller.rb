@@ -11,6 +11,7 @@ class JqueryController < ActionController::Base
     worker.connect_to_db("nitrous","","postgres")
     home = Home.new
     home.set_home_id(params[:home_id]);
+    @photographer_list = worker.interact_with_photographer('L');
     @orderdetails = worker.interact_with_home('O', home)
     if @orderdetails.get_raw_photos.to_i < 0
     	@orderdetails.set_raw_photos(0)
@@ -61,6 +62,10 @@ class JqueryController < ActionController::Base
     else
     	@orderdetails.set_final_edit_upload(false)
     end
+  end
+
+  def updateorder
+
   end
 	
 end

@@ -102,6 +102,15 @@ a {
   height: 80px;
 }
 
+#home-number {
+	float: left;
+	position: absolute;
+        bottom: 30px;
+	color: #ED9C28;
+        font-weight: bold;
+	font-size: 20px;
+}
+
 .modal-header {
 	border-bottom: none;
 }

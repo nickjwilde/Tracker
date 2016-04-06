@@ -1,6 +1,6 @@
 				<div class="details-box">
+				<form id='update-details' action='' method='post'>
 					<div class="row row-one">
-						
 							<div class="sm-input">
 								<label for="pkg">Pkg </label>
 								<input type="text" class="sm-txt-box" value="<%= @orderdetails.get_package.get_num_of_photos %>" data-pkg-photos="<%= @orderdetails.get_package.get_num_of_photos %>" id="pkg"/>
@@ -25,10 +25,17 @@
 								<h4>Photographer: </h4>
 							<div class="photographer">
 								<select>
-									<option>John Doe</option>
+								<% @photographer_list.each do |photographer| %>
+									<% if photographer.get_photographer_id == @orderdetails.get_photographer.get_photographer_id %>
+									<option value='<%= @orderdetails.get_photographer.get_photographer_id %>' selected><%= @orderdetails.get_photographer.get_name %></option>
+									<% else %>
+									<option value='<%= photographer.get_photographer_id %>'><%= photographer.get_name %></option>
+									<% end %>
+								<% end %>
 								</select>
 							</div>
-							<div class="swag">
+							<div class="swag" data-swag="<%= @orderdetails.get_photographer.get_swag %>">
+								<input id='swag' type='hidden' value='<%= @orderdetails.get_photographer.get_swag %>'></input>
 							<% if @orderdetails.get_photographer.get_swag %>
 								Swag Pkg  <i class="fa fa-check"></i>
 							<% else %>
@@ -38,10 +45,10 @@
 					</div>
 					<div id="photographer-info">
 						<div class="email">
-							<a href="mailto:jdoe@fakemail.com">jdoe@fakemail.com</a>
+							<a href="mailto:<%= @orderdetails.get_photographer.get_email %>"><%= @orderdetails.get_photographer.get_email %></a>
 						</div>
 						<div class="phone">
-							<a href="tel:801-555-5555">801-555-5555</a>
+							<a href="tel:<%= @orderdetails.get_photographer.get_phone %>"><%= @orderdetails.get_photographer.get_phone %></a>
 						</div>
 					</div>
 					<div id="order-bools">
@@ -49,15 +56,15 @@
 							<div class="status-header">
 								Photos Approved:  
 							</div>
-							<% if @orderdetails.get_photos_approved %>
 							<div class="status-icon">
+							<input id='photos-approved' type='hidden' value='<%= @orderdetails.get_photos_approved.to_s %>'></input>
+							<% if @orderdetails.get_photos_approved %>
 								<i class="fa fa-check"></i>
 							</div>
 							<div class="status-date">
 								Date: <%= @orderdetails.get_photos_approved_date.try(:to_time).try(:strftime, '%-m/%-d/%y') %> 
 							</div>
 							<% else %>
-							<div class="status-icon">
 								<i class="fa fa-times"></i>
 							</div>
 							<div class="status-date">
@@ -69,15 +76,15 @@
 							<div class="status-header">
 								Photographer Paid:	
 							</div>
+							<div class="status-icon"> 
+								<input id='photographer-paid' type='hidden' value='<%= @orderdetails.get_photographer_paid.to_s %>'></input>
 							<% if @orderdetails.get_photographer_paid %>
-							<div class="status-icon">
 								<i class="fa fa-check"></i>
 							</div>
 							<div class="status-date">
 								Date: <%= @orderdetails.get_photographer_paid_date.try(:to_time).try(:strftime, '%-m/%-d/%y') %> 
 							</div>
 							<% else %>
-							<div class="status-icon">
 								<i class="fa fa-times"></i>
 							</div>
 							<div class="status-date">
@@ -89,8 +96,9 @@
 							<div class="status-header">
 								 Quick Edit Upload: 
 							</div>
-							<% if @orderdetails.get_quick_edit_upload%>
 							<div class="status-icon">
+								<input id='quick-edit-upload' type='hidden' value='<%= @orderdetails.get_quick_edit_upload %>'></input>
+							<% if @orderdetails.get_quick_edit_upload%>
 								<i class="fa fa-check"></i>
 							</div>
 							<div class="status-date">
@@ -109,8 +117,9 @@
 							<div class="status-header">
 								Assigned to Editor:  
 							</div>
-							<% if @orderdetails.get_assigned_to_editor%>
 							<div class="status-icon">
+								<input id='assigned-to-editor' type='hidden' value='<%= @orderdetails.get_assigned_to_editor.to_s %>'></input>
+							<% if @orderdetails.get_assigned_to_editor%>
 								<i class="fa fa-check"></i>
 							</div>
 							<div class="status-date">
@@ -129,15 +138,15 @@
 							<div class="status-header">
 								Final Edits Approved:  
 							</div>
-							<% if @orderdetails.get_final_edits_approve%>
 							<div class="status-icon">
+								<input id='final-edits-approve' type='hidden' value='<%= @orderdetails.get_final_edits_approve %>'></input>
+							<% if @orderdetails.get_final_edits_approve %>
 								<i class="fa fa-check"></i>
 							</div>
 							<div class="status-date">
 								Date: <%= @orderdetails.get_final_edits_approve_date.try(:to_time).try(:strftime, '%-m/%-d/%y') %> 
 							</div>
 							<% else %>
-							<div class="status-icon">
 								<i class="fa fa-times"></i>
 							</div>
 							<div class="status-date">
@@ -149,8 +158,9 @@
 							<div class="status-header">
 								Final Crops:  
 							</div>
-							<% if @orderdetails.get_cropping %>
 							<div class="status-icon">
+							<input id='crops' type='hidden' value='<%= @orderdetails.get_cropping.to_s %>'></input>
+							<% if @orderdetails.get_cropping %>
 								<i class="fa fa-check"></i>
 							</div>
 							<div class="status-date">
@@ -169,8 +179,9 @@
 							<div class="status-header">
 								Final Edit Upload:  
 							</div>
-							<% if @orderdetails.get_final_edit_upload %>
 							<div class="status-icon">
+							<input id='final-edit-upload' type='hidden' value='<%= @orderdetails.get_final_edit_upload %>'></input>
+							<% if @orderdetails.get_final_edit_upload %>
 								<i class="fa fa-check"></i>
 							</div>
 							<div class="status-date">
@@ -186,8 +197,8 @@
 							<% end %>
 						</div>
 						</div><br/>
-						<a class ="update-project btn btn-primary" data-toggle="modal" data-target="#update-modal">Update Details</a>
+						<a id="update-order" class ="update-project btn btn-primary">Update Details</a>
 					</div>
-
 				</div>
+				</form>
 				</div>
