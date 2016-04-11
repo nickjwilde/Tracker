@@ -139,5 +139,59 @@ class JqueryController < ActionController::Base
 	worker.interact_with_home('U', home)
 	worker.interact_with_package('U', package)
   end
+
+  def addevent
+	worker = Factory.new
+	worker.connect_to_db("nitrous","","postgres")
+	parade = Parade.new
+	parade.set_parade_name(params[:name])
+	parade.set_city(params[:city])
+	parade.set_state(params[:state])
+	parade.set_start_date(params[:start_date])
+	if params[:end_date] == ""
+		parade.set_end_date(params[:start_date])
+	else
+		parade.set_end_date(params[:end_date])
+	end
+	parade.set_notes(params[:notes])
+	worker.interact_with_parade('C',parade)
+  end
+  def addphotographer
+	worker = Factory.new
+	worker.connect_to_db("nitrous","","postgres")
+	photographer = Photographer.new
+	photographer.set_name(params[:first_name]+", "+params[:last_name])
+	photographer.set_email(params[:email])
+	photographer.set_phone(params[:phone])
+	photographer.set_notes(params[:notes])
+	worker.interact_with_photographer('C',photographer)
+  end
+  def addproject
+	worker = Factory.new
+	worker.connect_to_db("nitrous","","postgres")
+	home = Home.new
+	home.set_home_number(params[:home_num])
+	home.set_home_name(params[:home_name])
+	home.set_home_address(params[:address])
+	home.set_city(params[:city])
+	home.set_state(params[:state])
+	home.set_zipcode(params[:zip])
+	home.set_home_notes(params[:notes])
+	photographer = Photographer.new
+	photographer.set_photographer_id(params[:photographer_id])
+	photographer = worker.interact_with_photographer('R',photographer)
+	builder = Builder.new
+	builder.set_builder_id(params[:builder_id])
+	builder = worker.interact_with_builder('R',builder)
+	parade = Parade.new
+	parade.set_parade_id(params[:event_id])
+	parade = worker.interact_with_parade('R',parade)
+	home.set_builder(builder)
+	home.set_parade(parade)
+	@connection = PG::Connection.open(:dbname => "postgres",:user => 'nitrous',:password => "")
+	new_home = Home.new
+	new_home = worker.interact_with_home('C',home)
+#	@connection.exec("INSERT INTO order_table (home_id, photographer_id) values($1, $2)",[new_home.get_home_id, photographer.get_photographer_id])
+  end
 	
 end

@@ -65,6 +65,103 @@ function update_order_ajax(){
 
 }
 
+function addevent(){
+	var name = $('#event-name').val();
+	var city = $('#event-city').val();
+	var state = $('#event-state option:selected').val();
+	var start_date = $('#event-start-date').val();
+	var end_date = $('#event-end-date').val();
+	var notes = $('#event-notes').val();
+
+	$.post('addevent',
+		{
+			name: name,
+			city: city,
+			state: state,
+			start_date: start_date,
+			end_date: end_date,
+			notes: notes
+		},
+		function(data){
+			$('#record-added-dialog').dialog({
+			title: 'Record Added Successsfuly',
+			buttons: {
+			"Okay": function(){
+					$(this).dialog('close');
+				}
+			}
+			});
+			$('#record-added-dialog').dialog('open');
+		});
+}
+
+function addphotographer(){
+	var first_name = $('#photographer-first-name').val();
+	var last_name = $('#photographer-last-name').val();
+	var email = $('#photographer-email').val();
+	var phone = $('#photographer-phone').val();
+	var notes = $('#photographer-notes').val();
+
+	$.post('addphotographer',
+		{
+			first_name: first_name,
+			last_name: last_name,
+			email: email,
+			phone: phone,
+			notes: notes
+		},
+		function(data){
+			$('#record-added-dialog').dialog({
+			title: 'Record Added Successsfuly',
+			buttons: {
+			"Okay": function(){
+					$(this).dialog('close');
+				}
+			}
+			});
+			$('#record-added-dialog').dialog('open');
+		});
+}
+
+function addproject(){
+	var home_number = $('#home-num').val();
+	var builder_id = $('#home-builder option:selected').val();
+	var home_name = $('#home-name').val();
+	var address = $('#home-address').val();
+	var city = $('#home-city').val();
+	var state = $('#home-state').val();
+	var zip = $('#home-zip').val();
+	var photographer_id = $('#home-photographer').val();
+	var event_id = $('#home-event').val();
+	var notes = $('#home-notes').val();
+
+	$.post('addproject',
+		{
+			home_number: home_number,
+			builder_id: builder_id,
+			home_name: home_name,
+			address: address,
+			city: city,
+			state: state,
+			zip: zip,
+			photographer_id: photographer_id,
+			event_id: event_id,
+			notes: notes
+		},
+		function(data){
+			$('#record-added-dialog').dialog({
+			title: 'Record Added Successsfuly',
+			buttons: {
+			"Okay": function(){
+					$(this).dialog('close');
+				}
+			}
+			});
+			$('#record-added-dialog').dialog('open');
+		});
+}
+
+
 $(document).ready(function(){
 	//handle event selection
 	$('#event-column .entry').click(function(){
@@ -146,5 +243,23 @@ $(document).ready(function(){
 		$('#confirmation-dialog').dialog('open');
 		$('#update-results').html('');
 		$('#update-results').fadeIn(1);
+	});
+	
+	//handle adding event
+	$('#addeventform').submit(function(e){
+		e.preventDefault();
+		addevent();
+	});
+	
+	//handle adding photographer
+	$('#addphotographerform').submit(function(e){
+		e.preventDefault();
+		addphotographer();
+	});
+
+	//handle adding project
+	$('#addprojectform').submit(function(e){
+		e.preventDefault();
+		addproject();
 	});
 });

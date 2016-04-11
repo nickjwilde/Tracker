@@ -13,6 +13,9 @@ Rails.application.routes.draw do
   match 'homes/', :to => 'jquery#homes', via: 'post'
   match 'order_details/', :to => 'jquery#order', via: 'post'
   match 'update_order/', :to => 'jquery#updateorder', via: 'post'
+  match 'addnew/addevent/', :to => 'jquery#addevent', via: 'post'
+  match 'addnew/addphotographer/', :to => 'jquery#addphotographer', via: 'post'
+  match 'addnew/addproject/', :to => 'jquery#addproject', via: 'post'
 
   root 'admin#events'
   get 'addnew/', to: 'admin#addnew'
