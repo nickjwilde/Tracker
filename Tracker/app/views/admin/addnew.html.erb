@@ -1,0 +1,52 @@
+<div class="container">
+	<div class="row">	
+		<div class="col-sm-6">
+			<ul class="nav nav-tabs">
+				<li class="active"><a data-toggle="tab" href="#addevent">Add Event</a></li>
+				<li><a data-toggle="tab" href="#addphotographer">Add Photographer</a></li>
+				<li><a data-toggle="tab" href="#addproject">Add Project</a></li>
+			</ul>
+		
+			<div class="tab-content">
+				<div id="addevent" class="tab-pane fade in active">
+					<h3>Add Event</h3>
+					<form id="addeventform" method="post">
+						Event Name<br/><input id="event-name" type="text" required></input><br/>
+						City<br/><input id="event-city" type="text" required></input><br/>
+						State<br/><%= select_tag "event-state", options_for_select(us_states) %><br/>
+						Start Date<br/><input id="event-start-date" type="date" required></input><br/>
+						End Date<br/><input id="event-end-date" type="date"></input><br/>
+						Notes<br/><textarea id="event-notes" form="addeventform"></textarea><br/>
+						<button class="btn btn-default" type="submit" form="addeventform">Add</button>  
+					</form>
+				</div>
+				<div id="addphotographer" class="tab-pane fade">
+					<h3>Add Photographer</h3>
+					<form id="addphotographerform" method="post">
+						First Name<br/><input id="photographer-name" type="text" required></input><br/>
+						Last Name<br/><input id="photographer-city" type="text" required></input><br/>
+						Email<br/><input id="photographer-email" type="email" required></input><br/>
+						Phone<br/><input id="photographer-phone" type="tel" required></input><br/>
+						Notes<br/><textarea id="photographer-notes" form="addphotographerform"></textarea><br/>
+						<button class="btn btn-default" type="submit" form="addphotographerform">Add</button>  
+					</form>
+				</div>
+				<div id="addproject" class="tab-pane fade">
+					<h3>Add Project</h3>
+					<form id="addprojectform" method="post">
+						Home Number<br/><input id="home-num" type="text" required></input><br/>
+						Builder<br/><%= select_tag "home-builder", options_from_collection_for_select(@builderlist, 'get_builder_id', 'get_name_of_builder') %><br/>
+						Home Name<br/><input id="home-name" type="text" required></input><br/>
+						City<br/><input id="home-city" type="text"></input><br/>
+						State<br/><%= select_tag "home-state", options_for_select(us_states) %><br/>
+						Photographer<br/><%= select_tag "home-photographer", options_from_collection_for_select(@photographerlist, 'get_photographer_id', 'get_name') %><br/>
+						Event<br/><%= select_tag "home-event", options_from_collection_for_select(@eventlist, 'get_parade_id', 'get_parade_name') %><br/>
+						Event<br/><input id="home-event" type="text"></input><br/>
+						Notes<br/><textarea id="home-notes" form="addprojectform"></textarea><br/>
+						<button class="btn btn-default" type="submit" form="addprojectform">Add</button>  
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

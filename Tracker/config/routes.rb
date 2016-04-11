@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   match 'update_order/', :to => 'jquery#updateorder', via: 'post'
 
   root 'admin#events'
-
+  get 'addnew/', to: 'admin#addnew'
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

@@ -49,7 +49,7 @@ class Factory
         @conn.exec("DELETE FROM Builder WHERE builder_id = $1",[object.get_builder_id])
       when 'L'
         @feedBack = Array.new
-        @conn.exec "SELECT builder_id, name_of_builder FROM Builder" do |results|
+        @conn.exec "SELECT builder_id, name_of_builder FROM Builder ORDER BY name_of_builder" do |results|
           results.each do |row|
             object = Builder.new
             object.set_builder_id(row['builder_id'])
@@ -113,6 +113,21 @@ class Factory
         object.set_swag(results.getvalue 0,5)
         results = nil
         return object
+      when 'L'
+	@feedback = Array.new
+      	results = Array.new
+	results = @conn.exec("SELECT * FROM photographer")
+	results.each do | row |
+		object = Photographer.new
+		object.set_photographer_id(row['photographer_id'])
+		object.set_name(row['name_of_photographer'])
+		object.set_email(row['email_of_photographer'])
+		object.set_phone(row['phone_of_photographer'])
+		object.set_notes(row['notes_of_photographer'])
+		object.set_swag(row['swag'])
+		@feedback << object
+	end
+	return @feedback
       when 'U'
         results = Array.new
         results = @conn.exec("SELECT photographer_id, name_of_photographer, email_of_photographer, phone_number_of_photographer,notes_of_photographer, swag FROM Photographer WHERE photographer_id=$1",[object.get_photographer_id])
@@ -890,6 +905,7 @@ class Factory
         end
     end
   end
+  end
 
   def list_all_orders_for_parade(object)
     # Get the ID for the parade
@@ -973,6 +989,5 @@ class Factory
       else
         return (@feedBack="Error")
     end
+    end
   end
-end
-end
