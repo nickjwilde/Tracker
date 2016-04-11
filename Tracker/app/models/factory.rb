@@ -194,7 +194,7 @@ class Factory
         results = @conn.exec("SELECT  package_id, number_of_photos, notes_of_package, name FROM Package WHERE package_id=$1",[object.get_package_id])
         compare_value = results.getvalue 0,1
         if !compare_value.eql? object.get_num_of_photos
-          @conn.exec("UPDATE Package SET number_of_photos=$2 WHERE package=$1",[object.get_package_id,object.get_num_of_photos])
+          @conn.exec("UPDATE Package SET number_of_photos=$2 WHERE package_id=$1",[object.get_package_id,object.get_num_of_photos])
         end
         compare_value = results.getvalue 0,2
         if !compare_value.eql? object.get_notes
@@ -757,80 +757,80 @@ class Factory
         return object
       when 'U'
         results = Array.new
-        results = @conn.exec("SELECT * FROM Order_table WHERE order_id=$1",[object.get_order_id])
-        compare_value = results.getvalue 0,1
-        if !compare_value.eql? object.get_raw_photos
-          @conn.exec("UPDATE Order_table SET raw_photos=$2 WHERE order_id=$1",[object.get_order_id,object.get_raw_photos])
-        end
+        results = @conn.exec("SELECT * FROM order_table WHERE order_id=$1",[object.get_order_id])
         compare_value = results.getvalue 0,2
-        if !compare_value.eql? object.get_raw_photos_date
-          @conn.exec("UPDATE Order_table SET raw_photos_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_raw_photos_date])
+        if !compare_value.eql? object.get_raw_photos
+          @conn.exec("UPDATE order_table SET raw_photos=$2 WHERE order_id=$1",[object.get_order_id,object.get_raw_photos])
         end
         compare_value = results.getvalue 0,3
-        if !compare_value.eql? object.get_estimated_photos
-          @conn.exec("UPDATE Order_table SET estimated_photos=$2 WHERE order_id=$1",[object.get_order_id,object.get_estimated_photos])
+        if !compare_value.nil?
+          @conn.exec("UPDATE order_table SET raw_photos_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_raw_photos_date])
         end
         compare_value = results.getvalue 0,4
-        if !compare_value.eql? object.get_photos_approved
-          @conn.exec("UPDATE Order_table SET photos_approved=$2 WHERE order_id=$1",[object.get_order_id,object.get_photos_approved])
+        if !compare_value.eql? object.get_estimated_photos
+          @conn.exec("UPDATE order_table SET estimated_photos=$2 WHERE order_id=$1",[object.get_order_id,object.get_estimated_photos])
         end
         compare_value = results.getvalue 0,5
-        if !compare_value.eql? object.get_photos_approved_date
-          @conn.exec("UPDATE Order_table SET photos_approved_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_photos_approved_date])
+        if !compare_value.eql? object.get_photos_approved
+          @conn.exec("UPDATE order_table SET photos_approved=$2 WHERE order_id=$1",[object.get_order_id,object.get_photos_approved])
         end
         compare_value = results.getvalue 0,6
-        if !compare_value.eql? object.get_photographer_paid
-          @conn.exec("UPDATE Order_table SET photographer_paid=$2 WHERE order_id=$1",[object.get_order_id,object.get_photographer_paid])
+        if !compare_value.nil?
+          @conn.exec("UPDATE order_table SET photos_approved_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_photos_approved_date])
         end
         compare_value = results.getvalue 0,7
-        if !compare_value.eql? object.get_photographer_paid_date
-          @conn.exec("UPDATE Order_table SET photographer_paid_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_photographer_paid_date])
+        if !compare_value.eql? object.get_photographer_paid
+          @conn.exec("UPDATE order_table SET photographer_paid=$2 WHERE order_id=$1",[object.get_order_id,object.get_photographer_paid])
         end
         compare_value = results.getvalue 0,8
-        if !compare_value.eql? object.get_quick_edit_upload
-          @conn.exec("UPDATE Order_table SET quick_edit_upload=$2 WHERE order_id=$1",[object.get_order_id,object.get_quick_edit_upload])
+        if !compare_value.nil?
+          @conn.exec("UPDATE order_table SET photographer_paid_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_photographer_paid_date])
         end
         compare_value = results.getvalue 0,9
-        if !compare_value.eql? object.get_quick_edit_upload_date
-          @conn.exec("UPDATE Order_table SET quick_edit_upload_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_quick_edit_upload_date])
+        if !compare_value.eql? object.get_quick_edit_upload
+          @conn.exec("UPDATE order_table SET quick_edit_upload=$2 WHERE order_id=$1",[object.get_order_id,object.get_quick_edit_upload])
         end
         compare_value = results.getvalue 0,10
-        if !compare_value.eql? object.get_assigned_to_editor
-          @conn.exec("UPDATE Order_table SET assigned_to_editor=$2 WHERE order_id=$1",[object.get_order_id,object.get_assigned_to_editor])
+        if !compare_value.nil?
+          @conn.exec("UPDATE order_table SET quick_edit_upload_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_quick_edit_upload_date])
         end
         compare_value = results.getvalue 0,11
-        if !compare_value.eql? object.get_assigned_to_editor_date
-          @conn.exec("UPDATE Order_table SET assigned_to_editor_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_assigned_to_editor_date])
+        if !compare_value.eql? object.get_assigned_to_editor
+          @conn.exec("UPDATE order_table SET assigned_to_editor=$2 WHERE order_id=$1",[object.get_order_id,object.get_assigned_to_editor])
         end
         compare_value = results.getvalue 0,12
-        if !compare_value.eql? object.get_final_edits_approve
-          @conn.exec("UPDATE Order_table SET final_edits_approve=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_edits_approve])
+        if !compare_value.nil?
+          @conn.exec("UPDATE order_table SET assigned_to_editor_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_assigned_to_editor_date])
         end
         compare_value = results.getvalue 0,13
-        if !compare_value.eql? object.get_final_edits_approve_date
-          @conn.exec("UPDATE Order_table SET final_edits_approve_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_edits_approve_date])
+        if !compare_value.eql? object.get_final_edits_approve
+          @conn.exec("UPDATE order_table SET final_edits_approve=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_edits_approve])
         end
         compare_value = results.getvalue 0,14
-        if !compare_value.eql? object.get_final_photos_number
-          @conn.exec("UPDATE Order_table SET final_photos_num=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_photos_number])
+        if !compare_value.nil?
+          @conn.exec("UPDATE order_table SET final_edits_approve_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_edits_approve_date])
         end
         compare_value = results.getvalue 0,15
-        if !compare_value.eql? object.get_cropping
-          @conn.exec("UPDATE Order_table SET final_cropping=$2 WHERE order_id=$1",[object.get_order_id,object.get_cropping])
+        if !compare_value.eql? object.get_final_photos_number
+          @conn.exec("UPDATE order_table SET final_photos_num=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_photos_number])
         end
         compare_value = results.getvalue 0,16
-        if !compare_value.eql? object.get_cropping_date
-          @conn.exec("UPDATE Order_table SET final_cropping_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_cropping_date])
+        if !compare_value.eql? object.get_cropping
+          @conn.exec("UPDATE order_table SET final_cropping=$2 WHERE order_id=$1",[object.get_order_id,object.get_cropping])
         end
         compare_value = results.getvalue 0,17
-        if !compare_value.eql? object.get_final_edit_upload
-          @conn.exec("UPDATE Order_table SET final_edit_upload=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_edit_upload])
+        if compare_value.nil?
+          @conn.exec("UPDATE order_table SET final_cropping_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_cropping_date])
         end
         compare_value = results.getvalue 0,18
-        if !compare_value.eql? object.get_final_edit_upload_date
-          @conn.exec("UPDATE Order_table SET final_edit_upload_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_edit_upload_date])
+        if !compare_value.eql? object.get_final_edit_upload
+          @conn.exec("UPDATE order_table SET final_edit_upload=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_edit_upload])
         end
         compare_value = results.getvalue 0,19
+        if !compare_value.nil?
+          @conn.exec("UPDATE order_table SET final_edit_upload_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_edit_upload_date])
+        end
+        compare_value = results.getvalue 0,20
         if object.get_home.eql? "empty"
           if !compare_value.nil?
             parade_id = nil
@@ -842,7 +842,7 @@ class Factory
 
           if home_id != -1
             home = interact_with_home('u',home)
-          elsif home_id == -1
+          if home_id == -1
             home = interact_with_home('c',home)
             home_id = home.get_home_id.to_i
           end
@@ -851,7 +851,7 @@ class Factory
           @conn.exec("UPDATE Order_table SET home_id=$2 WHERE order_id=$1",[object.get_order_id,home_id])
         end
 
-        compare_value = results.getvalue 0,20
+        compare_value = results.getvalue 0,21
         if object.get_photographer.eql? "empty"
           if !compare_value.nil?
             photographer_id = nil
@@ -861,18 +861,14 @@ class Factory
           photographer = object.get_photographer
           photographer_id = photographer.get_photographer_id.to_i
 
-          if photographer_id != -1
-            photographer = interact_with_photographer('u',photographer)
-          elsif photographer_id == -1
+          if photographer_id == -1
             photographer = interact_with_photographer('c',photographer)
             photographer_id = photographer.get_photographer_id.to_i
           end
         end
-        if compare_value.to_i != photographer_id
-          @conn.exec("UPDATE Order_table SET photographer_id=$2 WHERE order_id=$1",[object.get_order_id,photographer_id])
-        end
+        @conn.exec("UPDATE Order_table SET photographer_id=$2 WHERE order_id=$1",[object.get_order_id,photographer_id])
 
-        compare_value = results.getvalue 0,21
+        compare_value = results.getvalue 0,22
         if object.get_package.eql? "empty"
           if !compare_value.nil?
             package_id = nil
@@ -892,8 +888,6 @@ class Factory
         if compare_value.to_i != package_id
           @conn.exec("UPDATE Order_table SET package_id=$2 WHERE order_id=$1",[object.get_order_id,package_id])
         end
-      else
-        return (@feedBack="Error")
     end
   end
 
@@ -980,4 +974,5 @@ class Factory
         return (@feedBack="Error")
     end
   end
+end
 end

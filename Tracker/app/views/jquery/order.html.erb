@@ -1,9 +1,11 @@
 				<div class="details-box">
 				<form id='update-details' action='' method='post'>
+				<input type="hidden" id="order-id" value="<%= @orderdetails.get_order_id %>"/>
 					<div class="row row-one">
 							<div class="sm-input">
 								<label for="pkg">Pkg </label>
-								<input type="text" class="sm-txt-box" value="<%= @orderdetails.get_package.get_num_of_photos %>" data-pkg-photos="<%= @orderdetails.get_package.get_num_of_photos %>" id="pkg"/>
+								<input type="text" class="sm-txt-box" value="<%= @orderdetails.get_package.try(:get_num_of_photos) %>" data-pkg-photos="<%= @orderdetails.get_package.try(:get_num_of_photos) %>" id="pkg"/>
+								<input type="hidden" id="package_id" value="<%= @orderdetails.get_package.try(:get_package_id) %>"/>
 							</div>
 							<div class="sm-input">
 								<label for="raw">RAW </label>
@@ -23,20 +25,20 @@
 					<div id="photographer-details">
 						
 								<h4>Photographer: </h4>
-							<div class="photographer" id="photographer-info" data-photographer-id='<%= @orderdetails.get_photographer.get_photographer_id %>'>
+							<div class="photographer" id="photographer-info" data-photographer-id='<%= @orderdetails.get_photographer.try(:get_photographer_id) %>'>
 								<select id="photographer-dropdown">
 								<% @photographer_list.each do |photographer| %>
-									<% if photographer.get_photographer_id == @orderdetails.get_photographer.get_photographer_id %>
-									<option value='<%= @orderdetails.get_photographer.get_photographer_id %>' selected><%= @orderdetails.get_photographer.get_name %></option>
+									<% if photographer.try(:get_photographer_id) == @orderdetails.get_photographer.try(:get_photographer_id) %>
+									<option value='<%= @orderdetails.get_photographer.try(:get_photographer_id) %>' selected><%= @orderdetails.get_photographer.try(:get_name) %></option>
 									<% else %>
-									<option value='<%= photographer.get_photographer_id %>'><%= photographer.get_name %></option>
+									<option value='<%= photographer.try(:get_photographer_id) %>'><%= photographer.try(:get_name) %></option>
 									<% end %>
 								<% end %>
 								</select>
 							</div>
-							<div class="swag" data-swag="<%= @orderdetails.get_photographer.get_swag %>">
-								<input id='swag' type='hidden' value='<%= @orderdetails.get_photographer.get_swag %>'></input>
-							<% if @orderdetails.get_photographer.get_swag %>
+							<div class="swag" data-swag="<%= @orderdetails.get_photographer.try(:get_swag) %>">
+								<input id='swag' type='hidden' value='<%= @orderdetails.get_photographer.try(:get_swag) %>'></input>
+							<% if @orderdetails.get_photographer.try(:get_swag) %>
 								Swag Pkg  <i class="fa fa-check"></i>
 							<% else %>
 								Swag Pkg <i class="fa fa-times"></i>
@@ -45,10 +47,10 @@
 					</div>
 					<div id="photographer-info">
 						<div class="email">
-							<a href="mailto:<%= @orderdetails.get_photographer.get_email %>"><%= @orderdetails.get_photographer.get_email %></a>
+							<a href="mailto:<%= @orderdetails.get_photographer.try(:get_email) %>"><%= @orderdetails.get_photographer.try(:get_email) %></a>
 						</div>
 						<div class="phone">
-							<a href="tel:<%= @orderdetails.get_photographer.get_phone %>"><%= @orderdetails.get_photographer.get_phone %></a>
+							<a href="tel:<%= @orderdetails.get_photographer.try(:get_phone) %>"><%= @orderdetails.get_photographer.try(:get_phone) %></a>
 						</div>
 					</div>
 					<div id="order-bools">
@@ -105,7 +107,6 @@
 								Date: <%= @orderdetails.get_quick_edit_upload_date.try(:to_time).try(:strftime, '%-m/%-d/%y') %> 
 							</div>
 							<% else %>
-							<div class="status-icon">
 								<i class="fa fa-times"></i>
 							</div>
 							<div class="status-date">
@@ -126,7 +127,6 @@
 								Date: <%= @orderdetails.get_assigned_to_editor_date.try(:to_time).try(:strftime, '%-m/%-d/%y') %> 
 							</div>
 							<% else %>
-							<div class="status-icon">
 								<i class="fa fa-times"></i>
 							</div>
 							<div class="status-date">
@@ -167,7 +167,6 @@
 								Date: <%= @orderdetails.get_cropping_date.try(:to_time).try(:strftime, '%-m/%-d/%y')%> 
 							</div>
 							<% else %>
-							<div class="status-icon">
 								<i class="fa fa-times"></i>
 							</div>
 							<div class="status-date">
@@ -188,7 +187,6 @@
 								Date: <%= @orderdetails.get_final_edit_upload_date.try(:to_time).try(:strftime, '%-m/%-d/%y') %> 
 							</div>
 							<% else %>
-							<div class="status-icon">
 								<i class="fa fa-times"></i>
 							</div>
 							<div class="status-date">

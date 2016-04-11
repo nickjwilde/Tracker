@@ -3,7 +3,7 @@ require 'pg'
 
 # Internal Files
 require '../models/builder.rb'
-require '../models/Photographer.rb'
+require '../models/photographer.rb'
 require '../models/package.rb'
 require '../models/factory.rb'
 require '../models/parade.rb'

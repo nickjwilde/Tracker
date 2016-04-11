@@ -21,13 +21,15 @@ function order_ajax(id){
 }
 
 function update_order_ajax(){
+	var order_id = $('#order-id').val();
+	var package_id = $('#package_id').val();
 	var num_photos = $('#pkg').val();
 	var raw_photos = $('#raw').val();
 	var est_photos = $('#est').val();
 	var final_photos = $('#final').val();
 	var photographer_id = $('#photographer-dropdown option:selected').val();
 	var old_photographer_id = $('#photographer-info').data('photographer-id');
-	var swag = $('.swag').data('swag');
+	var swag = $('#swag').val();
 	var photos_approved = $('#photos-approved').val();
 	var photographer_paid = $('#photographer-paid').val();
 	var quick_edit_upload = $('#quick-edit-upload').val();
@@ -35,9 +37,12 @@ function update_order_ajax(){
 	var final_edits_approve = $('#final-edits-approve').val();
 	var final_crops = $('#crops').val();
 	var final_edit_upload = $('#final-edit-upload').val();
+	var home_id = $('#home-info').data('home-id');
 
 	$.post('update_order',
 			{
+				order_id: order_id,
+				package_id: package_id,
 				num_photos: num_photos,
 				raw_photos: raw_photos,
 				est_photos: est_photos,
@@ -49,7 +54,9 @@ function update_order_ajax(){
 				assigned_to_editor: assigned_to_editor,
 				final_edits_approve: final_edits_approve,
 				final_crops: final_crops,
-				final_edit_upload: final_edit_upload
+				final_edit_upload: final_edit_upload,
+				home_id: home_id,
+				swag: swag
 			},
 			function(data){
 				$('#update-results').html(data);
