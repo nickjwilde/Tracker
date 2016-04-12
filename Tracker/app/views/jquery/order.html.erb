@@ -4,8 +4,7 @@
 					<div class="row row-one">
 							<div class="sm-input">
 								<label for="pkg">Pkg </label>
-								<input type="text" class="sm-txt-box" value="<%= @orderdetails.get_package.try(:get_num_of_photos) %>" data-pkg-photos="<%= @orderdetails.get_package.try(:get_num_of_photos) %>" id="pkg"/>
-								<input type="hidden" id="package_id" value="<%= @orderdetails.get_package.try(:get_package_id) %>"/>
+								<input type="text" class="sm-txt-box" value="<%= @orderdetails.try(:get_num_package_photos) %>" data-pkg-photos="<%= @orderdetails.try(:get_num_package_photos) %>" id="pkg"/>
 							</div>
 							<div class="sm-input">
 								<label for="raw">RAW </label>

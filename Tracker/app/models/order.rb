@@ -1,8 +1,8 @@
 class Order
-    def initialize(id = "-1", raw="empty", raw_date=nil,estimated="empty", approved = "N", date_pictures_approved=nil, paid="empty", paid_date=nil, quick_edit="empty", quick_edit_date=nil, assigned_editor="empty", assigned_editor_date=nil, final_edits="empty", final_edits_date=nil,final_num=0, cropping="empty", cropping_date="empty", final_edit_upload="empty", final_edit_upload_date=nil, home = "empty", photographer="empty", package="empty")
+    def initialize(id = "-1", raw="empty", raw_date=nil,estimated="empty", approved = "N", date_pictures_approved=nil, paid="empty", paid_date=nil, quick_edit="empty", quick_edit_date=nil, assigned_editor="empty", assigned_editor_date=nil, final_edits="empty", final_edits_date=nil,final_num=0, cropping="empty", cropping_date="empty", final_edit_upload="empty", final_edit_upload_date=nil, home = "empty", photographer="empty", num_package_photos=0)
       @order_id=id
       @home = home
-      @package=package
+      @num_package_photos=num_package_photos
       @photographer=photographer
       @raw_photos=raw
       @raw_photos_date = raw_date
@@ -143,11 +143,11 @@ class Order
   def set_home(home)
     @home = home
   end
-  def set_package(package)
-    @package= package
+  def set_num_package_photos(num_package_photos)
+	@num_package_photos = num_package_photos
   end
-  def get_package
-    @package
+  def get_num_package_photos
+    @num_package_photos
   end
   def set_photographer(photographer)
     @photographer= photographer

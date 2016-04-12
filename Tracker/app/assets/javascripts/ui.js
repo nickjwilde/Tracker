@@ -125,6 +125,7 @@ function addphotographer(){
 
 function addproject(){
 	var home_number = $('#home-num').val();
+	alert(home_number);
 	var builder_id = $('#home-builder option:selected').val();
 	var home_name = $('#home-name').val();
 	var address = $('#home-address').val();
@@ -249,17 +250,20 @@ $(document).ready(function(){
 	$('#addeventform').submit(function(e){
 		e.preventDefault();
 		addevent();
+		return false;
 	});
 	
 	//handle adding photographer
 	$('#addphotographerform').submit(function(e){
 		e.preventDefault();
 		addphotographer();
+		return false;
 	});
 
 	//handle adding project
 	$('#addprojectform').submit(function(e){
 		e.preventDefault();
 		addproject();
+		return false;
 	});
 });

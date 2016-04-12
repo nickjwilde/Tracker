@@ -4,7 +4,6 @@ require 'pg'
 # Internal Files
 require '../models/builder.rb'
 require '../models/photographer.rb'
-require '../models/package.rb'
 require '../models/factory.rb'
 require '../models/parade.rb'
 require '../models/order.rb'
@@ -23,7 +22,6 @@ worker.connect_to_db(user_name, pw, database)
 worker.create_builder_table
 worker.create_photographer_table
 worker.create_parade_table
-worker.create_package_table
 worker.create_order_table
 
 ### dependency tables
@@ -102,41 +100,6 @@ temp = worker.interact_with_photographer('R',photo_person1)
 
 ### List Photographer
 temp = worker.interact_with_photographer('l')
-
-
-## Package
-package1 = Package.new
-package1.set_num_of_photos("10")
-package1.set_notes("This is the notes about package one")
-
-package2 = Package.new
-package2.set_num_of_photos("15")
-package2.set_notes("THese are the notes for package two")
-
-### Create Package
-package1 = worker.interact_with_package('c',package1)
-package2 = worker.interact_with_package('c',package2)
-
-### Update a Package
-package2.set_notes("These are the new notes for package 2")
-worker.interact_with_package('u',package2)
-
-### Delete a Package
-worker.interact_with_package('D',package2)
-
-### List Package
-temp = worker.interact_with_package('l')
-
-### Recreate a Package
-package2.set_num_of_photos("5")
-package2.set_notes("These are the notes for package two, that are reentered")
-package2 = worker.interact_with_package('c',package2)
-
-### Read a Package
-temp = worker.interact_with_package('R',package1)
-
-### List Package
-temp = worker.interact_with_package('l')
 
 ## Parade
 parade1 = Parade.new
@@ -299,7 +262,7 @@ order1.set_final_edit_upload("Y")
 order1.set_final_edit_upload_date("01/16/2016")
 order1.set_home(home1)
 order1.set_photographer(photo_person1)
-order1.set_package(package1)
+order1.set_num_package_photos(15)
 
 order1 = worker.interact_with_order('C',order1)
 
@@ -327,11 +290,6 @@ home3.set_notes("THis is a home that has all the examples")
 home3.set_home_address("10256 n 489 e")
 home3.set_home_name("Candle Home 1")
 home3.set_parade(parade3)
-
-### New package that needs to be created
-package3 = Package.new
-package3.set_num_of_photos("90")
-package3.set_notes("This is the notes about package three")
 
 ### New photographer that needs to be created
 photo_person3 = Photographer.new
@@ -362,7 +320,7 @@ order2.set_final_edit_upload("N")
 order2.set_final_edit_upload_date(nil)
 order2.set_home(home3)
 order2.set_photographer(photo_person2)
-order2.set_package(package3)
+order2.set_num_package_photos(15)
 
 
 order2 = worker.interact_with_order('C',order2)
@@ -397,7 +355,6 @@ order2.set_final_edit_upload("Y")
 order2.set_final_edit_upload_date(nil)
 order2.set_home(home2)
 order2.set_photographer(photo_person3)
-order2.set_package(package2)
 # Did not set home/Photographer/package on purpose
 
 order3 = worker.interact_with_order('U',order2)
@@ -428,11 +385,6 @@ home4.set_home_name("Candle Home 72")
 home4.set_home_number(15)
 home4.set_parade(parade4)
 
-### New package that needs to be created
-package4 = Package.new
-package4.set_num_of_photos("100000")
-package4.set_notes("This is the notes about package four")
-
 ### New photographer that needs to be created
 photo_person4 = Photographer.new
 photo_person4.set_name("Rosy Frost")
@@ -442,7 +394,6 @@ photo_person4.set_notes("This person should not be used")
 
 order2.set_home(home4)
 order2.set_photographer(photo_person4)
-order2.set_package(package4)
 
 
 worker.interact_with_order('U',order2)

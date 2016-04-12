@@ -47,7 +47,7 @@
 						Photographer<br/><%= select_tag "home-photographer", options_from_collection_for_select(@photographerlist, 'get_photographer_id', 'get_name') %><br/>
 						Event<br/><%= select_tag "home-event", options_from_collection_for_select(@eventlist, 'get_parade_id', 'get_parade_name') %><br/>
 						Notes<br/><textarea id="home-notes" form="addprojectform"></textarea><br/>
-						<button class="btn btn-default" type="submit" form="addprojectform">Add</button>  
+						<button class="btn btn-primary" type="submit" form="addprojectform">Add</button>  
 					</form>
 				</div>
 			</div>

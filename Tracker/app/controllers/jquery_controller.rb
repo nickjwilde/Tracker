@@ -22,7 +22,7 @@ class JqueryController < ActionController::Base
     if @orderdetails.get_final_photos_number.to_i < 0
     	@orderdetails.set_final_photos_number(0)
     end
-    if @orderdetails.get_photos_approved.upcase == 'Y'
+    if @orderdetails.try(:get_photos_approved).try(:upcase) == 'Y'
     	@orderdetails.set_photos_approved(true)
     else
     	@orderdetails.set_photos_approved(false)
@@ -32,32 +32,32 @@ class JqueryController < ActionController::Base
     else
     	@orderdetails.get_photographer.try(:set_swag,false)
     end
-    if @orderdetails.get_photographer_paid.upcase == 'Y'
+    if @orderdetails.get_photographer_paid.try(:upcase) == 'Y'
     	@orderdetails.set_photographer_paid(true)
     else
     	@orderdetails.set_photographer_paid(false)
     end
-    if @orderdetails.get_quick_edit_upload.upcase == 'Y'
+    if @orderdetails.get_quick_edit_upload.try(:upcase) == 'Y'
     	@orderdetails.set_quick_edit_upload(true)
     else
     	@orderdetails.set_quick_edit_upload(false)
     end
-    if @orderdetails.get_assigned_to_editor.upcase == 'Y'
+    if @orderdetails.get_assigned_to_editor.try(:upcase) == 'Y'
     	@orderdetails.set_assigned_to_editor(true)
     else
     	@orderdetails.set_assigned_to_editor(false)
     end
-    if @orderdetails.get_final_edits_approve.upcase == 'Y'
+    if @orderdetails.get_final_edits_approve.try(:upcase) == 'Y'
     	@orderdetails.set_final_edits_approve(true)
     else
     	@orderdetails.set_final_edits_approve(false)
     end
-    if @orderdetails.get_cropping.upcase == 'Y'
+    if @orderdetails.get_cropping.try(:upcase) == 'Y'
     	@orderdetails.set_cropping(true)
     else
     	@orderdetails.set_cropping(false)
     end
-    if @orderdetails.get_final_edit_upload.upcase == 'Y'
+    if @orderdetails.get_final_edit_upload.try(:upcase) == 'Y'
     	@orderdetails.set_final_edit_upload(true)
     else
     	@orderdetails.set_final_edit_upload(false)
@@ -71,10 +71,7 @@ class JqueryController < ActionController::Base
 	photographer = Photographer.new
 	photographer.set_photographer_id(params[:photographer_id].to_i)
 	photographer = worker.interact_with_photographer('R',photographer)
-	package = Package.new
-	package.set_package_id(params[:package_id].to_i)
-	package = worker.interact_with_package('R', package)	
-	package.set_num_of_photos(params[:num_photos].to_i)
+	order.set_num_package_photos(params[:num_photos])
 	home = Home.new
 	home.set_home_id(params[:home_id].to_i)
 	home = worker.interact_with_home('R',home)
@@ -132,12 +129,10 @@ class JqueryController < ActionController::Base
 		order.set_final_edit_upload('N')
 	end
 	order.set_photographer(photographer)
-	order.set_package(package)
 	order.set_home(home)
 	worker.interact_with_order('U', order)
 	worker.interact_with_photographer('U', photographer)
 	worker.interact_with_home('U', home)
-	worker.interact_with_package('U', package)
   end
 
   def addevent
@@ -170,7 +165,7 @@ class JqueryController < ActionController::Base
 	worker = Factory.new
 	worker.connect_to_db("nitrous","","postgres")
 	home = Home.new
-	home.set_home_number(params[:home_num])
+	home.set_home_number(params[:home_number])
 	home.set_home_name(params[:home_name])
 	home.set_home_address(params[:address])
 	home.set_city(params[:city])
@@ -191,7 +186,7 @@ class JqueryController < ActionController::Base
 	@connection = PG::Connection.open(:dbname => "postgres",:user => 'nitrous',:password => "")
 	new_home = Home.new
 	new_home = worker.interact_with_home('C',home)
-#	@connection.exec("INSERT INTO order_table (home_id, photographer_id) values($1, $2)",[new_home.get_home_id, photographer.get_photographer_id])
+	@connection.exec("INSERT INTO order_table (home_id, photographer_id) values($1, $2)",[new_home.get_home_id.to_i, photographer.get_photographer_id.to_i])
   end
 	
 end
