@@ -197,7 +197,7 @@
 						
 						<div class="form-group" style="margin-top: 10px">
 							<label for="photographer-notes">Photographer Notes</label>
-							<textarea id="photographer-notes" class="form-control"><%= @orderdetails.get_photographer.get_notes %></textarea>
+							<textarea id="photographer-notes" class="form-control"><%= @orderdetails.get_photographer.try(:get_notes) %></textarea>
 						</div>
 						<a id="update-order" class ="update-project btn btn-primary">Save</a>
 					<div id="update-results"></div>

@@ -16,8 +16,13 @@
 <%= event.get_city + ", " +  event.get_state %><br/>
 <div class="date">
 <% unless event.get_start_date.nil? %>
-<%= event.get_start_date.to_time.strftime("%b %d, %Y")+ " - " + event.get_end_date.to_time.strftime("%b %d, %Y") %>
+<%= event.get_start_date.to_time.strftime("%b %d, %Y") %>
 <% end %>
+-
+<% unless event.get_end_date.nil? %>
+<%= event.get_end_date.try(:to_time).try(:strftime,"%b %d, %Y") %>
+<% end %>
+	
 </div>
 </h4>
 </div>

@@ -209,7 +209,7 @@ class Factory
       when 'L'
         @feedBack = Array.new
 
-        @conn.exec "SELECT * FROM Parade" do |results|
+        @conn.exec "SELECT * FROM Parade WHERE end_date_of_parade > CURRENT_TIMESTAMP OR end_date_of_parade IS NULL ORDER BY name_of_parade" do |results|
         results.each do |row|
             object = Parade.new(row['parade_id'],row['name_of_parade'],row['city_of_parade'],row['state_of_parade'],row['start_date_of_parade'],row['end_date_of_parade'])
             @feedBack << object
@@ -669,7 +669,7 @@ class Factory
       when 'U'
         results = Array.new
         results = @conn.exec("SELECT * FROM order_table WHERE order_id=$1",[object.get_order_id])
-	compare_value = results.getvalue 0,1
+	compare_value = results.getvalue 0,2
         if !compare_value.eql? object.get_num_package_photos 
           @conn.exec("UPDATE order_table SET num_package_photos=$2 WHERE order_id=$1",[object.get_order_id,object.get_num_package_photos.to_i])
         end
@@ -691,7 +691,7 @@ class Factory
           @conn.exec("UPDATE order_table SET photos_approved=$2 WHERE order_id=$1",[object.get_order_id,object.get_photos_approved])
         end
         compare_value = results.getvalue 0,7
-        if !compare_value.nil?
+        if !compare_value.eql? object.get_photos_approved_date
           @conn.exec("UPDATE order_table SET photos_approved_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_photos_approved_date])
         end
         compare_value = results.getvalue 0,8
@@ -699,7 +699,7 @@ class Factory
           @conn.exec("UPDATE order_table SET photographer_paid=$2 WHERE order_id=$1",[object.get_order_id,object.get_photographer_paid])
         end
         compare_value = results.getvalue 0,9
-        if !compare_value.nil?
+        if !compare_value.eql? object.get_photographer_paid_date
           @conn.exec("UPDATE order_table SET photographer_paid_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_photographer_paid_date])
         end
         compare_value = results.getvalue 0,10
@@ -707,7 +707,7 @@ class Factory
           @conn.exec("UPDATE order_table SET quick_edit_upload=$2 WHERE order_id=$1",[object.get_order_id,object.get_quick_edit_upload])
         end
         compare_value = results.getvalue 0,11
-        if !compare_value.nil?
+        if !compare_value.eql? object.get_quick_edit_upload_date
           @conn.exec("UPDATE order_table SET quick_edit_upload_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_quick_edit_upload_date])
         end
         compare_value = results.getvalue 0,12
@@ -715,7 +715,7 @@ class Factory
           @conn.exec("UPDATE order_table SET assigned_to_editor=$2 WHERE order_id=$1",[object.get_order_id,object.get_assigned_to_editor])
         end
         compare_value = results.getvalue 0,13
-        if !compare_value.nil?
+        if !compare_value.eql? object.get_assigned_to_editor_date
           @conn.exec("UPDATE order_table SET assigned_to_editor_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_assigned_to_editor_date])
         end
         compare_value = results.getvalue 0,14
@@ -723,7 +723,7 @@ class Factory
           @conn.exec("UPDATE order_table SET final_edits_approve=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_edits_approve])
         end
         compare_value = results.getvalue 0,15
-        if !compare_value.nil?
+        if !compare_value.eql? object.get_final_edits_approve_date
           @conn.exec("UPDATE order_table SET final_edits_approve_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_edits_approve_date])
         end
         compare_value = results.getvalue 0,16
@@ -735,7 +735,7 @@ class Factory
           @conn.exec("UPDATE order_table SET final_cropping=$2 WHERE order_id=$1",[object.get_order_id,object.get_cropping])
         end
         compare_value = results.getvalue 0,18
-        if compare_value.nil?
+        if !compare_value.eql? object.get_cropping_date
           @conn.exec("UPDATE order_table SET final_cropping_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_cropping_date.to_time])
         end
         compare_value = results.getvalue 0,19
@@ -743,7 +743,7 @@ class Factory
           @conn.exec("UPDATE order_table SET final_edit_upload=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_edit_upload])
         end
         compare_value = results.getvalue 0,20
-        if !compare_value.nil?
+        if !compare_value.eql? object.get_final_edit_upload
           @conn.exec("UPDATE order_table SET final_edit_upload_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_final_edit_upload_date])
         end
         compare_value = results.getvalue 0,21

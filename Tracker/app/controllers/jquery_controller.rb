@@ -119,6 +119,7 @@ class JqueryController < ActionController::Base
 
 	@order_id = params[:order_id].to_i
 	order.set_order_id(params[:order_id].to_i)
+	order = worker.interact_with_order('R',order)
 	order.set_raw_photos(params[:raw_photos].to_i)
 	order.set_estimated_photos(params[:est_photos].to_i)
 	order.set_final_photos_number(params[:final_photos].to_i)
@@ -128,44 +129,58 @@ class JqueryController < ActionController::Base
 		photographer.set_swag('N')
 	end
 	if(params[:photos_approved] == 'true')
+		if (order.get_photos_approved_date.nil? or order.get_photos_approved == 'N')
+			order.set_photos_approved_date(Time.now)
+		end
 		order.set_photos_approved('Y')
-		order.set_photos_approved_date(Time.now)
 	else
 		order.set_photos_approved('N')
 	end
 	if(params[:photographer_paid] == 'true')
-		order.set_photographer_paid('Y')
+		if (order.get_photographer_paid_date.nil? or order.get_photographer_paid == 'N')
 		order.set_photographer_paid_date(Time.now)
+		end
+		order.set_photographer_paid('Y')
 	else
 		order.set_photographer_paid('N')
 	end
 	if(params[:quick_edit_upload] == 'true')
-		order.set_quick_edit_upload('Y')
+		if (order.get_quick_edit_upload.nil? or order.get_quick_edit_upload == 'N')
 		order.set_quick_edit_upload_date(Time.now)
+		end
+		order.set_quick_edit_upload('Y')
 	else
 		order.set_quick_edit_upload('N')
 	end
 	if(params[:assigned_to_editor] == 'true')
-		order.set_assigned_to_editor('Y')
+		if (order.get_assigned_to_editor_date.nil? or order.get_assigned_to_editor == 'N')
 		order.set_assigned_to_editor_date(Time.now)
+		end
+		order.set_assigned_to_editor('Y')
 	else
 		order.set_assigned_to_editor('N')
 	end
 	if(params[:final_edits_approve] == 'true')
-		order.set_final_edits_approve('Y')
+		if (order.get_final_edits_approve.nil? or order.get_final_edits_approve == 'N')
 		order.set_final_edits_approve_date(Time.now)
+		end
+		order.set_final_edits_approve('Y')
 	else
 		order.set_final_edits_approve('N')
 	end
 	if(params[:final_crops] == 'true')
+		if (order.get_cropping_date.nil? or order.get_cropping == 'N')
+			order.set_cropping_date(Time.now)
+		end
 		order.set_cropping('Y')
-		order.set_cropping_date(Time.now)
 	else
 		order.set_cropping('N')
 	end
 	if(params[:final_edit_upload] == 'true')
-		order.set_final_edit_upload('Y')
+		if (order.get_final_edit_upload_date.nil? or order.get_photographer_paid == 'N')
 		order.set_final_edit_upload_date(Time.now)
+		end
+		order.set_final_edit_upload('Y')
 	else
 		order.set_final_edit_upload('N')
 	end
@@ -185,7 +200,7 @@ class JqueryController < ActionController::Base
 	parade.set_state(params[:state])
 	parade.set_start_date(params[:start_date])
 	if params[:end_date] == ""
-		parade.set_end_date(params[:start_date])
+		parade.set_end_date(nil)
 	else
 		parade.set_end_date(params[:end_date])
 	end
@@ -227,7 +242,7 @@ class JqueryController < ActionController::Base
 	@connection = PG::Connection.open(:dbname => "postgres",:user => 'nitrous',:password => "")
 	new_home = Home.new
 	new_home = worker.interact_with_home('C',home)
-	@connection.exec("INSERT INTO order_table (home_id, photographer_id) values($1, $2)",[new_home.get_home_id.to_i, photographer.get_photographer_id.to_i])
+	@connection.exec("INSERT INTO order_table (home_id, photographer_id, photos_approved, photographer_paid, quick_edit_upload, assigned_to_editor, final_edits_approve, final_cropping, final_edit_upload) values($1, $2,'N','N','N','N','N','N','N')",[new_home.get_home_id.to_i, photographer.get_photographer_id.to_i])
   end
 	
 end

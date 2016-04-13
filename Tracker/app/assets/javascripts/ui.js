@@ -55,7 +55,7 @@ function update_order_ajax(){
 	var final_edits_approve = $('#final-edits-approve').val();
 	var final_crops = $('#crops').val();
 	var final_edit_upload = $('#final-edit-upload').val();
-	var home_id = $('#home-info').data('home-id');
+	var home_id = $('.home-column .entry.selected').data('home-id');
 	var photographer_notes = $('textarea#photographer-notes').val();
 
 	$.post('update_order',
@@ -79,7 +79,7 @@ function update_order_ajax(){
 				photographer_notes: photographer_notes
 			},
 			function(data){
-				$('#update-results').html(data);
+				order_ajax(home_id);
 			}
 		);
 }
@@ -112,6 +112,7 @@ function addevent(){
 			});
 			$('#record-added-dialog').dialog('open');
 		});
+		location.reload();
 }
 
 function addphotographer(){
@@ -140,6 +141,7 @@ function addphotographer(){
 			});
 			$('#record-added-dialog').dialog('open');
 		});
+		location.reload();
 }
 
 function addproject(){
@@ -178,6 +180,7 @@ function addproject(){
 			});
 			$('#record-added-dialog').dialog('open');
 		});
+		location.reload();
 }
 
 
