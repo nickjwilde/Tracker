@@ -26,7 +26,7 @@
       <li class="navbar-text">Welcome, <%= current_user.name %>!</li>
 	  	<li><%= link_to "Events" , root_path, class: "btn btn-default"%></li>
 	  	<li><%= link_to "Add" , '/addnew/', class: "btn btn-default"%></li>
-	  	<li><a class="btn btn-default" href="#">Admin</a></li>
+	  	<li><%= link_to "Admin", "/admin/", class: "btn btn-default" %></li>
 	  	<li class="active logout"><%= link_to "Logout", "/signout/" %></li>
 	  </ul>
 	</div>

@@ -857,7 +857,7 @@ class Factory
         @feedBack = Array.new
         @conn.exec "SELECT first_name, last_name, email FROM user_table" do |results|
           results.each do |row|
-            object = User.new
+            object = UserAuth.new
             object.set_first_name(row['first_name'])
             object.set_last_name(row['last_name'])
             object.set_email(row['email'])

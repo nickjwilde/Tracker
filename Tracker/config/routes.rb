@@ -24,6 +24,7 @@ Rails.application.routes.draw do
 
   root 'admin#events'
   get 'addnew/', to: 'admin#addnew'
+  get 'admin/', to: 'admin#admin'
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

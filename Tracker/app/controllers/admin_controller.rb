@@ -12,4 +12,10 @@ class AdminController < ApplicationController
     @photographerlist = worker.interact_with_photographer('L')
     @eventlist = worker.interact_with_parade('L')
   end
+  
+  def admin
+    worker = Factory.new
+    worker.connect_to_db("nitrous","","postgres")
+    @userlist = worker.interact_with_user('L')
+  end
 end
