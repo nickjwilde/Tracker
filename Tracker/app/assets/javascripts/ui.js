@@ -125,7 +125,6 @@ function addphotographer(){
 
 function addproject(){
 	var home_number = $('#home-num').val();
-	alert(home_number);
 	var builder_id = $('#home-builder option:selected').val();
 	var home_name = $('#home-name').val();
 	var address = $('#home-address').val();

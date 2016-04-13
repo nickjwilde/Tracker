@@ -106,6 +106,7 @@ class Factory
       when 'R'
         results = Array.new
         results = @conn.exec("SELECT photographer_id, name_of_photographer, email_of_photographer, phone_number_of_photographer, notes_of_photographer, swag FROM Photographer WHERE photographer_id=$1",[object.get_photographer_id])
+	if !results.num_tuples.zero?
         object.set_name(results.getvalue 0,1)
         object.set_email(results.getvalue 0,2)
         object.set_phone(results.getvalue 0,3)
@@ -113,6 +114,9 @@ class Factory
         object.set_swag(results.getvalue 0,5)
         results = nil
         return object
+	else
+	return nil
+	end
       when 'L'
 	@feedback = Array.new
       	results = Array.new
@@ -664,9 +668,9 @@ class Factory
       when 'U'
         results = Array.new
         results = @conn.exec("SELECT * FROM order_table WHERE order_id=$1",[object.get_order_id])
-	compare_value = results.getvalue 0,2
-        if !compare_value.eql? object.get_num_package_photos
-          @conn.exec("UPDATE order_table SET num_package_photos=$2 WHERE order_id=$1",[object.get_order_id,object.get_num_package_photos])
+	compare_value = results.getvalue 0,1
+        if !compare_value.eql? object.get_num_package_photos 
+          @conn.exec("UPDATE order_table SET num_package_photos=$2 WHERE order_id=$1",[object.get_order_id,object.get_num_package_photos.to_i])
         end
 
         compare_value = results.getvalue 0,3
@@ -731,7 +735,7 @@ class Factory
         end
         compare_value = results.getvalue 0,18
         if compare_value.nil?
-          @conn.exec("UPDATE order_table SET final_cropping_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_cropping_date])
+          @conn.exec("UPDATE order_table SET final_cropping_date=$2 WHERE order_id=$1",[object.get_order_id,object.get_cropping_date.to_time])
         end
         compare_value = results.getvalue 0,19
         if !compare_value.eql? object.get_final_edit_upload
