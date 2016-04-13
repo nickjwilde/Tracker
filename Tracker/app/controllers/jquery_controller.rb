@@ -6,6 +6,45 @@ class JqueryController < ActionController::Base
     @home_results = worker.interact_with_home('L')
   end
 
+  def paradenotes
+    worker = Factory.new
+    worker.connect_to_db("nitrous","","postgres")
+    parade = Parade.new
+    parade.set_parade_id(params[:id].to_i)
+    parade = worker.interact_with_parade('R', parade)
+    @paradenotes = parade.get_notes
+  end
+
+  def updateparadenotes
+    worker = Factory.new
+    worker.connect_to_db("nitrous","","postgres")
+    parade = Parade.new
+    parade.set_parade_id(params[:parade_id].to_i)
+    parade = worker.interact_with_parade('R', parade)
+    parade.set_notes(params[:notes])
+    worker.interact_with_parade('U', parade)
+  end
+  
+  def homenotes
+    worker = Factory.new
+    worker.connect_to_db("nitrous","","postgres")
+    home = Home.new
+    home.set_home_id(params[:home_id].to_i)
+    home = worker.interact_with_home('R', home)
+    @homenotes = home.get_notes
+
+  end
+
+  def updatehomenotes
+    worker = Factory.new
+    worker.connect_to_db("nitrous","","postgres")
+    home = Home.new
+    home.set_home_id(params[:home_id].to_i)
+    home = worker.interact_with_home('R', home)
+    home.set_notes(params[:notes])
+    worker.interact_with_home('U', home)
+  end
+
   def order
     worker = Factory.new
     worker.connect_to_db("nitrous","","postgres")
@@ -71,6 +110,8 @@ class JqueryController < ActionController::Base
 	photographer = Photographer.new
 	photographer.set_photographer_id(params[:photographer_id].to_i)
 	photographer = worker.interact_with_photographer('R',photographer)
+	photographer.set_notes(params[:photographer_notes])
+	worker.interact_with_photographer('U', photographer)
 	order.set_num_package_photos(params[:num_photos])
 	home = Home.new
 	home.set_home_id(params[:home_id].to_i)
@@ -155,7 +196,7 @@ class JqueryController < ActionController::Base
 	worker = Factory.new
 	worker.connect_to_db("nitrous","","postgres")
 	photographer = Photographer.new
-	photographer.set_name(params[:first_name]+", "+params[:last_name])
+	photographer.set_name(params[:last_name]+", "+params[:first_name])
 	photographer.set_email(params[:email])
 	photographer.set_phone(params[:phone])
 	photographer.set_notes(params[:notes])

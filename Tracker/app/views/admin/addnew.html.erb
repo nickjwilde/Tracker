@@ -38,14 +38,14 @@
 					<h3>Add Project</h3>
 					<form id="addprojectform" method="post" action="">
 						Home Number*<br/><input id="home-num" type="text" required></input><br/>
-						Builder<br/><%= select_tag "home-builder", options_from_collection_for_select(@builderlist, 'get_builder_id', 'get_name_of_builder') %><br/>
+						Builder*<br/><%= select_tag "home-builder", options_from_collection_for_select(@builderlist, 'get_builder_id', 'get_name_of_builder') %><br/>
 						Home Name*<br/><input id="home-name" type="text" required></input><br/>
-						Address<br/><input id="home-address" type="text"></input><br/>
-						City<br/><input id="home-city" type="text"></input><br/>
-						State<br/><%= select_tag "home-state", options_for_select(us_states) %><br/>
-						ZIP<br/><input id="home-zip" type="text"></input><br/>
+						Address*<br/><input id="home-address" type="text" required></input><br/>
+						City*<br/><input id="home-city" type="text" required></input><br/>
+						State*<br/><%= select_tag "home-state", options_for_select(us_states) %><br/>
+						Zip Code*<br/><input id="home-zip" type="text" required></input><br/>
 						Photographer<br/><%= select_tag "home-photographer", options_from_collection_for_select(@photographerlist, 'get_photographer_id', 'get_name') %><br/>
-						Event<br/><%= select_tag "home-event", options_from_collection_for_select(@eventlist, 'get_parade_id', 'get_parade_name') %><br/>
+						Event*<br/><%= select_tag "home-event", options_from_collection_for_select(@eventlist, 'get_parade_id', 'get_parade_name') %><br/>
 						Notes<br/><textarea id="home-notes" form="addprojectform"></textarea><br/>
 						<button class="btn btn-primary" type="submit" form="addprojectform">Add</button>  
 					</form>

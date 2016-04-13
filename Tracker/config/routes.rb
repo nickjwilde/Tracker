@@ -10,12 +10,17 @@ Rails.application.routes.draw do
   resources :sessions, only: [:create, :destroy]
   resource :home, only: [:show]
 
+ #jquery handler methods
   match 'homes/', :to => 'jquery#homes', via: 'post'
   match 'order_details/', :to => 'jquery#order', via: 'post'
   match 'update_order/', :to => 'jquery#updateorder', via: 'post'
   match 'addnew/addevent/', :to => 'jquery#addevent', via: 'post'
   match 'addnew/addphotographer/', :to => 'jquery#addphotographer', via: 'post'
   match 'addnew/addproject/', :to => 'jquery#addproject', via: 'post'
+  match 'parade_notes', :to => 'jquery#paradenotes', via: 'post'
+  match 'home_notes', :to => 'jquery#homenotes', via: 'post'
+  match 'update_parade_notes', :to => 'jquery#updateparadenotes', via: 'post'
+  match 'update_home_notes', :to => 'jquery#updatehomenotes', via: 'post'
 
   root 'admin#events'
   get 'addnew/', to: 'admin#addnew'

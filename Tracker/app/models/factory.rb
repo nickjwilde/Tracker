@@ -333,7 +333,8 @@ class Factory
                         LEFT JOIN builder b
                         ON h.builder_id = b.builder_id
                         LEFT JOIN Parade p
-                        ON h.parade_id = p.parade_id" )do |results|
+                        ON h.parade_id = p.parade_id
+			ORDER BY h.home_number" )do |results|
           results.each do |row|
             object = Home.new(row['home_id'],row['home_name'],row['home_number'],row['home_address'],row['city'],row['state'],row['zipcode'],row['notes'])
 
