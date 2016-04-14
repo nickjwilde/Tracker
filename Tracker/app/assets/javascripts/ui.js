@@ -198,13 +198,30 @@ $(document).ready(function(){
 			$('#parade-notes').html('');
 			$('#parade-notes').css('display','block');
 			$('#home-notes').html('');
+			$(this).next().css('display','none');
 		}else{
 			$(this).addClass("selected");
 			$('#event-column .column-header').fadeTo(1000,0);
 			$('#event-column .entry').not(this).slideUp(1000);
+			$(this).next().css('display','block');
       			homes_ajax(parade_id);
       		}
 });
+
+	$('.edit-button').click(function(){
+		var parade_id = $(this).data('edit-parade-id');
+		$.post('editparade',
+			{
+				parade_id: parade_id
+			},
+			function(data){
+				$('#edit-record').html(data);
+			}
+		);
+
+		$('#edit-record').modal("toggle");
+	});
+
 	//handle home selection
 	$(document).on('click','.home-column .entry',function(){
 		var home_id = $(this).data("home-id");

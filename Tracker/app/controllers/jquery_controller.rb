@@ -244,5 +244,12 @@ class JqueryController < ActionController::Base
 	new_home = worker.interact_with_home('C',home)
 	@connection.exec("INSERT INTO order_table (home_id, photographer_id, photos_approved, photographer_paid, quick_edit_upload, assigned_to_editor, final_edits_approve, final_cropping, final_edit_upload) values($1, $2,'N','N','N','N','N','N','N')",[new_home.get_home_id.to_i, photographer.get_photographer_id.to_i])
   end
+  def editparade
+	worker = Factory.new
+	worker.connect_to_db("nitrous","","postgres")
+	@parade = Parade.new
+	@parade.set_parade_id(params[:parade_id])
+	@parade = worker.interact_with_parade('R',@parade)
+  end
 	
 end

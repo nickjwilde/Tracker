@@ -43,6 +43,12 @@ a {
     margin-top: 1em;
 }
 
+.edit-button {
+	float: right;
+	background-color: #ED9C28;
+	margin-top: 1em;
+}
+
 .entry {
 	height: 60px;
 	display: -webkit-box;
@@ -142,6 +148,9 @@ a {
     text-align: center;
 }
 
+#parade-notes {
+	margin-top: 3em;
+}
 .photographer {
 	float: left;
 }

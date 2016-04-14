@@ -3,6 +3,10 @@
 <div id="confirmation-dialog" style="display: none">
 	<p>Are you sure you want to update this record?</p>
 </div>
+<div id="edit-record" class="modal fade" role="dialog">
+	Hello world
+</div>
+
 <div id="event-column" class="col-sm-6">
 <div class="column-header">
 <h2 class="">Events</h2>
@@ -26,6 +30,9 @@
 </div>
 </h4>
 </div>
+<button type="button" class="edit-button btn" id="edit-parade" data-edit-parade-id="<%= event.get_parade_id %>" style="display: none;">
+Edit
+</button>
 <% end %>
 </div>
 <div id="parade-notes" class="col-sm-6">
