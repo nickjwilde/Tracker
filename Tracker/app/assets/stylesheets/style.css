@@ -47,6 +47,8 @@ a {
 	float: right;
 	background-color: #ED9C28;
 	margin-top: 1em;
+  position: relative;
+  z-index: 1;
 }
 
 .entry {

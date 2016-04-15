@@ -1,0 +1,13 @@
+  <div id="home-info" data-home-id="<%= @home.try(:get_home_id) %>" class="entry">
+	    <h4>
+	    <div id="home-number"><%= @home.try(:get_home_number) %></div>
+		    <div class="home-header">
+			  	<span class="address">
+            <%= @home.get_builder.get_name_of_builder %><br/>
+				  	<%= @home.get_home_name %>
+				  </span><br/>
+            <%= @home.get_home_address %><br/>
+			      <%= @home.get_city + ', ' + @home.get_state + ' ' + @home.get_home_zipcode %>
+	    	</div>
+    	</h4>
+    </div>

@@ -183,6 +183,65 @@ function addproject(){
 		location.reload();
 }
 
+function editparadeajax(){
+  var parade_id = $('.entry.selected').data('parade-id');
+  var name = $('#parade-name').val();
+  var city = $('#parade-city').val();
+  var state = $('#parade-state option:selected').val();
+  var start_date = $('#parade-start-date').val();
+  var end_date = $('#parade-end-date').val();
+  var notes = $('#parade-notes-modal').val();
+  $.post('updateparade',
+        {
+          parade_id: parade_id,
+          name: name,
+          city: city,
+          state: state,
+          start_date: start_date,
+          end_date: end_date,
+          notes: notes
+        },
+         function(data){
+          $('#event-column .entry.selected').html(data);
+          $('#edit-record').modal("toggle");
+         }
+   );
+
+}
+
+function edithomeajax(){
+  var home_id = $('.home-column .entry.selected').data('home-id');
+  var parade_id = $('.entry.selected').data('parade-id');
+  var home_number = $('#home-num').val();
+  var name = $('#home-name').val();
+  var address = $('#home-address').val();
+  var city = $('#home-city').val();
+  var state = $('#home-state option:selected').val();
+  var zipcode = $('#home-zip').val();
+  var builder_id = $('#home-builder option:selected').val();
+  var notes = $('#home-notes-modal').val();
+  $.post('updatehome',
+        {
+          home_id: home_id,
+          name: name,
+          home_number: home_number,
+          address: address,
+          city: city,
+          state: state,
+          zipcode: zipcode,
+          builder_id: builder_id,
+          notes: notes
+        },
+         function(data){
+          homes_ajax(parade_id);
+          $('#order-results').html('');
+			    $('#home-notes').html('');
+			    $('#parade-notes').show();
+          $('#event-column .entry.selected').next('.edit-button').show();
+          $('#edit-record').modal("toggle");
+         }
+   );
+}
 
 $(document).ready(function(){
 	//handle event selection
@@ -208,8 +267,10 @@ $(document).ready(function(){
       		}
 });
 
-	$('.edit-button').click(function(){
+  //handle parade edit button
+	$('.edit-button').click(function(e){
 		var parade_id = $(this).data('edit-parade-id');
+    e.preventDefault();
 		$.post('editparade',
 			{
 				parade_id: parade_id
@@ -218,9 +279,22 @@ $(document).ready(function(){
 				$('#edit-record').html(data);
 			}
 		);
-
-		$('#edit-record').modal("toggle");
+		$('#edit-record').modal("show");
 	});
+
+  $(document).on('click','#edit-home',function(e){
+      e.preventDefault();
+    var home_id = $(this).data('edit-home-id');
+    $.post('edithome',
+           {
+            home_id: home_id
+           },
+           function(data){
+            $('#edit-record').html(data);
+    }
+  );
+    $('#edit-record').modal("show");
+  });
 
 	//handle home selection
 	$(document).on('click','.home-column .entry',function(){
@@ -231,12 +305,16 @@ $(document).ready(function(){
 			$('#home-results .entry').not(this).slideDown(1000);
 			$('#order-results').html('');
 			$('#home-notes').html('');
-			$('#parade-notes').css('display','block');
+			$('#parade-notes').show();
+      $('#event-column .entry.selected').next('.edit-button').show();
+      $(this).next('.edit-button').hide();
 		}else{
 			$(this).addClass("selected");
 			$('#home-results .column-header').slideUp(1000);
 			$('#home-results .entry').not(this).slideUp(1000);
-			$('#parade-notes').css('display','none');
+			$('#parade-notes').hide();
+      $('#event-column .entry.selected').next('.edit-button').hide();
+      $(this).next('.edit-button').show();
 			order_ajax(home_id)
 		}
 	});
@@ -253,7 +331,7 @@ $(document).ready(function(){
 			$(this).siblings('input').val('true');
 		}
 	});
-	
+
 	//handle swag package
 	$(document).on('click','.swag i',function(){
 		if($(this).hasClass('fa-check')){
@@ -270,7 +348,7 @@ $(document).ready(function(){
 			autoOpen: false,
 			modal: true
 	});
-	
+
 	//handle saving of event notes
 	$(document).on('submit','#save-parade-notes',function(e){
 		e.preventDefault();
@@ -329,14 +407,14 @@ $(document).ready(function(){
 		$('#update-results').html('');
 		$('#update-results').fadeIn(1);
 	});
-	
+
 	//handle adding event
 	$('#addeventform').submit(function(e){
 		e.preventDefault();
 		addevent();
 		return false;
 	});
-	
+
 	//handle adding photographer
 	$('#addphotographerform').submit(function(e){
 		e.preventDefault();
@@ -350,6 +428,17 @@ $(document).ready(function(){
 		addproject();
 		return false;
 	});
+
+  //handle saving event details
+  $(document).on('click','#updateparadebtn', function(e){
+    e.preventDefault();
+    editparadeajax();
+  });
+
+   $(document).on('click','#updatehomebtn', function(e){
+    e.preventDefault();
+    edithomeajax();
+  });
 
 	//Stack menu when collapsed
 	$('#menu-collapse').on('show.bs.collapse', function() {

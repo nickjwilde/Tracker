@@ -261,7 +261,7 @@ class Factory
                     , home_address                    VARCHAR(100)
                     , city                            VARCHAR(100)
                     , state                           VARCHAR(100)
-                    , zip                             INTEGER
+                    , zip                             VARCHAR(5)
                     , notes                           VARCHAR(10000)
                     , parade_id                       INTEGER
                     , builder_id                      INTEGER
@@ -670,7 +670,7 @@ class Factory
         results = Array.new
         results = @conn.exec("SELECT * FROM order_table WHERE order_id=$1",[object.get_order_id])
 	compare_value = results.getvalue 0,2
-        if !compare_value.eql? object.get_num_package_photos 
+        if !compare_value.eql? object.get_num_package_photos
           @conn.exec("UPDATE order_table SET num_package_photos=$2 WHERE order_id=$1",[object.get_order_id,object.get_num_package_photos.to_i])
         end
 

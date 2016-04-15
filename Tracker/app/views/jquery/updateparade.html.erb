@@ -1,0 +1,12 @@
+<h4>
+<span class="entry-header">
+<%= @parade.get_parade_name %>
+</span><br>
+ <%= @parade.get_city %>, <%= @parade.get_state %><br/>
+<div class="date">
+<%= @parade.get_start_date.try(:to_time).try(:strftime, "%b %d, %Y") %>
+-
+<%= @parade.get_end_date.try(:to_time).try(:strftime, "%b %d, %Y") %>
+	
+</div>
+</h4>

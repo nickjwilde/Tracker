@@ -24,7 +24,7 @@ class JqueryController < ActionController::Base
     parade.set_notes(params[:notes])
     worker.interact_with_parade('U', parade)
   end
-  
+
   def homenotes
     worker = Factory.new
     worker.connect_to_db("nitrous","","postgres")
@@ -251,5 +251,48 @@ class JqueryController < ActionController::Base
 	@parade.set_parade_id(params[:parade_id])
 	@parade = worker.interact_with_parade('R',@parade)
   end
-	
+
+  def updateparade
+    worker = Factory.new
+    worker.connect_to_db("nitrous","","postgres")
+    @parade = Parade.new
+    @parade.set_parade_id(params[:parade_id])
+    @parade.set_parade_name(params[:name])
+    @parade.set_city(params[:city])
+    @parade.set_state(params[:state])
+    @parade.set_start_date(params[:start_date])
+    @parade.set_end_date(params[:end_date])
+    @parade.set_notes(params[:notes])
+    worker.interact_with_parade('U', @parade)
+  end
+
+   def edithome
+	worker = Factory.new
+	worker.connect_to_db("nitrous","","postgres")
+  @builderlist = worker.interact_with_builder('L')
+	@home = Home.new
+	@home.set_home_id(params[:home_id])
+	@home = worker.interact_with_home('R',@home)
+  end
+
+   def updatehome
+    worker = Factory.new
+    worker.connect_to_db("nitrous","","postgres")
+    builder = Builder.new
+    builder.set_builder_id(params[:builder_id])
+    builder = worker.interact_with_builder('R', builder)
+    @home = Home.new
+    @home.set_home_id(params[:home_id])
+    @home = worker.interact_with_home('R', @home)
+    @home.set_home_name(params[:name])
+    @home.set_home_number(params[:home_number])
+    @home.set_home_address(params[:address])
+    @home.set_city(params[:city])
+    @home.set_state(params[:state])
+    @home.set_home_zipcode(params[:zipcode])
+    @home.set_notes(params[:notes])
+    @home.set_builder(builder)
+    worker.interact_with_home('U', @home)
+  end
+
 end

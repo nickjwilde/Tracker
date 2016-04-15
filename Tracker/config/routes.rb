@@ -22,6 +22,9 @@ Rails.application.routes.draw do
   match 'update_parade_notes', :to => 'jquery#updateparadenotes', via: 'post'
   match 'update_home_notes', :to => 'jquery#updatehomenotes', via: 'post'
   match 'editparade', :to => 'jquery#editparade', via: 'post'
+  match 'edithome', :to => 'jquery#edithome', via: 'post'
+  match 'updateparade', :to => 'jquery#updateparade', via: 'post'
+  match 'updatehome', :to => 'jquery#updatehome', via: 'post'
 
   root 'admin#events'
   get 'addnew/', to: 'admin#addnew'
