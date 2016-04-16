@@ -304,7 +304,7 @@ function addbuilderajax(){
 
 $(document).ready(function(){
 	//handle event selection
-	$('#event-column .entry').click(function(){
+	$(document).on('click','#event-column .entry',function(){
     		var parade_id = $(this).data("parade-id");
 
     		if($(this).hasClass("selected")){
@@ -342,6 +342,7 @@ $(document).ready(function(){
 		$('#edit-record').modal("show");
 	});
 
+  //handle edit home button to show modal with edit home form
   $(document).on('click','#edit-home',function(e){
       e.preventDefault();
     var home_id = $(this).data('edit-home-id');
@@ -500,7 +501,7 @@ $(document).ready(function(){
     e.preventDefault();
     edithomeajax();
   });
-  
+
   //handle add builder
   $('#addbuilderbtn').click(function(e){
      e.preventDefault();
@@ -520,7 +521,15 @@ $(document).ready(function(){
   $(document).on('change','#state-filter',function(){
     eventfiltersajax();
   });
-  //year filter
+  //clear event filters button
+  $(document).on('click','#cleareventfilters',function(e){
+    e.preventDefault();
+    $('#state-filter').val('NO');
+    $('#year-filter').val('');
+    eventfiltersajax();
+  });
+
+  //builder filter
   $(document).on('change','#builder-filter',function(){
     homefiltersajax();
   });
@@ -528,6 +537,14 @@ $(document).ready(function(){
   $(document).on('change','#photographer-filter',function(){
     homefiltersajax();
   });
+  //clear home filters
+  $(document).on('click','#clearhomefilters',function(e){
+    e.preventDefault();
+    $('#photographer-filter').val('');
+    $('#builder-filter').val('');
+    homefiltersajax();
+  });
+
   //stop form from submitting if the user hits enter
   $(document).on('submit','#form-filters',function(e){
     e.preventDefault();
