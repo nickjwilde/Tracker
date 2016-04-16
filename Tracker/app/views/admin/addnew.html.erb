@@ -1,12 +1,37 @@
 <div class="container">
-	<div class="row">	
+	<div class="row">
+  <div id="add-builder" class="modal fade" role="dialog">
+<div class="modal-dialog">
+
+<!-- Modal content-->
+<div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h4 class="modal-title">Add Builder</h4>
+</div>
+<div class="modal-body">
+<form id="addbuilderform">
+<div class="form-group">
+<label for="builder-name">Builder Name</label>
+<input id="builder-name" class="form-control" type="text" required></input>
+</div>
+</form>
+</div>
+<div class="modal-footer">
+  <button id="addbuilderbtn" type="button" class="btn btn-primary">Add</button>
+<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+</div>
+</div>
+
+</div>
+</div>
 		<div class="col-sm-6">
 			<ul class="nav nav-tabs">
 				<li class="active"><a data-toggle="tab" href="#addevent">Add Event</a></li>
 				<li><a data-toggle="tab" href="#addphotographer">Add Photographer</a></li>
 				<li><a data-toggle="tab" href="#addproject">Add Project</a></li>
 			</ul>
-		
+
 			<div class="tab-content">
 				<div id="addevent" class="tab-pane fade in active">
 					<div id="record-added-dialog" style="display: none">
@@ -20,7 +45,7 @@
 						Start Date*<br/><input id="event-start-date" type="date" required></input><br/>
 						End Date<br/><input id="event-end-date" type="date"></input><br/>
 						Notes<br/><textarea id="event-notes" form="addeventform"></textarea><br/>
-						<button class="btn btn-primary" type="submit" form="addeventform">Add</button>  
+						<button class="btn btn-primary" type="submit" form="addeventform">Add</button>
 					</form>
 				</div>
 				<div id="addphotographer" class="tab-pane fade">
@@ -31,23 +56,23 @@
 						Email*<br/><input id="photographer-email" type="email" required></input><br/>
 						Phone*<br/><input id="photographer-phone" type="tel" required></input><br/>
 						Notes<br/><textarea id="photographer-notes" form="addphotographerform"></textarea><br/>
-						<button class="btn btn-primary" type="submit" form="addphotographerform">Add</button>  
+						<button class="btn btn-primary" type="submit" form="addphotographerform">Add</button>
 					</form>
 				</div>
 				<div id="addproject" class="tab-pane fade">
 					<h3>Add Project</h3>
 					<form id="addprojectform" method="post" action="">
 						Home Number*<br/><input id="home-num" type="text" required></input><br/>
-						Builder*<br/><%= select_tag "home-builder", options_from_collection_for_select(@builderlist, 'get_builder_id', 'get_name_of_builder') %><br/>
+						Builder*<br/><div id="builder-select"><%= select_tag "home-builder", options_from_collection_for_select(@builderlist, 'get_builder_id', 'get_name_of_builder') %><a href="#" data-toggle="modal" data-target="#add-builder"><i class="fa fa-plus-circle"></i></a></div>
 						Home Name*<br/><input id="home-name" type="text" required></input><br/>
 						Address*<br/><input id="home-address" type="text" required></input><br/>
 						City*<br/><input id="home-city" type="text" required></input><br/>
 						State*<br/><%= select_tag "home-state", options_for_select(us_states) %><br/>
 						Zip Code*<br/><input id="home-zip" type="text" required></input><br/>
-						Photographer<br/><%= select_tag "home-photographer", options_from_collection_for_select(@photographerlist, 'get_photographer_id', 'get_name') %><br/>
-						Event*<br/><%= select_tag "home-event", options_from_collection_for_select(@eventlist, 'get_parade_id', 'get_parade_name') %><br/>
+						Photographer<br/><%= select_tag "home-photographer", options_from_collection_for_select(@photographerlist, 'get_photographer_id', 'get_name') %><a id="addphotographericon" href="#"><i class="fa fa-plus-circle"></i></a><br/>
+						Event*<br/><%= select_tag "home-event", options_from_collection_for_select(@eventlist, 'get_parade_id', 'get_parade_name') %><a id="addeventicon" href="#"><i class="fa fa-plus-circle"></i></a><br/>
 						Notes<br/><textarea id="home-notes" form="addprojectform"></textarea><br/>
-						<button class="btn btn-primary" type="submit" form="addprojectform">Add</button>  
+						<button class="btn btn-primary" type="submit" form="addprojectform">Add</button>
 					</form>
 				</div>
 			</div>

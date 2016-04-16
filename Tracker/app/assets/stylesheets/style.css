@@ -96,6 +96,13 @@ a {
     padding: 2px;
 }
 
+.fa-plus-circle {
+    margin-left: 1em;
+    font-size: 20px!important;
+    color: green;
+    cursor: pointer;
+}
+
 .fa-times {
 	color: red;
 	border: solid 2px;

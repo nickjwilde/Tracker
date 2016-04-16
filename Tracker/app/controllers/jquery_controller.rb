@@ -425,4 +425,13 @@ class JqueryController < ActionController::Base
         @filtered = worker.interact_with_home('L')
     end
   end
+
+  def addbuilder
+      builder = Builder.new
+      worker = Factory.new
+      worker.connect_to_db("nitrous","","postgres")
+      builder.set_name_of_builder(params[:builder_name])
+      worker.interact_with_builder('C', builder)
+      @builderlist = worker.interact_with_builder('L')
+  end
 end

@@ -286,6 +286,22 @@ function resetfilterformhtml(){
       });
 }
 
+function addbuilderajax(){
+      var builder_name = $('#builder-name').val();
+      if (builder_name == ""){
+        alert('Sorry, you must enter a builder');
+      }else{
+      $.post('addbuilder',
+            {
+        builder_name: builder_name
+      },
+            function(data){
+              $('#builder-select').html(data);
+              $('#add-builder').modal('toggle');
+        });
+      }
+}
+
 $(document).ready(function(){
 	//handle event selection
 	$('#event-column .entry').click(function(){
@@ -484,6 +500,16 @@ $(document).ready(function(){
     e.preventDefault();
     edithomeajax();
   });
+  
+  //handle add builder
+  $('#addbuilderbtn').click(function(e){
+     e.preventDefault();
+    addbuilderajax();
+  });
+  //stop builder form from submitting
+  $('#addbuilderform').submit(function(e){
+    e.preventDefault();
+  });
 
   //handle filters
   //year filter
@@ -506,6 +532,14 @@ $(document).ready(function(){
   $(document).on('submit','#form-filters',function(e){
     e.preventDefault();
   })
+
+  //handle plus icons to move to corresponding tab
+  $('#addeventicon').click(function(){
+      $('.nav-tabs a[href="#addevent"]').tab('show');
+  });
+  $('#addphotographericon').click(function(){
+    $('.nav-tabs a[href="#addphotographer"]').tab('show');
+  });
 
 	//Stack menu when collapsed
 	$('#menu-collapse').on('show.bs.collapse', function() {
