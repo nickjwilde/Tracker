@@ -336,7 +336,7 @@ class Factory
                         ON h.parade_id = p.parade_id
 			ORDER BY h.home_number" )do |results|
           results.each do |row|
-            object = Home.new(row['home_id'],row['home_name'],row['home_number'],row['home_address'],row['city'],row['state'],row['zipcode'],row['notes'])
+            object = Home.new(row['home_id'],row['home_name'],row['home_number'],row['home_address'],row['city'],row['state'],row['zip'],row['notes'])
 
             builder = Builder.new
             builder.set_builder_id(row['builder_id'])

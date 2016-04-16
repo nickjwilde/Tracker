@@ -1,0 +1,27 @@
+<div class="column-header">
+<h2 class="">Events</h2>
+</div>
+<%= @message %>
+<% @filtered.each do |event| %>
+<div class="entry" data-parade-id="<%= event.get_parade_id %>">
+<h4>
+<span class="entry-header">
+<%= event.get_parade_name %>
+</span><br/>
+<%= event.get_city + ", " +  event.get_state %><br/>
+<div class="date">
+<% unless event.get_start_date.nil? %>
+<%= event.get_start_date.to_time.strftime("%b %d, %Y") %>
+<% end %>
+-
+<% unless event.get_end_date.nil? %>
+<%= event.get_end_date.try(:to_time).try(:strftime,"%b %d, %Y") %>
+<% end %>
+
+</div>
+</h4>
+  <button type="button" class="edit-button btn" id="edit-parade" data-edit-parade-id="<%= event.get_parade_id %>" style="display: none;">
+Edit
+</button>
+</div>
+<% end %>

@@ -1,5 +1,5 @@
 class Home
-  def initialize(home = "-1",name="empty",home_num = 0,address="empty",city="empty",state="empty",zipcode = 0,notes="empty",parade="empty",builder="empty")
+  def initialize(home = "-1",name="empty",home_num = 0,address="empty",city="empty",state="empty",zipcode = 1,notes="empty",parade="empty",builder="empty")
     @home_id = home
     @home_name=name
     @address = address

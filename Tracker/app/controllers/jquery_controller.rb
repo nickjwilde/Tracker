@@ -295,4 +295,36 @@ class JqueryController < ActionController::Base
     worker.interact_with_home('U', @home)
   end
 
+  def eventfilters
+    @filtered = Array.new
+    parade = Parade.new
+    @connection = PG::Connection.open(:dbname => "postgres",:user => 'nitrous',:password => "")
+    if !params[:state].empty? and !params[:year].empty?
+        @message = "both"
+        results = @connection.exec("SELECT * FROM parade where state_of_parade = $1 AND date_part('year',start_date_of_parade) = $2",[params[:state], params[:year]])
+        results.each do | row |
+          parade = Parade.new(row['parade_id'],row['name_of_parade'],row['city_of_parade'],row['state_of_parade'],row['start_date_of_parade'],row['end_date_of_parade'])
+          @filtered << parade
+        end
+    elsif !params[:state].empty?
+      @message = "state"
+            results = @connection.exec("SELECT * FROM parade where state_of_parade = $1",[params[:state]])
+        results.each do | row |
+          parade = Parade.new(row['parade_id'],row['name_of_parade'],row['city_of_parade'],row['state_of_parade'],row['start_date_of_parade'],row['end_date_of_parade'])
+          @filtered << parade
+        end
+    elsif !params[:year].empty?
+      @message = "year"
+            results = @connection.exec("SELECT * FROM parade where date_part('year',start_date_of_parade) = $1",[params[:year]])
+        results.each do | row |
+          parade = Parade.new(row['parade_id'],row['name_of_parade'],row['city_of_parade'],row['state_of_parade'],row['start_date_of_parade'],row['end_date_of_parade'])
+          @filtered << parade
+        end
+    else
+        worker = Factory.new
+        worker.connect_to_db("nitrous","","postgres")
+        @filtered = worker.interact_with_parade('L')
+      @message = "none"
+    end
+  end
 end

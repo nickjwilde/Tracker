@@ -25,7 +25,8 @@ Rails.application.routes.draw do
   match 'edithome', :to => 'jquery#edithome', via: 'post'
   match 'updateparade', :to => 'jquery#updateparade', via: 'post'
   match 'updatehome', :to => 'jquery#updatehome', via: 'post'
-
+  match 'eventfilters', :to => 'jquery#eventfilters', via: 'post'
+  
   root 'admin#events'
   get 'addnew/', to: 'admin#addnew'
   get 'admin/', to: 'admin#admin'

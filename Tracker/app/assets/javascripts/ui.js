@@ -243,6 +243,23 @@ function edithomeajax(){
    );
 }
 
+function  eventfiltersajax(){
+    var state = $('#state-filter option:selected').val();
+    var year = $('#year-filter').val();
+    if (state == "NO")
+       state = "";
+    $.post('eventfilters',
+           {
+      state: state,
+      year: year
+    },
+    function(data){
+      $('#event-column').html(data);
+    });
+
+
+}
+
 $(document).ready(function(){
 	//handle event selection
 	$('#event-column .entry').click(function(){
@@ -439,6 +456,21 @@ $(document).ready(function(){
     e.preventDefault();
     edithomeajax();
   });
+
+  //handle filters
+  $(document).on('change','#year-filter',function(){
+
+    eventfiltersajax();
+  });
+  $(document).on('change','#state-filter',function(){
+    alert("changed input");
+    eventfiltersajax();
+  });
+  $(document).on('submit','#form-filters',function(e){
+    e.preventDefault();
+  })
+
+
 
 	//Stack menu when collapsed
 	$('#menu-collapse').on('show.bs.collapse', function() {
