@@ -1,0 +1,24 @@
+<div class="column-header">
+	<h2>
+		Projects
+  </h2>
+</div>
+<% @filtered.each do | home | %>
+  <% if home.get_parade.get_parade_id == @parade_id %>
+    <div id="home-info" data-home-id="<%= home.get_home_id %>" class="entry">
+	    <h4>
+	    <div id="home-number"><%= home.get_home_number %></div>
+		    <div class="home-header">
+			  	<span class="address">
+            <%= home.get_builder.get_name_of_builder %><br/>
+				  	<%= home.get_home_name %>
+				  </span><br/>
+            <%= home.get_home_address %><br/>
+			      <%= home.get_city + ', ' + home.get_state + ' ' + home.get_zipcode %>
+	    	</div>
+    	</h4>
+    </div>
+<button type="button" class="edit-button btn" id="edit-home" data-edit-home-id="<%= home.get_home_id %>" style="display: none;">Edit</button>
+
+  <% end %>
+<% end %>

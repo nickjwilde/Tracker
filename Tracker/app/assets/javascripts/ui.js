@@ -15,6 +15,11 @@ function homes_ajax(id){
 		$('#parade-notes').html(data);
 	}
   );
+  $.post('filterforms',
+         {},
+         function(data){
+            $('#filters').html(data);
+  });
 }
 
 function order_ajax(id){
@@ -256,8 +261,29 @@ function  eventfiltersajax(){
     function(data){
       $('#event-column').html(data);
     });
+}
 
+function  homefiltersajax(){
+    var parade_id = $('#event-column .entry.selected').data('parade-id');
+    var builder = $('#builder-filter').val();
+    var photographer = $('#photographer-filter').val();
+    $.post('homefilters',
+           {
+      builder: builder,
+      photographer: photographer,
+      parade_id: parade_id
+    },
+    function(data){
+      $('#home-results').html(data);
+    });
+}
 
+function resetfilterformhtml(){
+      $.post('resetfilters',
+            {},
+            function(data){
+          $('#filters').html(data);
+      });
 }
 
 $(document).ready(function(){
@@ -275,6 +301,7 @@ $(document).ready(function(){
 			$('#parade-notes').css('display','block');
 			$('#home-notes').html('');
 			$(this).next().css('display','none');
+          resetfilterformhtml();
 		}else{
 			$(this).addClass("selected");
 			$('#event-column .column-header').fadeTo(1000,0);
@@ -325,6 +352,7 @@ $(document).ready(function(){
 			$('#parade-notes').show();
       $('#event-column .entry.selected').next('.edit-button').show();
       $(this).next('.edit-button').hide();
+
 		}else{
 			$(this).addClass("selected");
 			$('#home-results .column-header').slideUp(1000);
@@ -458,19 +486,26 @@ $(document).ready(function(){
   });
 
   //handle filters
+  //year filter
   $(document).on('change','#year-filter',function(){
-
     eventfiltersajax();
   });
+  //state filter
   $(document).on('change','#state-filter',function(){
-    alert("changed input");
     eventfiltersajax();
   });
+  //year filter
+  $(document).on('change','#builder-filter',function(){
+    homefiltersajax();
+  });
+  //photographer filter
+  $(document).on('change','#photographer-filter',function(){
+    homefiltersajax();
+  });
+  //stop form from submitting if the user hits enter
   $(document).on('submit','#form-filters',function(e){
     e.preventDefault();
   })
-
-
 
 	//Stack menu when collapsed
 	$('#menu-collapse').on('show.bs.collapse', function() {

@@ -298,23 +298,21 @@ class JqueryController < ActionController::Base
   def eventfilters
     @filtered = Array.new
     parade = Parade.new
+    #not good practice to put logic here, but time constraints call for exceptions
     @connection = PG::Connection.open(:dbname => "postgres",:user => 'nitrous',:password => "")
     if !params[:state].empty? and !params[:year].empty?
-        @message = "both"
         results = @connection.exec("SELECT * FROM parade where state_of_parade = $1 AND date_part('year',start_date_of_parade) = $2",[params[:state], params[:year]])
         results.each do | row |
           parade = Parade.new(row['parade_id'],row['name_of_parade'],row['city_of_parade'],row['state_of_parade'],row['start_date_of_parade'],row['end_date_of_parade'])
           @filtered << parade
         end
     elsif !params[:state].empty?
-      @message = "state"
             results = @connection.exec("SELECT * FROM parade where state_of_parade = $1",[params[:state]])
         results.each do | row |
           parade = Parade.new(row['parade_id'],row['name_of_parade'],row['city_of_parade'],row['state_of_parade'],row['start_date_of_parade'],row['end_date_of_parade'])
           @filtered << parade
         end
     elsif !params[:year].empty?
-      @message = "year"
             results = @connection.exec("SELECT * FROM parade where date_part('year',start_date_of_parade) = $1",[params[:year]])
         results.each do | row |
           parade = Parade.new(row['parade_id'],row['name_of_parade'],row['city_of_parade'],row['state_of_parade'],row['start_date_of_parade'],row['end_date_of_parade'])
@@ -324,7 +322,107 @@ class JqueryController < ActionController::Base
         worker = Factory.new
         worker.connect_to_db("nitrous","","postgres")
         @filtered = worker.interact_with_parade('L')
-      @message = "none"
+    end
+  end
+
+  def filterforms
+    #do nothing cause we just want the home filter form
+  end
+
+  def resetfilterform
+    #do nothing here as well cause we're just reloading event filters
+  end
+
+  def homefilters
+   @filtered = Array.new
+    home = Home.new
+    @parade_id = params[:parade_id]
+    #not good practice to put logic here, but time constraints call for exceptions
+    @connection = PG::Connection.open(:dbname => "postgres",:user => 'nitrous',:password => "")
+    if !params[:builder].empty? and !params[:photographer].empty?
+       @connection.exec("SELECT  h.*, b.name_of_builder, p.name_of_parade
+                    FROM Home h
+                        LEFT JOIN builder b
+                        ON h.builder_id = b.builder_id
+                        LEFT JOIN Parade p
+                        ON h.parade_id = p.parade_id
+                        LEFT JOIN order_table ot
+                        ON ot.home_id = h.home_id
+                        LEFT JOIN photographer ph
+                        ON ph.photographer_id = ot.photographer_id
+         WHERE b.name_of_builder Ilike $1 AND ph.name_of_photographer ilike $2 ORDER BY h.home_number",['%' + params[:builder] + '%','%' + params[:photographer]+ '%']) do  |results|
+          results.each do |row|
+            home = Home.new(row['home_id'],row['home_name'],row['home_number'],row['home_address'],row['city'],row['state'],row['zip'],row['notes'])
+
+            builder = Builder.new
+            builder.set_builder_id(row['builder_id'])
+            builder.set_name_of_builder(row['name_of_builder'])
+
+            parade = Parade.new
+            parade.set_parade_id(row['parade_id'])
+            parade.set_parade_name(row['name_of_parade'])
+
+            home.set_parade(parade)
+            home.set_builder(builder)
+            @filtered << home
+          end
+      end
+    elsif !params[:builder].empty?
+ @connection.exec("SELECT  h.*, b.name_of_builder, p.name_of_parade
+                    FROM Home h
+                        LEFT JOIN builder b
+                        ON h.builder_id = b.builder_id
+                        LEFT JOIN Parade p
+                        ON h.parade_id = p.parade_id
+			WHERE b.name_of_builder ILIKE $1 ORDER BY h.home_number",['%'+ params[:builder] + '%'] ) do |results|
+          results.each do |row|
+            home = Home.new(row['home_id'],row['home_name'],row['home_number'],row['home_address'],row['city'],row['state'],row['zip'],row['notes'])
+
+            builder = Builder.new
+            builder.set_builder_id(row['builder_id'])
+            builder.set_name_of_builder(row['name_of_builder'])
+
+            parade = Parade.new
+            parade.set_parade_id(row['parade_id'])
+            parade.set_parade_name(row['name_of_parade'])
+
+            home.set_parade(parade)
+            home.set_builder(builder)
+            @filtered << home
+                    end
+      end
+    elsif !params[:photographer].empty?
+ @connection.exec("SELECT  h.*, b.name_of_builder, p.name_of_parade
+                    FROM Home h
+                        LEFT JOIN builder b
+                        ON h.builder_id = b.builder_id
+                        LEFT JOIN Parade p
+                        ON h.parade_id = p.parade_id
+                        LEFT JOIN order_table ot
+                        ON ot.home_id = h.home_id
+                        LEFT JOIN photographer ph
+                        ON ph.photographer_id = ot.photographer_id
+			 WHERE ph.name_of_photographer ILIKE $1 ORDER BY h.home_number",['%' + params[:photographer] + '%'] ) do |results|
+          results.each do |row|
+            home = Home.new(row['home_id'],row['home_name'],row['home_number'],row['home_address'],row['city'],row['state'],row['zip'],row['notes'])
+
+            builder = Builder.new
+            builder.set_builder_id(row['builder_id'])
+            builder.set_name_of_builder(row['name_of_builder'])
+
+            parade = Parade.new
+            parade.set_parade_id(row['parade_id'])
+            parade.set_parade_name(row['name_of_parade'])
+
+            home.set_parade(parade)
+            home.set_builder(builder)
+            @filtered << home
+                    end
+      end
+    else
+        worker = Factory.new
+        worker.connect_to_db("nitrous","","postgres")
+        @filtered = worker.interact_with_home('L')
     end
   end
 end

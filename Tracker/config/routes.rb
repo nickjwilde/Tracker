@@ -26,7 +26,10 @@ Rails.application.routes.draw do
   match 'updateparade', :to => 'jquery#updateparade', via: 'post'
   match 'updatehome', :to => 'jquery#updatehome', via: 'post'
   match 'eventfilters', :to => 'jquery#eventfilters', via: 'post'
-  
+  match 'filterforms', :to => 'jquery#filterforms', via: 'post'
+  match 'homefilters', :to => 'jquery#homefilters', via: 'post'
+  match 'resetfilters', :to => 'jquery#resetfilterform', via: 'post'
+
   root 'admin#events'
   get 'addnew/', to: 'admin#addnew'
   get 'admin/', to: 'admin#admin'
