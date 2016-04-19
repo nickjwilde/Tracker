@@ -116,8 +116,9 @@ function addevent(){
 			}
 			});
 			$('#record-added-dialog').dialog('open');
+     $('.home-event').html(data);
 		});
-		location.reload();
+
 }
 
 function addphotographer(){
@@ -145,8 +146,8 @@ function addphotographer(){
 			}
 			});
 			$('#record-added-dialog').dialog('open');
+      $('.home-photographer').html(data);
 		});
-		location.reload();
 }
 
 function addproject(){

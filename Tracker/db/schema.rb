@@ -11,24 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160321012430) do
+ActiveRecord::Schema.define(version: 20160419173731) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "builder", primary_key: "builder_id", force: true do |t|
-    t.string   "name_of_builder", limit: 100,                   null: false
-    t.string   "phone_number",    limit: 14
-    t.string   "email_address",   limit: 100
-    t.datetime "time_stamp",                  default: "now()", null: false
-    t.string   "contact",         limit: 100
+    t.string "name_of_builder", limit: 100, null: false
   end
 
   create_table "home", primary_key: "home_id", force: true do |t|
     t.string   "home_name",    limit: 100
+    t.integer  "home_number"
     t.string   "home_address", limit: 100
     t.string   "city",         limit: 100
     t.string   "state",        limit: 100
+    t.string   "zip",          limit: 5
     t.string   "notes",        limit: 10000
     t.integer  "parade_id"
     t.integer  "builder_id"
@@ -36,29 +34,28 @@ ActiveRecord::Schema.define(version: 20160321012430) do
   end
 
   create_table "order_table", primary_key: "order_id", force: true do |t|
-    t.string   "photos_received",               limit: 2
-    t.datetime "photos_recieved_date"
-    t.integer  "photos_usable"
-    t.string   "photo_notes",                   limit: 10000
+    t.integer  "num_package_photos"
+    t.integer  "raw_photos"
+    t.datetime "raw_photos_date"
+    t.integer  "estimated_photos"
+    t.string   "photos_approved",          limit: 2
     t.datetime "photos_approved_date"
-    t.string   "photographer_paid",             limit: 2
+    t.string   "photographer_paid",        limit: 2
     t.datetime "photographer_paid_date"
-    t.string   "initial_client_upload",         limit: 2
-    t.datetime "initial_client_upload_date"
-    t.string   "sent_to_philippines",           limit: 2
-    t.datetime "sent_to_philippines_date"
-    t.string   "approve_philippines",           limit: 2
-    t.datetime "approve_philippines_date"
-    t.string   "cropping",                      limit: 2
-    t.datetime "cropping_date"
-    t.string   "final_client_upload",           limit: 2
-    t.datetime "final_client_upload_date"
-    t.string   "verify_photo_replacement",      limit: 2
-    t.datetime "verify_photo_replacement_date"
+    t.string   "quick_edit_upload",        limit: 2
+    t.datetime "quick_edit_upload_date"
+    t.string   "assigned_to_editor",       limit: 2
+    t.datetime "assigned_to_editor_date"
+    t.string   "final_edits_approve",      limit: 2
+    t.datetime "final_edits_approve_date"
+    t.integer  "final_photos_num"
+    t.string   "final_cropping",           limit: 2
+    t.datetime "final_cropping_date"
+    t.string   "final_edit_upload",        limit: 2
+    t.datetime "final_edit_upload_date"
     t.integer  "home_id"
     t.integer  "photographer_id"
-    t.integer  "package_id"
-    t.datetime "time_stamp",                                  default: "now()", null: false
+    t.datetime "time_stamp",                         default: "now()", null: false
   end
 
   create_table "package", primary_key: "package_id", force: true do |t|
@@ -87,12 +84,31 @@ ActiveRecord::Schema.define(version: 20160321012430) do
     t.string   "swag",                         limit: 2
   end
 
-  create_table "users", force: true do |t|
+  create_table "user2s", force: true do |t|
     t.string   "provider"
     t.string   "uid"
     t.string   "name"
+    t.string   "email"
     t.string   "oauth_token"
-    t.datetime "oauth_expires_at"
+    t.datetime "oauth_token_expires_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_table", id: false, force: true do |t|
+    t.string   "first_name", limit: 100
+    t.string   "last_name",  limit: 100
+    t.string   "email",      limit: 1000
+    t.string   "user_id",    limit: 1000
+    t.datetime "time_stamp",              default: "now()", null: false
+  end
+
+  create_table "users", force: true do |t|
+    t.string   "uid"
+    t.string   "provider"
+    t.string   "name"
+    t.string   "email"
+    t.string   "oauth_token"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

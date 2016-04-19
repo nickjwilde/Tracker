@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
@@ -21,7 +22,7 @@
 			<span class="icon-bar"></span>
 		</button>
 	</div>
-	<div class="collapse navbar-collapse" id="menu-collapse"> 
+	<div class="collapse navbar-collapse" id="menu-collapse">
 	  <ul class="nav nav-pills">
       <li class="navbar-text">Welcome, <%= current_user.name %>!</li>
 	  	<li><%= link_to "Events" , root_path, class: "btn btn-default"%></li>

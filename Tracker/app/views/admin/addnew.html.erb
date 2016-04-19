@@ -69,8 +69,8 @@
 						City*<br/><input id="home-city" type="text" required></input><br/>
 						State*<br/><%= select_tag "home-state", options_for_select(us_states) %><br/>
 						Zip Code*<br/><input id="home-zip" type="text" required></input><br/>
-						Photographer<br/><%= select_tag "home-photographer", options_from_collection_for_select(@photographerlist, 'get_photographer_id', 'get_name') %><a id="addphotographericon" href="#"><i class="fa fa-plus-circle"></i></a><br/>
-						Event*<br/><%= select_tag "home-event", options_from_collection_for_select(@eventlist, 'get_parade_id', 'get_parade_name') %><a id="addeventicon" href="#"><i class="fa fa-plus-circle"></i></a><br/>
+						Photographer<br/><div class="home-photographer"><%= select_tag "home-photographer", options_from_collection_for_select(@photographerlist, 'get_photographer_id', 'get_name') %><a id="addphotographericon" href="#"><i class="fa fa-plus-circle"></i></a></div>
+						Event*<br/><div class="home-event"><%= select_tag "home-event", options_from_collection_for_select(@eventlist, 'get_parade_id', 'get_parade_name') %><a id="addeventicon" href="#"><i class="fa fa-plus-circle"></i></a></div><br/>
 						Notes<br/><textarea id="home-notes" form="addprojectform"></textarea><br/>
 						<button class="btn btn-primary" type="submit" form="addprojectform">Add</button>
 					</form>

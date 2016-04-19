@@ -830,7 +830,7 @@ class Factory
         @conn.exec("INSERT INTO user_table (first_name,last_name,email,user_id) VALUES($1,$2,$3,$4)",[object.get_first_name,object.get_last_name,object.get_email,object.get_user_id])
       when 'V'
         results = Array.new
-        results = @conn.exec("SELECT user_id FROM user_table WHERE user_id=$1",[object.get_user_id])
+        results = @conn.exec("SELECT email FROM user_table WHERE email=$1",[object.get_email])
         if (results.num_tuples.zero?)
           return FALSE
         else
