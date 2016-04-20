@@ -394,6 +394,7 @@ $(document).ready(function(){
            function(data){
                $('#photographer-details').html(data);
           });
+          $('#edit-record').modal("hide");
   });
 
 	//handle home selection
