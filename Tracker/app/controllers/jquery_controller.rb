@@ -1,4 +1,7 @@
 class JqueryController < ActionController::Base
+  #This class is for all ajax calls
+
+  #get list of homes
   def homes
     worker = Factory.new
     worker.connect_to_db("nitrous","","postgres")
@@ -6,6 +9,7 @@ class JqueryController < ActionController::Base
     @home_results = worker.interact_with_home('L')
   end
 
+  #get parade notes
   def paradenotes
     worker = Factory.new
     worker.connect_to_db("nitrous","","postgres")
@@ -25,6 +29,7 @@ class JqueryController < ActionController::Base
     worker.interact_with_parade('U', parade)
   end
 
+  #get homenotes
   def homenotes
     worker = Factory.new
     worker.connect_to_db("nitrous","","postgres")
@@ -45,6 +50,7 @@ class JqueryController < ActionController::Base
     worker.interact_with_home('U', home)
   end
 
+  #display project/order for a particular home
   def order
     worker = Factory.new
     worker.connect_to_db("nitrous","","postgres")
@@ -52,6 +58,8 @@ class JqueryController < ActionController::Base
     home.set_home_id(params[:home_id]);
     @photographer_list = worker.interact_with_photographer('L');
     @orderdetails = worker.interact_with_home('O', home)
+    #the following chain of ifs are for the 'Y', 'N' values.
+    #could be refactored later to store "true", "false" in the database
     if @orderdetails.get_raw_photos.to_i < 0
     	@orderdetails.set_raw_photos(0)
     end
@@ -458,10 +466,13 @@ class JqueryController < ActionController::Base
     @photographer.set_email(params[:email])
     @photographer.set_phone(params[:phone])
     @photographer.set_notes(params[:notes])
-    worker.interact_with_photographer('U', @photographer)    
+    worker.interact_with_photographer('U', @photographer)
     @photographer_list = worker.interact_with_photographer('L')
   end
 
+  #this updates the info for a photographer
+  #in an order so the user doesn't have to save the order
+  #to see that
   def updatephotographerinfo
     @photographer = Photographer.new
     worker = Factory.new

@@ -1,5 +1,3 @@
-
-
 class Builder
   def initialize(id="-1",name="empty")
     @builder_id = id

@@ -3,7 +3,7 @@ require 'factory.rb'
 
 class User < ActiveRecord::Base
 
-
+  # This is a User model for google authentication
  def self.from_omniauth(auth)
     where(uid: auth.uid, provider: auth.provider).first_or_initialize.tap do |user|
       user.provider = auth.provider

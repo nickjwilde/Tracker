@@ -1,4 +1,6 @@
 class UserAuth
+  
+  #Class to store authorized users information after they login with google
   def initialize(first_name="empty", last_name="empty", email="emtpy", user_id="empty")
     @first_name = first_name
     @last_name = last_name

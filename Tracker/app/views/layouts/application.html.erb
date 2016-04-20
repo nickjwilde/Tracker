@@ -38,7 +38,16 @@
       <% else %>
     <div class="container">
       <div class="row">
-        <%= link_to "Sign in with Google", "/auth/google_oauth2", id: "sign_in", class: "btn btn-primary", style: "position:absolute;top:50%;left:50%"%>
+      
+        <div class="logos-signin" >
+          <h4>Parade of Homes Image Management System</h4>
+          <p>Built by
+          <%= image_tag("spark_logo.png", id: "spark-logo") %><br/><br/><br/>
+         On behalf of
+        <%= image_tag("parade_craze_logo.png", id: "parade-craze-logo") %>
+          </p>
+        <%= link_to "Sign in with Google", "/auth/google_oauth2", id: "sign_in", class: "btn btn-primary", id: "signin-button" %>
+        </div>
       </div>
   </div>
       <% end %>

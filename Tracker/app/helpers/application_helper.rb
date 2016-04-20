@@ -1,4 +1,5 @@
 module ApplicationHelper
+#data for our drop down list
 def us_states
 [
 	['Select State','NO'],

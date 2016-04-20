@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
+  
+  # google oauth2 routes
   get 'auth/:provider/callback', to: 'sessions#create'
   get 'auth/failure', to: redirect('/')
   get 'signout', to: 'sessions#destroy', as: 'signout'
@@ -34,9 +36,11 @@ Rails.application.routes.draw do
   match 'updatephotographer', :to => 'jquery#updatephotographer', via: 'post'
   match 'updatephotographerinfo', :to => 'jquery#updatephotographerinfo', via: 'post'
 
+  # main page routes
   root 'admin#events'
   get 'addnew/', to: 'admin#addnew'
   get 'admin/', to: 'admin#admin'
+  
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
