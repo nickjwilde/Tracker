@@ -439,4 +439,40 @@ class JqueryController < ActionController::Base
       worker.interact_with_builder('C', builder)
       @builderlist = worker.interact_with_builder('L')
   end
+
+  def editphotographer
+      @photographer = Photographer.new
+      worker = Factory.new
+      worker.connect_to_db("nitrous","","postgres")
+      @photographer.set_photographer_id(params[:photographer_id])
+      @photographer = worker.interact_with_photographer('R', @photographer)
+  end
+
+  def updatephotographer
+    @photographer = Photographer.new
+    worker = Factory.new
+    worker.connect_to_db("nitrous","","postgres")
+    @photographer.set_photographer_id(params[:photographer_id])
+    @photographer = worker.interact_with_photographer('R', @photographer)
+    @photographer.set_name(params[:lastname] + ", " + params[:firstname])
+    @photographer.set_email(params[:email])
+    @photographer.set_phone(params[:phone])
+    @photographer.set_notes(params[:notes])
+    worker.interact_with_photographer('U', @photographer)    
+    @photographer_list = worker.interact_with_photographer('L')
+  end
+
+  def updatephotographerinfo
+    @photographer = Photographer.new
+    worker = Factory.new
+    worker.connect_to_db("nitrous","","postgres")
+    @photographer.set_photographer_id(params[:photographer_id])
+    @photographer = worker.interact_with_photographer('R', @photographer)
+     if @photographer.try(:get_swag).try(:upcase) == 'Y'
+    	@photographer.try(:set_swag,true)
+    else
+    	@photographer.try(:set_swag,false)
+    end
+    @photographer_list = worker.interact_with_photographer('L')
+  end
 end

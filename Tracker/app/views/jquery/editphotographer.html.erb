@@ -1,0 +1,41 @@
+<div class="modal-dialog">
+
+<!-- Modal content-->
+<div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h4 class="modal-title">Editing Photographer</h4>
+</div>
+<div class="modal-body">
+<form id="editphotographerform">
+<div class="form-group">
+<label for="photographer-firstname">First Name</label>
+<input id="photographer-firstname" class="form-control" type="text" value="<%= @photographer.get_name.to_s.split(',')[1] %>"></input>
+</div>
+  <div class="form-group">
+<label for="photographer-lastname">Last Name</label>
+<input id="photographer-lastname" class="form-control" type="text" value="<%= @photographer.get_name.to_s.split(',')[0] %>"></input>
+</div>
+<div class="form-group">
+<label for="photographer-email">Email</label>
+<input id="photographer-email" class="form-control" type="text" value="<%= @photographer.get_email %>"></input>
+</div>
+<div class="form-group">
+<label for="photographer-phone">Phone Number</label><br/>
+<input id="photographer-phone" class="form-control" type="text" value="<%= @photographer.get_phone %>"></input>
+</div>
+<div class="form-group">
+<label for="photographer-notes">Notes</label>
+<textarea id="photographer-notes" class="form-control" form="editphotographerform"><%= @photographer.get_notes %></textarea>
+</div>
+
+</form>
+</div>
+<div class="modal-footer">
+  <button id="updatephotographerbtn" type="button" class="btn btn-primary">Save</button>
+<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+</div>
+</div>
+
+</div>
+</div>

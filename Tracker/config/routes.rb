@@ -30,6 +30,9 @@ Rails.application.routes.draw do
   match 'homefilters', :to => 'jquery#homefilters', via: 'post'
   match 'resetfilters', :to => 'jquery#resetfilterform', via: 'post'
   match 'addnew/addbuilder', :to => 'jquery#addbuilder', via: 'post'
+  match 'editphotographer', :to => 'jquery#editphotographer', via: 'post'
+  match 'updatephotographer', :to => 'jquery#updatephotographer', via: 'post'
+  match 'updatephotographerinfo', :to => 'jquery#updatephotographerinfo', via: 'post'
 
   root 'admin#events'
   get 'addnew/', to: 'admin#addnew'

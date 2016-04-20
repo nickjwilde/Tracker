@@ -96,6 +96,13 @@ a {
     padding: 2px;
 }
 
+.fa.fa-pencil {
+    margin-left: 1em;
+    color: #337AB7;
+    cursor: pointer;
+    font-size: 20px;
+}
+
 .fa-plus-circle {
     margin-left: 1em;
     font-size: 20px!important;

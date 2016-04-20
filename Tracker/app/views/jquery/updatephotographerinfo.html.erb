@@ -1,0 +1,31 @@
+<h4>Photographer: </h4>
+							<div class="photographer" id="photographer-info" data-photographer-id='<%= @photographer.try(:get_photographer_id) %>'>
+								<select id="photographer-dropdown">
+								<% @photographer_list.each do |photographer| %>
+									<% if photographer.try(:get_photographer_id) == @photographer.try(:get_photographer_id) %>
+									<option value='<%= @photographer.try(:get_photographer_id) %>' selected><%= @photographer.try(:get_name) %></option>
+									<% else %>
+									<option value='<%= photographer.try(:get_photographer_id) %>'><%= photographer.try(:get_name) %></option>
+									<% end %>
+								<% end %>
+								</select>
+							</div>
+							<div class="swag" data-swag="<%= @photographer.try(:get_swag) %>">
+								<input id='swag' type='hidden' value='<%= @photographer.try(:get_swag) %>'></input>
+							<% if @photographer.try(:get_swag) %>
+								Swag Pkg  <i class="fa fa-check"></i>
+							<% else %>
+								Swag Pkg <i class="fa fa-times"></i>
+							<% end %>
+							</div>
+					</div>
+           <i id="photographer-edit" data-photographer-id="<%= @photographer.get_photographer_id %>" class="fa fa-pencil"></i>
+					<div id="photographer-info">
+						<div class="email">
+							<a href="mailto:<%= @photographer.try(:get_email) %>"><%= @photographer.try(:get_email) %></a>
+						</div>
+						<div class="phone">
+							<a href="tel:<%= @photographer.try(:get_phone) %>"><%= @photographer.try(:get_phone) %></a>
+						</div>
+
+					</div>

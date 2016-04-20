@@ -358,6 +358,44 @@ $(document).ready(function(){
     $('#edit-record').modal("show");
   });
 
+  //handle edit photographer icon to show appropiate form
+  $(document).on('click','#photographer-edit',function(e){
+     e.preventDefault();
+    var photographer_id = $(this).data('photographer-id');
+    $.post('editphotographer',
+        {
+          photographer_id: photographer_id
+        },
+        function(data){
+         $('#edit-record').html(data);
+        }
+    );
+    $('#edit-record').modal("show");
+  });
+
+  //handle update of photographer
+  $(document).on('click','#updatephotographerbtn',function(e){
+     e.preventDefault();
+    var photographer_id = $('#photographer-edit').data('photographer-id');
+    var firstname = $('#photographer-firstname').val();
+    var lastname = $('#photographer-lastname').val();
+    var email = $('#photographer-email').val();
+    var phone = $('#photographer-phone').val();
+    var notes = $('#photographer-notes').val();
+    $.post('updatephotographer',
+          {
+            photographer_id: photographer_id,
+            firstname: firstname,
+            lastname: lastname,
+            email: email,
+            phone: phone,
+            notes: notes
+          },
+           function(data){
+               $('#photographer-details').html(data);
+          });
+  });
+
 	//handle home selection
 	$(document).on('click','.home-column .entry',function(){
 		var home_id = $(this).data("home-id");
@@ -511,6 +549,19 @@ $(document).ready(function(){
   //stop builder form from submitting
   $('#addbuilderform').submit(function(e){
     e.preventDefault();
+  });
+
+  //update photographer info
+  //when dropdown is changed
+  $(document).on('change','#photographer-dropdown',function(){
+    var photographer_id = $('#photographer-dropdown option:selected').val();
+    $.post('updatephotographerinfo',
+           {
+              photographer_id: photographer_id
+           },
+           function(data){
+              $('#photographer-details').html(data);
+           });
   });
 
   //handle filters
