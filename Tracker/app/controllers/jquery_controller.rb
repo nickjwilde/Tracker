@@ -120,7 +120,7 @@ class JqueryController < ActionController::Base
 	photographer = worker.interact_with_photographer('R',photographer)
 	photographer.set_notes(params[:photographer_notes])
 	worker.interact_with_photographer('U', photographer)
-	order.set_num_package_photos(params[:num_photos])
+
 	home = Home.new
 	home.set_home_id(params[:home_id].to_i)
 	home = worker.interact_with_home('R',home)
@@ -128,6 +128,7 @@ class JqueryController < ActionController::Base
 	@order_id = params[:order_id].to_i
 	order.set_order_id(params[:order_id].to_i)
 	order = worker.interact_with_order('R',order)
+  order.set_num_package_photos(params[:num_photos])
 	order.set_raw_photos(params[:raw_photos].to_i)
 	order.set_estimated_photos(params[:est_photos].to_i)
 	order.set_final_photos_number(params[:final_photos].to_i)
